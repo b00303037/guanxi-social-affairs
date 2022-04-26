@@ -78,7 +78,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
 
   refreshCaptcha(): void {
     const url = environment.fakeData
-      ? '/assets/captcha.png'
+      ? 'assets/captcha.png'
       : `${environment.baseApiUrl}/api/GetCaptcha`;
     const timestamp = new Date().valueOf();
 
