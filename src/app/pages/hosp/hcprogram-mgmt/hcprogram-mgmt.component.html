@@ -1,0 +1,123 @@
+<div class="page-title">健檢項目維護</div>
+
+<mat-card>
+  <div class="spinner-box">
+    <div class="overflow-auto">
+      <div *ngIf="getting" class="spinner">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        multiTemplateDataRows
+        class="w-full"
+      >
+        <tr
+          mat-header-row
+          *matHeaderRowDef="
+            gtSMQuery.matches ? displayedColumnsSM : displayedColumns
+          "
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="
+            let program;
+            columns: gtSMQuery.matches ? displayedColumnsSM : displayedColumns
+          "
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: ['expandedDetail']"
+          class="h-0"
+        ></tr>
+
+        <!-- TODO slide toggle -->
+        <!-- 啟用 enabled: enabled -->
+        <ng-container matColumnDef="enabled">
+          <th mat-header-cell *matHeaderCellDef>啟用</th>
+          <td mat-cell *matCellDef="let program" class="border-b-0">
+            <span>{{ program.enabled | i18nSelect: ynMap }}</span>
+          </td>
+        </ng-container>
+
+        <!-- 名稱 name: name -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>名稱</th>
+          <td mat-cell *matCellDef="let program" class="border-b-0">
+            <span class="block text-base py-2">{{ program.name }}</span>
+          </td>
+        </ng-container>
+
+        <!-- 描述 description: description -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>描述</th>
+          <td mat-cell *matCellDef="let program" class="border-b-0">
+            <span>{{ program.description }}</span>
+          </td>
+        </ng-container>
+
+        <!-- 費用 charge: charge -->
+        <ng-container matColumnDef="charge">
+          <th mat-header-cell *matHeaderCellDef>費用</th>
+          <td mat-cell *matCellDef="let program" class="border-b-0">
+            <span class="font-mono">
+              {{ program.charge | currency: "TWD":"symbol":"1.0-2" }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- 操作 actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>操作</th>
+          <td mat-cell *matCellDef="let program" class="border-b-0">
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openUpdateHCProgramDialog(program.programID)"
+              matTooltip="編輯健檢項目"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="expandedDetail">
+          <td
+            mat-cell
+            *matCellDef="let program"
+            [attr.colspan]="
+              (gtSMQuery.matches ? displayedColumnsSM : displayedColumns).length
+            "
+          >
+            <div class="w-full program detail-col">
+              <div
+                *ngIf="!gtSMQuery.matches"
+                class="grid grid-cols-1 border-t border-black border-opacity-6"
+              >
+                <table class="col-span-1">
+                  <!-- TODO slide toggle -->
+                  <!-- 啟用 -->
+                  <tr>
+                    <td><label>啟用</label></td>
+                    <td>
+                      <span>{{ program.enabled | i18nSelect: ynMap }}</span>
+                    </td>
+                  </tr>
+                  <!-- 描述 -->
+                  <tr>
+                    <td><label>描述</label></td>
+                    <td>
+                      <span>{{ program.description }}</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+      </table>
+    </div>
+    <mat-paginator pageSize="10" hidePageSize class="w-full"></mat-paginator>
+  </div>
+</mat-card>

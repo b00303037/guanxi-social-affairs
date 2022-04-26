@@ -1,0 +1,55 @@
+<section class="w-page py-4">
+  <div class="breadcrumbs">
+    <a routerLink="/home">首頁</a>
+
+    <mat-icon>chevron_right</mat-icon>
+
+    <span>最新消息</span>
+  </div>
+
+  <div class="page-title">最新消息</div>
+
+  <mat-card>
+    <div class="spinner-box">
+      <div class="overflow-auto">
+        <div *ngIf="getting" class="spinner">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          multiTemplateDataRows
+          class="w-full"
+        >
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr
+            mat-row
+            [routerLink]="'/news/' + news.newsID"
+            *matRowDef="let news; columns: displayedColumns"
+            class="cursor-pointer hover:bg-amber-400 hover:bg-opacity-10"
+          ></tr>
+
+          <!-- 標題 title: title -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>標題</th>
+            <td mat-cell *matCellDef="let news">
+              <div class="text-base py-2">{{ news.title }}</div>
+            </td>
+          </ng-container>
+
+          <!-- 日期 date: date -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>日期</th>
+            <td mat-cell *matCellDef="let news">
+              <span>
+                {{ news.date | date: "yyyy-MM-dd" }}
+              </span>
+            </td>
+          </ng-container>
+        </table>
+      </div>
+      <mat-paginator pageSize="10" hidePageSize class="w-full"></mat-paginator>
+    </div>
+  </mat-card>
+</section>

@@ -1,0 +1,78 @@
+<form [formGroup]="fg" class="grid grid-cols-2 gap-x-4 my-4">
+  <!-- 醫院 -->
+  <mat-form-field class="col-span-2">
+    <mat-label>醫院</mat-label>
+    <mat-select formControlName="hospitalID">
+      <mat-option
+        *ngFor="let hospital of hospitalSelectList"
+        [value]="hospital.hospitalID"
+        [disabled]="hospital.enabled === YNObj.N"
+      >
+        {{ hospital.name }}
+      </mat-option>
+    </mat-select>
+
+    <mat-error *ngIf="fcs['hospitalID'].hasError('required')"
+      >請選擇&nbsp;<strong>醫院</strong></mat-error
+    >
+  </mat-form-field>
+
+  <!-- 健檢項目 -->
+  <div class="col-span-2 HCProgram form-field-style">
+    <div class="h-8 flex justify-center items-center">
+      <ng-container *ngIf="HCProgramSelectList.length > 0; else noPrograms">
+        <mat-icon>arrow_back</mat-icon>
+        <span>左右捲動看看更多選項</span>
+        <mat-icon>arrow_forward</mat-icon>
+      </ng-container>
+
+      <ng-template #noPrograms>
+        <span>請先選擇醫院</span>
+      </ng-template>
+    </div>
+
+    <ul>
+      <li
+        *ngFor="let HCProgram of HCProgramSelectList"
+        [class.border-amber-400]="
+          fcs['programID'].value === HCProgram.programID
+        "
+        (click)="onSelectProgram(HCProgram)"
+        class="bg-white transition cursor-pointer hover:border-amber-400"
+      >
+        <div class="text-2xl font-semibold mb-2">{{ HCProgram.name }}</div>
+        <div class="text-xl font-semibold font-mono mb-2">
+          {{ HCProgram.charge | currency: "TWD":"symbol":"1.0-2" }}
+        </div>
+        <div>{{ HCProgram.description }}</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 健檢項目 -->
+  <mat-form-field class="col-span-2 sm:col-span-1">
+    <mat-label>健檢項目</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="programName"
+      required
+      readonly
+    />
+
+    <mat-error *ngIf="fcs['programName'].hasError('required')"
+      >請選擇&nbsp;<strong>健檢項目</strong></mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field class="col-span-2 sm:col-span-1">
+    <mat-label>項目費用</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="programCharge"
+      required
+      readonly
+    />
+  </mat-form-field>
+</form>

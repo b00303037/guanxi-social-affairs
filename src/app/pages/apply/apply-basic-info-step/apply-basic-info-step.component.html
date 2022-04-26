@@ -1,0 +1,239 @@
+<form [formGroup]="fg" class="grid grid-cols-12 gap-x-4 my-4">
+  <!-- 身分證字號 -->
+  <mat-form-field class="col-span-12 sm:col-span-6">
+    <mat-label>身分證字號</mat-label>
+    <input type="text" matInput [value]="IDNo" required readonly />
+  </mat-form-field>
+
+  <!-- 密碼 -->
+  <mat-form-field class="col-span-12 sm:col-span-6">
+    <mat-label>密碼</mat-label>
+    <input
+      [type]="showPassword ? 'text' : 'password'"
+      matInput
+      formControlName="newPassword"
+      required
+      maxlength="20"
+      autocomplete="off"
+    />
+
+    <button
+      type="button"
+      matSuffix
+      mat-icon-button
+      color="primary"
+      [disabled]="fcs['newPassword'].disabled"
+      (click)="showPassword = !showPassword"
+    >
+      <mat-icon>{{ showPassword ? "visibility" : "visibility_off" }}</mat-icon>
+    </button>
+
+    <mat-error *ngIf="fcs['newPassword'].hasError('required')"
+      >請輸入&nbsp;<strong>密碼</strong>
+    </mat-error>
+    <mat-error *ngIf="fcs['newPassword'].hasError('minlength')"
+      ><strong>密碼</strong>&nbsp;格式有誤</mat-error
+    >
+  </mat-form-field>
+
+  <!-- 姓名 -->
+  <mat-form-field class="col-span-12 sm:col-span-6">
+    <mat-label>姓名</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="name"
+      required
+      maxlength="20"
+    />
+
+    <mat-error *ngIf="fcs['name'].hasError('required')"
+      >請輸入&nbsp;<strong>姓名</strong></mat-error
+    >
+  </mat-form-field>
+
+  <!-- 性別 -->
+  <div
+    class="col-span-12 h-form-field form-field-style flex items-center sm:col-span-6"
+  >
+    <label class="form-field-label mr-4">性別 *</label>
+    <mat-radio-group formControlName="gender">
+      <mat-radio-button [value]="genderObj.Male" class="mr-4"
+        >男</mat-radio-button
+      >
+      <mat-radio-button [value]="genderObj.Female">女</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <!-- 出生日期 -->
+  <mat-form-field
+    (click)="birthDatepicker.open()"
+    class="col-span-12 cursor-pointer sm:col-span-6"
+  >
+    <mat-label>出生日期</mat-label>
+    <input
+      matInput
+      [matDatepicker]="birthDatepicker"
+      formControlName="birthDate"
+      required
+      [max]="today"
+      readonly
+      class="cursor-pointer"
+    />
+
+    <button
+      *ngIf="fcs['birthDate'].value; else birthDateToggle"
+      type="button"
+      matSuffix
+      mat-icon-button
+      color="primary"
+      (click)="clearDate($event, fcs['birthDate'])"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+    <ng-template #birthDateToggle>
+      <button type="button" matSuffix mat-icon-button color="primary">
+        <mat-icon>today</mat-icon>
+      </button>
+    </ng-template>
+
+    <mat-error *ngIf="fcs['birthDate'].hasError('required')"
+      >請選擇&nbsp;<strong>出生日期</strong></mat-error
+    >
+
+    <mat-datepicker
+      #birthDatepicker
+      startView="multi-year"
+      [touchUi]="mobileQuery.matches"
+    ></mat-datepicker>
+  </mat-form-field>
+
+  <!-- 設籍日期 -->
+  <mat-form-field
+    (click)="regDatepicker.open()"
+    class="col-span-12 cursor-pointer sm:col-span-6"
+  >
+    <mat-label>設籍日期</mat-label>
+    <input
+      matInput
+      [matDatepicker]="regDatepicker"
+      formControlName="regDate"
+      required
+      [max]="today"
+      readonly
+      class="cursor-pointer"
+    />
+
+    <button
+      *ngIf="fcs['regDate'].value; else regDateToggle"
+      type="button"
+      matSuffix
+      mat-icon-button
+      color="primary"
+      (click)="clearDate($event, fcs['regDate'])"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+    <ng-template #regDateToggle>
+      <button type="button" matSuffix mat-icon-button color="primary">
+        <mat-icon>today</mat-icon>
+      </button>
+    </ng-template>
+
+    <mat-error *ngIf="fcs['regDate'].hasError('required')"
+      >請選擇&nbsp;<strong>設籍日期</strong></mat-error
+    >
+
+    <mat-datepicker
+      #regDatepicker
+      startView="multi-year"
+      [touchUi]="mobileQuery.matches"
+    ></mat-datepicker>
+  </mat-form-field>
+
+  <!-- Email -->
+  <mat-form-field class="col-span-12 sm:col-span-6">
+    <mat-label>Email</mat-label>
+    <input
+      type="email"
+      inputmode="email"
+      matInput
+      formControlName="email"
+      maxlength="50"
+      [errorStateMatcher]="emailOrMobileNoErrorStateMatcher"
+    />
+
+    <mat-error *ngIf="fg.hasError('emailOrMobileNo')"
+      >請輸入&nbsp;<strong>Email</strong>&nbsp;或&nbsp;<strong
+        >行動電話</strong
+      ></mat-error
+    >
+  </mat-form-field>
+
+  <!-- 行動電話 -->
+  <mat-form-field class="col-span-12 sm:col-span-6">
+    <mat-label>行動電話</mat-label>
+    <input
+      type="text"
+      inputmode="numeric"
+      matInput
+      formControlName="mobileNo"
+      maxlength="10"
+      [errorStateMatcher]="emailOrMobileNoErrorStateMatcher"
+    />
+
+    <mat-error *ngIf="fg.hasError('emailOrMobileNo')"
+      >請輸入&nbsp;<strong>Email</strong>&nbsp;或&nbsp;<strong
+        >行動電話</strong
+      ></mat-error
+    >
+    <mat-error *ngIf="fcs['mobileNo'].hasError('mobileNo')"
+      ><strong>行動電話</strong>&nbsp;格式有誤</mat-error
+    >
+  </mat-form-field>
+
+  <div class="col-span-12 flex">
+    <!-- 住家電話 - 區碼 -->
+    <mat-form-field class="w-14 grow shrink-0">
+      <mat-label>區碼</mat-label>
+      <input
+        type="text"
+        inputmode="numeric"
+        matInput
+        formControlName="telPrefix"
+        maxlength="3"
+        [errorStateMatcher]="telephoneNoErrorStateMatcher"
+      />
+
+      <mat-error *ngIf="fg.hasError('telephoneNo')"
+        ><strong>住家電話</strong>&nbsp;格式有誤</mat-error
+      >
+    </mat-form-field>
+
+    <!-- 住家電話 - 電話號碼 -->
+    <mat-form-field class="w-24 grow shrink-0">
+      <mat-label>電話號碼</mat-label>
+      <input
+        type="text"
+        inputmode="numeric"
+        matInput
+        formControlName="telNo"
+        maxlength="8"
+        [errorStateMatcher]="telephoneNoErrorStateMatcher"
+      />
+    </mat-form-field>
+
+    <!-- 住家電話 - 分機號碼 -->
+    <mat-form-field class="w-20 grow shrink-0">
+      <mat-label>分機號碼</mat-label>
+      <input
+        type="text"
+        inputmode="numeric"
+        matInput
+        formControlName="telExt"
+        maxlength="6"
+        [errorStateMatcher]="telephoneNoErrorStateMatcher"
+      />
+    </mat-form-field>
+  </div>
+</form>
