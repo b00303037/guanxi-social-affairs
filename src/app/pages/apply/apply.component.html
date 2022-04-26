@@ -1,0 +1,123 @@
+<section class="w-page py-4">
+  <div class="page-title">線上申請</div>
+
+  <mat-card>
+    <mat-stepper
+      #stepper
+      linear
+      [orientation]="gtMDQuery.matches ? 'horizontal' : 'vertical'"
+    >
+      <!-- 身分認證 -->
+      <mat-step
+        label="身分認證"
+        [stepControl]="verificationFG"
+        [editable]="flagsOfEditable.verification"
+      >
+        <app-apply-verification-step
+          [fg]="verificationFG"
+          [fcs]="verificationFCs"
+        ></app-apply-verification-step>
+
+        <div class="actions-box">
+          <span class="grow"></span>
+          <button
+            type="button"
+            mat-flat-button
+            color="primary"
+            [disabled]="verifying"
+            (click)="forceValidation(verificationFG); onVerify()"
+          >
+            下一步
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- 健檢項目 -->
+      <mat-step
+        label="健檢項目"
+        [stepControl]="HCProgramFG"
+        [editable]="flagsOfEditable.HCProgram"
+      >
+        <app-apply-hcprogram-step
+          [fg]="HCProgramFG"
+          [fcs]="HCProgramFCs"
+        ></app-apply-hcprogram-step>
+
+        <div class="actions-box">
+          <span class="grow"></span>
+          <button
+            type="button"
+            mat-flat-button
+            color="primary"
+            matStepperNext
+            (click)="forceValidation(HCProgramFG)"
+          >
+            下一步
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- 資料填寫 -->
+      <mat-step
+        label="資料填寫"
+        [stepControl]="basicInfoFG"
+        [editable]="flagsOfEditable.basicInfo"
+      >
+        <app-apply-basic-info-step
+          [fg]="basicInfoFG"
+          [fcs]="basicInfoFCs"
+          [IDNo]="verificationFCs['IDNo'].value"
+        ></app-apply-basic-info-step>
+
+        <div class="actions-box">
+          <button type="button" mat-button color="primary" matStepperPrevious>
+            上一步
+          </button>
+          <span class="grow"></span>
+          <button
+            type="button"
+            mat-flat-button
+            color="primary"
+            matStepperNext
+            (click)="forceValidation(basicInfoFG)"
+          >
+            下一步
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- 文件上傳 -->
+      <mat-step
+        label="文件上傳"
+        [stepControl]="IDPhotosFG"
+        [editable]="flagsOfEditable.IDPhotos"
+      >
+        <app-apply-idphotos-step
+          [fg]="IDPhotosFG"
+          [fcs]="IDPhotosFCs"
+        ></app-apply-idphotos-step>
+
+        <div class="actions-box">
+          <button type="button" mat-button color="primary" matStepperPrevious>
+            上一步
+          </button>
+          <span class="grow"></span>
+          <button
+            type="button"
+            mat-flat-button
+            color="primary"
+            [disabled]="adding"
+            (click)="forceValidation(IDPhotosFG); onAdd()"
+          >
+            送出申請
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- 申請完成 -->
+      <mat-step label="申請完成">
+        <span>申請完成</span>
+      </mat-step>
+    </mat-stepper>
+  </mat-card>
+</section>

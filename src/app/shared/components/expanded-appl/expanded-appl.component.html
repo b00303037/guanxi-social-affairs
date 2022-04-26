@@ -1,0 +1,59 @@
+<div class="grid grid-cols-2 gap-x-4 border-t border-black border-opacity-6">
+  <table class="col-span-2 md:col-span-1">
+    <ng-container *ngIf="!gtMDQuery.matches">
+      <!-- 申請狀態 -->
+      <tr>
+        <td><label>申請狀態</label></td>
+        <td>
+          <span>{{ appl.status | i18nSelect: applStatusMap }}</span>
+        </td>
+      </tr>
+      <!-- 申請日期 -->
+      <tr>
+        <td><label>申請日期</label></td>
+        <td>
+          <span>{{ appl.createDatetime | date: "yyyy/MM/dd" }}</span>
+        </td>
+      </tr>
+      <!-- 姓名 -->
+      <tr>
+        <td><label>姓名</label></td>
+        <td>
+          <span>{{ appl.name }}</span>
+        </td>
+      </tr>
+    </ng-container>
+
+    <tr *ngFor="let property of detailPropertyList">
+      <td>
+        <label>{{ property.label }}</label>
+      </td>
+      <td>
+        <span>{{ $any(expandedAppl)[property.key] }}</span>
+      </td>
+    </tr>
+  </table>
+
+  <div class="col-span-2 md:col-span-1">
+    <div class="grid grid-cols-4 gap-x-2">
+      <label
+        *ngFor="let property of imgPropertyList"
+        [class.text-amber-400]="
+          $any(expandedAppl).displayedImg === property.key
+        "
+        class="clickable-text col-span-2 sm:col-span-1"
+        (click)="$any(expandedAppl).displayedImg = property.key"
+        >{{ property.label }}</label
+      >
+    </div>
+    <div class="w-full h-60 flex justify-center items-center">
+      <img
+        *ngIf="
+          $any(expandedAppl)[expandedAppl?.displayedImg ?? ''] !== undefined
+        "
+        [src]="$any(expandedAppl)[expandedAppl?.displayedImg ?? '']"
+        class="max-w-full max-h-full"
+      />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<div class="flex flex-col absolute top-0 right-0 bottom-0 left-0">
+  <header class="shadow">
+    <mat-toolbar
+      class="bg-rose-400 text-white"
+      [class.fixed]="mobileQuery.matches"
+    >
+      <div class="w-page flex">
+        <button type="menu" mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <span class="grow"></span>
+
+        <a routerLink="/home" class="hidden sm:flex sm:items-center">
+          <img
+            src="../../../../assets/logo.png"
+            width="40"
+            height="40"
+            class="mr-2"
+            alt="logo"
+          />
+
+          <div>
+            <div class="text-sm">新竹縣關西鎮公所</div>
+            <div class="text-base">Guanxi Township Office</div>
+          </div>
+        </a>
+
+        <span class="grow"></span>
+
+        <div class="actions-box">
+          <button type="button" mat-button (click)="logout()">
+            醫院端登出
+          </button>
+        </div>
+      </div>
+    </mat-toolbar>
+  </header>
+
+  <mat-sidenav-container
+    [style.marginTop.px]="mobileQuery.matches ? 56 : 0"
+    [ngClass]="
+      mobileQuery.matches ? 'grow shrink-0 basis-auto' : 'grow shrink basis-0'
+    "
+  >
+    <mat-sidenav
+      #sidenav
+      [mode]="mobileQuery.matches ? 'over' : 'side'"
+      [fixedInViewport]="mobileQuery.matches"
+      fixedTopGap="56"
+      class="w-60 bg-rose-100"
+    >
+      <mat-nav-list>
+        <mat-list-item
+          *ngFor="let item of navListItems"
+          [routerLink]="item.routerLink"
+          routerLinkActive
+          [routerLinkActiveOptions]="{ exact: true }"
+          #rla="routerLinkActive"
+          [class.text-rose-400]="rla.isActive"
+          (click)="sidenav.close()"
+        >
+          <button type="button" mat-icon-button>
+            <mat-icon>{{ item.icon }}</mat-icon>
+          </button>
+          <span>{{ item.label }}</span>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <main>
+        <div class="w-page py-4">
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

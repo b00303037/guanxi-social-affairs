@@ -1,0 +1,41 @@
+<section class="w-page py-4">
+  <div class="page-title">申請查詢</div>
+
+  <mat-card>
+    <mat-stepper
+      #stepper
+      linear
+      [orientation]="gtMDQuery.matches ? 'horizontal' : 'vertical'"
+    >
+      <!-- 身分認證 -->
+      <mat-step
+        label="身分認證"
+        [stepControl]="verificationFG"
+        [editable]="flagsOfEditable.verification"
+      >
+        <app-query-verification-step
+          [fg]="verificationFG"
+          [fcs]="verificationFCs"
+        ></app-query-verification-step>
+
+        <div class="actions-box">
+          <span class="grow"></span>
+          <button
+            type="button"
+            mat-flat-button
+            color="primary"
+            [disabled]="verifying"
+            (click)="forceValidation(verificationFG); onVerify()"
+          >
+            下一步
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- 申請紀錄 -->
+      <mat-step label="申請紀錄">
+        <app-query-appl-list-step></app-query-appl-list-step>
+      </mat-step>
+    </mat-stepper>
+  </mat-card>
+</section>

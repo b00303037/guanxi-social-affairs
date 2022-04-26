@@ -1,0 +1,123 @@
+<div class="page-title">最新消息維護</div>
+
+<mat-card>
+  <div class="spinner-box">
+    <div class="overflow-auto">
+      <div *ngIf="getting" class="spinner">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        multiTemplateDataRows
+        class="w-full"
+      >
+        <tr
+          mat-header-row
+          *matHeaderRowDef="
+            gtSMQuery.matches ? displayedColumnsSM : displayedColumns
+          "
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="
+            let news;
+            columns: gtSMQuery.matches ? displayedColumnsSM : displayedColumns
+          "
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: ['expandedDetail']"
+          class="h-0"
+        ></tr>
+
+        <!-- TODO slide toggle -->
+        <!-- 啟用 enabled: enabled -->
+        <ng-container matColumnDef="enabled">
+          <th mat-header-cell *matHeaderCellDef>啟用</th>
+          <td mat-cell *matCellDef="let news" class="border-b-0">
+            <span>{{ news.enabled | i18nSelect: ynMap }}</span>
+          </td>
+        </ng-container>
+
+        <!-- 首頁輪播 pinned: pinned -->
+        <ng-container matColumnDef="pinned">
+          <th mat-header-cell *matHeaderCellDef>首頁輪播</th>
+          <td mat-cell *matCellDef="let news" class="border-b-0">
+            <span>{{ news.pinned | i18nSelect: ynMap }}</span>
+          </td>
+        </ng-container>
+
+        <!-- 標題 title: title -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>標題</th>
+          <td mat-cell *matCellDef="let news" class="border-b-0">
+            <span class="block text-base py-2">{{ news.title }}</span>
+          </td>
+        </ng-container>
+
+        <!-- 日期 date: date -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>日期</th>
+          <td mat-cell *matCellDef="let news" class="border-b-0">
+            <span>
+              {{ news.date | date: "yyyy/MM/dd" }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- 操作 actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>操作</th>
+          <td mat-cell *matCellDef="let news" class="border-b-0">
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openUpdateNewsDialog(news.newsID)"
+              matTooltip="編輯最新消息"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="expandedDetail">
+          <td
+            mat-cell
+            *matCellDef="let news"
+            [attr.colspan]="
+              (gtSMQuery.matches ? displayedColumnsSM : displayedColumns).length
+            "
+          >
+            <div class="w-full news detail-col">
+              <div
+                *ngIf="!gtSMQuery.matches"
+                class="grid grid-cols-1 border-t border-black border-opacity-6"
+              >
+                <table class="col-span-1">
+                  <!-- TODO slide toggle -->
+                  <!-- 啟用 -->
+                  <tr>
+                    <td><label>啟用</label></td>
+                    <td>
+                      <span>{{ news.enabled | i18nSelect: ynMap }}</span>
+                    </td>
+                  </tr>
+                  <!-- 首頁輪播 -->
+                  <tr>
+                    <td><label>首頁輪播</label></td>
+                    <td>
+                      <span>{{ news.pinned | i18nSelect: ynMap }}</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+      </table>
+    </div>
+    <mat-paginator pageSize="10" hidePageSize class="w-full"></mat-paginator>
+  </div>
+</mat-card>
