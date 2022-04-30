@@ -1,4 +1,4 @@
-<form [formGroup]="fg" class="grid grid-cols-2 gap-x-4 my-4">
+<div [formGroup]="fg" class="grid grid-cols-2 gap-x-4 my-4">
   <!-- 初次申請 -->
   <div class="col-span-2 h-form-field form-field-style flex items-center">
     <label class="mr-4">初次申請</label>
@@ -24,7 +24,7 @@
     <mat-error *ngIf="fcs['IDNo'].hasError('required')"
       >請輸入&nbsp;<strong>身分證字號</strong></mat-error
     >
-    <mat-error *ngIf="fcs['IDNo'].hasError('minlength')"
+    <mat-error *ngIf="fcs['IDNo'].hasError('IDNo')"
       ><strong>身分證字號</strong>&nbsp;格式有誤</mat-error
     >
   </mat-form-field>
@@ -56,7 +56,7 @@
       >請輸入&nbsp;<strong>密碼</strong></mat-error
     >
     <mat-error *ngIf="fcs['password'].hasError('minlength')"
-      ><strong>密碼</strong>&nbsp;格式有誤</mat-error
+      >請輸入&nbsp;<strong>6 個字元以上</strong>&nbsp;的密碼</mat-error
     >
   </mat-form-field>
 
@@ -92,4 +92,4 @@
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
-</form>
+</div>

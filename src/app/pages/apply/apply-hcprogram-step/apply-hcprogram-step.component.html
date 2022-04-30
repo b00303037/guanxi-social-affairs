@@ -1,4 +1,4 @@
-<form [formGroup]="fg" class="grid grid-cols-2 gap-x-4 my-4">
+<div [formGroup]="fg" class="grid grid-cols-2 gap-x-4 my-4">
   <!-- 醫院 -->
   <mat-form-field class="col-span-2">
     <mat-label>醫院</mat-label>
@@ -34,10 +34,12 @@
     <ul>
       <li
         *ngFor="let HCProgram of HCProgramSelectList"
+        tabindex="0"
         [class.border-amber-400]="
           fcs['programID'].value === HCProgram.programID
         "
         (click)="onSelectProgram(HCProgram)"
+        (keydown.enter)="onSelectProgram(HCProgram)"
         class="bg-white transition cursor-pointer hover:border-amber-400"
       >
         <div class="text-2xl font-semibold mb-2">{{ HCProgram.name }}</div>
@@ -58,6 +60,7 @@
       formControlName="programName"
       required
       readonly
+      tabindex="-1"
     />
 
     <mat-error *ngIf="fcs['programName'].hasError('required')"
@@ -73,6 +76,7 @@
       formControlName="programCharge"
       required
       readonly
+      tabindex="-1"
     />
   </mat-form-field>
-</form>
+</div>

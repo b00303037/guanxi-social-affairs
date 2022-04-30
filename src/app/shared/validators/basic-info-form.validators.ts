@@ -8,22 +8,6 @@ import {
 import { ErrorStateMatcher } from '@angular/material/core';
 import { asValid, isEmpty } from './validator-utils';
 
-export function MobileNoValidator(
-  control: AbstractControl
-): ValidationErrors | null {
-  const mobileNo: string | null = control.value;
-
-  if (isEmpty(mobileNo) || asValid(control)) {
-    return null;
-  }
-
-  if (mobileNoRegExp.test(mobileNo as string)) {
-    return null;
-  }
-
-  return { mobileNo: true };
-}
-
 export function EmailOrMobileNoValidator(
   control: AbstractControl
 ): ValidationErrors | null {
@@ -33,7 +17,7 @@ export function EmailOrMobileNoValidator(
   const email: string | null = emailFC.value;
   const mobileNo: string | null = mobileNoFC.value;
 
-  if (asValid(emailFC) && asValid(mobileNoFC)) {
+  if (asValid(emailFC) || asValid(mobileNoFC)) {
     return null;
   }
 
@@ -55,7 +39,11 @@ export function TelephoneNoValidator(
   const telNo: string | null = telNoFC.value;
   const telExt: string | null = telExtFC.value;
 
-  if (asValid(telPrefixFC) && asValid(telNoFC) && asValid(telExtFC)) {
+  if (
+    (asValid(telPrefixFC) || asValid(telNoFC)) &&
+    telExtFC.untouched &&
+    telExtFC.pristine
+  ) {
     return null;
   }
 
@@ -66,9 +54,7 @@ export function TelephoneNoValidator(
   if (
     !isEmpty(telPrefix) &&
     !isEmpty(telNo) &&
-    telPrefixRegExp.test(telPrefix as string) &&
-    telNoRegExp.test(telNo as string) &&
-    (isEmpty(telExt) || telExtRegExp.test(telExt as string))
+    telephoneNoRegExp.test(`${telPrefix}-${telNo}#${telExt ?? ''}`)
   ) {
     return null;
   }
@@ -98,7 +84,5 @@ export class TelephoneNoErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 
-const mobileNoRegExp: RegExp = /^$|^09[0-9]{8}$/;
-const telPrefixRegExp: RegExp = /^0[0-9]{1,2}$/;
-const telNoRegExp: RegExp = /^[0-9]{6,8}$/;
-const telExtRegExp: RegExp = /^[0-9]{0,6}$/;
+export const mobileNoRegExp: RegExp = /09[0-9]{8}/;
+export const telephoneNoRegExp: RegExp = /0[0-9]{1,2}-[0-9]{6,8}#[0-9]{0,6}/;

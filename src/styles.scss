@@ -48,10 +48,10 @@ $guanxi-social-affairs-theme: mat.define-light-theme(
     @apply w-full min-h-60 relative;
   }
   .spinner {
-    @apply absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center bg-black bg-opacity-10 cursor-progress;
+    @apply absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center bg-black bg-opacity-10 cursor-progress z-10;
   }
   .blocking.spinner {
-    @apply fixed z-10;
+    @apply fixed;
   }
 
   // page
@@ -140,6 +140,22 @@ $guanxi-social-affairs-theme: mat.define-light-theme(
   .owl-theme .owl-dots .owl-dot:hover span {
     @apply bg-amber-400;
   }
+
+  // snack-bar
+  snack-bar-container.success {
+    @apply border-l-[6px] border-teal-600;
+
+    mat-icon {
+      @apply text-teal-600;
+    }
+  }
+  snack-bar-container.error {
+    @apply border-l-[6px] border-rose-400;
+
+    mat-icon {
+      @apply text-rose-400;
+    }
+  }
 }
 
 html,
@@ -172,13 +188,42 @@ mat-form-field {
 .form-field-style {
   margin-bottom: calc(1.34375em + 1em);
   padding: 0 0.75em 0 0.75em;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.42);
   border-radius: 4px 4px 0 0;
 
   background-color: rgba(0, 0, 0, 0.04);
+
+  position: relative;
+
+  .form-field-label {
+    color: rgba(0, 0, 0, 0.6);
+  }
 }
-.form-field-label {
-  color: rgba(0, 0, 0, 0.6);
+.form-field-style::after {
+  content: "";
+  height: 1px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  background-color: rgba(0, 0, 0, 0.42);
+}
+.form-field-style.form-field-invalid {
+  border-bottom-color: #f44336;
+
+  .form-field-label {
+    color: #f44336;
+  }
+}
+.form-field-style:hover::after,
+.form-field-style.form-field-invalid::after {
+  height: 2px;
+}
+.form-field-style:hover::after {
+  background-color: rgba(0, 0, 0, 0.87);
+}
+.form-field-style.form-field-invalid::after {
+  background-color: #f44336;
 }
 .mat-form-field-subscript-wrapper {
   overflow: visible !important;
@@ -187,16 +232,6 @@ mat-form-field {
   font-size: 0.875rem !important;
   line-height: 1.25rem !important;
   white-space: nowrap !important;
-}
-
-// snack-bar
-snack-bar-container.success {
-  background-color: mat.get-color-from-palette($guanxi-social-affairs-primary);
-  color: rgba(255, 255, 255, 1);
-}
-snack-bar-container.error {
-  background-color: mat.get-color-from-palette($guanxi-social-affairs-warn);
-  color: rgba(255, 255, 255, 1);
 }
 
 // table

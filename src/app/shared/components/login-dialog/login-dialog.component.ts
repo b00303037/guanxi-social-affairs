@@ -1,7 +1,6 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   catchError,
   EMPTY,
@@ -14,6 +13,9 @@ import {
 import { GsaService } from 'src/app/api/gsa.service';
 import { LoginReq } from 'src/app/api/models/login.models';
 import { environment } from 'src/environments/environment';
+import { SnackTypes } from '../../enums/snack-type.enum';
+import { Snack } from '../../services/snack-bar.models';
+import { SnackBarService } from '../../services/snack-bar.service';
 import { LoginDialogData, LoginFormModel } from './login-dialog.models';
 
 @Component({
@@ -59,7 +61,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: LoginDialogData,
     private dialogRef: MatDialogRef<LoginDialogComponent>,
-    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService,
     private gsaService: GsaService
   ) {
     this.loginFCs['role'].setValue(this.data.role);
@@ -67,14 +69,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     this.refreshCaptcha();
   }
 
-  ngOnInit(): void {
-    const fv: Partial<LoginFormModel> = {
-      username: this.data.role,
-      password: '123456',
-      captcha: '896062',
-    };
-    this.loginFG.patchValue(fv);
-  }
+  ngOnInit(): void {}
 
   refreshCaptcha(): void {
     const url = environment.fakeData
@@ -108,7 +103,11 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         finalize(() => (this.loggingIn = false)),
         map((res) => {
-          this.snackBar.open(res.message, '', { panelClass: 'success' });
+          const snack = new Snack({
+            message: res.message,
+            type: SnackTypes.Success,
+          });
+          this.snackBarService.add(snack);
 
           this.dialogRef.close(true);
         }),
@@ -118,7 +117,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   }
 
   onError(err: string): Observable<never> {
-    this.snackBar.open(err, '', { panelClass: 'error' });
+    const snack = new Snack({ message: err, type: SnackTypes.Error });
+    this.snackBarService.add(snack);
 
     return EMPTY;
   }

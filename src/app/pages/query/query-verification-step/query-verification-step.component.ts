@@ -12,7 +12,12 @@ export class QueryVerificationStepComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<null>();
 
   @Input() fg!: FormGroup;
-  @Input() fcs!: { [key: string]: AbstractControl };
+  fcs!: {
+    IDNo: AbstractControl;
+    password: AbstractControl;
+    captcha: AbstractControl;
+    passed: AbstractControl;
+  };
 
   showPassword = false;
   captchaImgSrc: string | undefined;
@@ -21,7 +26,18 @@ export class QueryVerificationStepComponent implements OnInit, OnDestroy {
     this.refreshCaptcha();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initFCs();
+  }
+
+  initFCs(): void {
+    this.fcs = {
+      IDNo: this.fg.controls['IDNo'],
+      password: this.fg.controls['password'],
+      captcha: this.fg.controls['captcha'],
+      passed: this.fg.controls['passed'],
+    };
+  }
 
   refreshCaptcha(): void {
     const url = environment.fakeData

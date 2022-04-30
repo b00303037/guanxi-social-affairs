@@ -1,4 +1,4 @@
-import { YN } from '../enums/yn.enum';
+import { YN } from '../../shared/enums/yn.enum';
 import { HospData, HospDataHCProgram } from '../models/get-hosp-data.models';
 
 const hospitalIDs = [1, 2, 3, 4, 5, 6];
@@ -22,7 +22,7 @@ export const HOSP_DATA: HospData = {
         description: `description ${HID}-${n}`,
         charge: PID * 100,
         hospitalID: HID,
-        enabled: HID === n ? YN.N : YN.Y,
+        enabled: YN.Y,
       });
     }
 

@@ -1,4 +1,4 @@
-import { ApplStatuses } from '../enums/appl-status.enum';
+import { ApplStatuses } from '../../shared/enums/appl-status.enum';
 import { BaseAPIResModel } from './base-api.models';
 
 export interface ReviewApplReq {

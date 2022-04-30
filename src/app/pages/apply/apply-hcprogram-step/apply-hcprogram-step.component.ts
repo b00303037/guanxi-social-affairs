@@ -9,12 +9,13 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { YN, YN_OBJ } from 'src/app/api/enums/yn.enum';
+import { YN, YN_OBJ } from 'src/app/shared/enums/yn.enum';
 import {
   HospData,
   HospDataHCProgram,
   HospDataHospital,
 } from 'src/app/api/models/get-hosp-data.models';
+import { HCProgramFCsModel, HCProgramFormModel } from '../apply.models';
 
 @Component({
   selector: 'app-apply-hcprogram-step',
@@ -25,7 +26,7 @@ export class ApplyHCProgramStepComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<null>();
 
   @Input() fg!: FormGroup;
-  @Input() fcs!: { [key: string]: AbstractControl };
+  fcs!: HCProgramFCsModel;
 
   enabledHCProgramList: Array<HospDataHCProgram> = [];
 
@@ -56,22 +57,39 @@ export class ApplyHCProgramStepComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.fcs['hospitalID'].valueChanges
+    this.initFCs();
+
+    this.fg.valueChanges
       .pipe(
         takeUntil(this.destroy$),
         debounceTime(300),
         distinctUntilChanged(),
-        tap<number>((next) => {
+        tap<HCProgramFormModel>((next) => {
           this.HCProgramSelectList = this.enabledHCProgramList.filter(
-            (p) => p.hospitalID === next
+            (p) => p.hospitalID === next.hospitalID
           );
 
-          this.fcs['programID'].setValue(null);
-          this.fcs['programName'].setValue(null);
-          this.fcs['programCharge'].setValue(null);
+          const program = this.HCProgramSelectList.find(
+            (p) => p.programID === next.programID
+          );
+
+          if (program === undefined) {
+            this.fcs['programID'].setValue(null);
+            this.fcs['programName'].setValue(null);
+            this.fcs['programCharge'].setValue(null);
+          }
         })
       )
       .subscribe();
+  }
+
+  initFCs(): void {
+    this.fcs = {
+      hospitalID: this.fg.controls['hospitalID'],
+      programID: this.fg.controls['programID'],
+      programName: this.fg.controls['programName'],
+      programCharge: this.fg.controls['programCharge'],
+    };
   }
 
   onSelectProgram(program: HospDataHCProgram): void {

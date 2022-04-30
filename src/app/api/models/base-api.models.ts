@@ -1,8 +1,4 @@
-export enum BaseAPICodes {
-  SUCCESS = '000',
-  FIELD_ERROR = '100',
-  UNEXPECTED_ERROR = '400',
-}
+import { BaseAPICodes } from 'src/app/shared/enums/base-api-codes.enum';
 
 export interface BaseAPIResModel<T> {
   /**

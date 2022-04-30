@@ -6,7 +6,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {
@@ -18,9 +17,12 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { YN } from 'src/app/api/enums/yn.enum';
+import { YN } from 'src/app/shared/enums/yn.enum';
 import { GsaService } from 'src/app/api/gsa.service';
 import { NewsInList } from 'src/app/api/models/get-news-list.models';
+import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
+import { Snack } from 'src/app/shared/services/snack-bar.models';
+import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 
 @Component({
   selector: 'app-news-list',
@@ -38,7 +40,10 @@ export class NewsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getting = false;
 
-  constructor(private snackBar: MatSnackBar, private gsaService: GsaService) {}
+  constructor(
+    private snackBarService: SnackBarService,
+    private gsaService: GsaService
+  ) {}
 
   ngOnInit(): void {
     this.onGetNewsList();
@@ -72,7 +77,8 @@ export class NewsListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onError(err: string): Observable<never> {
-    this.snackBar.open(err, '', { panelClass: 'error' });
+    const snack = new Snack({ message: err, type: SnackTypes.Error });
+    this.snackBarService.add(snack);
 
     return EMPTY;
   }

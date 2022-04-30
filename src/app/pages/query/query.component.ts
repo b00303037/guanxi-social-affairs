@@ -7,7 +7,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import {
   catchError,
@@ -20,6 +19,9 @@ import {
 } from 'rxjs';
 import { GsaService } from 'src/app/api/gsa.service';
 import { VerifyReq } from 'src/app/api/models/verify.models';
+import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
+import { Snack } from 'src/app/shared/services/snack-bar.models';
+import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import { IDNoValidator } from 'src/app/shared/validators/IDNo.validator';
 import { QueryApplListStepComponent } from './query-appl-list-step/query-appl-list-step.component';
 import { VerificationFormModel } from './query.models';
@@ -73,23 +75,20 @@ export class QueryComponent implements OnInit, OnDestroy {
   constructor(
     private media: MediaMatcher,
     private changeDetectorRef: ChangeDetectorRef,
-    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService,
     private gsaService: GsaService
   ) {
     this.gtMDQuery.addEventListener('change', this._gtMDQueryListener);
   }
 
-  ngOnInit(): void {
-    const fv: Partial<VerificationFormModel> = {
-      IDNo: 'A123456789',
-      password: '123456',
-      captcha: '896062',
-    };
-    this.verificationFG.patchValue(fv);
-  }
+  ngOnInit(): void {}
 
-  onVerify(): void {
-    if (this.verifying || !this.checkVerificationFG()) {
+  onVerificationFormSubmit(e: Event): void {
+    e.preventDefault();
+
+    this.forceValidation(this.verificationFG);
+
+    if (this.verifying || !this.checkFG(this.verificationFG, ['passed'])) {
       return;
     }
     this.verifying = true;
@@ -126,17 +125,18 @@ export class QueryComponent implements OnInit, OnDestroy {
     fg.updateValueAndValidity();
   }
 
-  checkVerificationFG(): boolean {
+  checkFG(fg: FormGroup, skippedFCNames: Array<string> = []): boolean {
     return (
-      this.verificationFG.errors === null &&
-      Object.entries(this.verificationFCs)
-        .filter(([key, fc]) => key !== 'passed')
-        .every(([key, fc]) => fc.errors === null)
+      fg.errors === null &&
+      Object.entries(fg.controls)
+        .filter(([name, fc]) => !skippedFCNames.includes(name))
+        .every(([name, fc]) => fc.errors === null)
     );
   }
 
   onError(err: string): Observable<never> {
-    this.snackBar.open(err, '', { panelClass: 'error' });
+    const snack = new Snack({ message: err, type: SnackTypes.Error });
+    this.snackBarService.add(snack);
 
     return EMPTY;
   }

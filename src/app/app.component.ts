@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { BehaviorSubject, filter, map, tap } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -8,23 +8,10 @@ import { BehaviorSubject, filter, map, tap } from 'rxjs';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  blocking$ = new BehaviorSubject<boolean>(false);
-  spinnerTop = 0;
+  blocking$: Observable<boolean> = this.router.events.pipe(
+    filter((e) => e instanceof NavigationStart || e instanceof NavigationEnd),
+    map((e) => e instanceof NavigationStart)
+  );
 
-  constructor(private router: Router) {
-    this.router.events
-      .pipe(
-        filter(
-          (e) => e instanceof NavigationStart || e instanceof NavigationEnd
-        ),
-        tap((e) => {
-          if (e instanceof NavigationEnd) {
-            window.scrollTo(0, 0);
-          }
-
-          this.blocking$.next(e instanceof NavigationStart);
-        })
-      )
-      .subscribe();
-  }
+  constructor(private router: Router) {}
 }

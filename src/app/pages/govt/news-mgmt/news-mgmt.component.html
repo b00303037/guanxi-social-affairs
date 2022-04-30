@@ -3,10 +3,6 @@
 <mat-card>
   <div class="spinner-box">
     <div class="overflow-auto">
-      <div *ngIf="getting" class="spinner">
-        <mat-spinner></mat-spinner>
-      </div>
-
       <table
         mat-table
         [dataSource]="dataSource"
@@ -32,12 +28,16 @@
           class="h-0"
         ></tr>
 
-        <!-- TODO slide toggle -->
         <!-- 啟用 enabled: enabled -->
         <ng-container matColumnDef="enabled">
           <th mat-header-cell *matHeaderCellDef>啟用</th>
           <td mat-cell *matCellDef="let news" class="border-b-0">
-            <span>{{ news.enabled | i18nSelect: ynMap }}</span>
+            <mat-slide-toggle
+              color="primary"
+              [checked]="news.enabled === ynObj.Y"
+              [disabled]="news.newsID | isInSet: updatingIDs"
+              (change)="onNewsEnabledChange($event, news.newsID)"
+            ></mat-slide-toggle>
           </td>
         </ng-container>
 
@@ -45,7 +45,12 @@
         <ng-container matColumnDef="pinned">
           <th mat-header-cell *matHeaderCellDef>首頁輪播</th>
           <td mat-cell *matCellDef="let news" class="border-b-0">
-            <span>{{ news.pinned | i18nSelect: ynMap }}</span>
+            <mat-slide-toggle
+              color="primary"
+              [checked]="news.pinned === ynObj.Y"
+              [disabled]="news.newsID | isInSet: updatingIDs"
+              (change)="onNewsPinnedChange($event, news.newsID)"
+            ></mat-slide-toggle>
           </td>
         </ng-container>
 
@@ -96,19 +101,28 @@
                 class="grid grid-cols-1 border-t border-black border-opacity-6"
               >
                 <table class="col-span-1">
-                  <!-- TODO slide toggle -->
                   <!-- 啟用 -->
                   <tr>
                     <td><label>啟用</label></td>
                     <td>
-                      <span>{{ news.enabled | i18nSelect: ynMap }}</span>
+                      <mat-slide-toggle
+                        color="primary"
+                        [checked]="news.enabled === ynObj.Y"
+                        [disabled]="news.newsID | isInSet: updatingIDs"
+                        (change)="onNewsEnabledChange($event, news.newsID)"
+                      ></mat-slide-toggle>
                     </td>
                   </tr>
                   <!-- 首頁輪播 -->
                   <tr>
                     <td><label>首頁輪播</label></td>
                     <td>
-                      <span>{{ news.pinned | i18nSelect: ynMap }}</span>
+                      <mat-slide-toggle
+                        color="primary"
+                        [checked]="news.pinned === ynObj.Y"
+                        [disabled]="news.newsID | isInSet: updatingIDs"
+                        (change)="onNewsPinnedChange($event, news.newsID)"
+                      ></mat-slide-toggle>
                     </td>
                   </tr>
                 </table>
@@ -119,5 +133,9 @@
       </table>
     </div>
     <mat-paginator pageSize="10" hidePageSize class="w-full"></mat-paginator>
+
+    <div *ngIf="getting" class="spinner">
+      <mat-spinner></mat-spinner>
+    </div>
   </div>
 </mat-card>

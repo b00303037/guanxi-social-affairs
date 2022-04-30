@@ -1,4 +1,4 @@
-import { YN } from '../enums/yn.enum';
+import { YN } from '../../shared/enums/yn.enum';
 import { HomeData, HomeDataNews } from '../models/get-home-data.models';
 import { NEWS_LIST } from './news-list';
 

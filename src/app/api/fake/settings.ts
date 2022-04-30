@@ -10,6 +10,7 @@ export const SETTINGS: Settings = {
     '13579',
     '02468',
   ],
-  regDateMin: new Date('2019/05/01').toISOString(),
+  maxRegDate: '2019/05/01',
   applIntervalYears: 3,
+  maxImgSizeMB: 1,
 };

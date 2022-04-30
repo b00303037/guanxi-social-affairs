@@ -30,7 +30,7 @@ export function IDNoValidator(
   return { IDNo: true };
 }
 
-const IDNoRegExp: RegExp = /^[a-zA-Z]{1}[1-2]{1}[0-9]{8}$/;
+export const IDNoRegExp: RegExp = /[a-zA-Z]{1}[1-2]{1}[0-9]{8}/;
 
 const IDNoCodesMapping: { [key: string]: string } = {
   A: '10', // 臺北市

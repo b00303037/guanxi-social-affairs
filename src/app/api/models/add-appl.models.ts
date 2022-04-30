@@ -1,4 +1,4 @@
-import { Genders } from '../enums/gender.enum';
+import { Genders } from '../../shared/enums/gender.enum';
 import { BaseAPIResModel } from './base-api.models';
 
 export interface AddApplReq {
@@ -9,7 +9,7 @@ export interface AddApplReq {
   /**
    * 密碼
    */
-  password: string;
+  password?: string;
   /**
    * 姓名
    */

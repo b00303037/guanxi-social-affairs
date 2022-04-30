@@ -13,23 +13,23 @@
         [stepControl]="verificationFG"
         [editable]="flagsOfEditable.verification"
       >
-        <app-query-verification-step
-          [fg]="verificationFG"
-          [fcs]="verificationFCs"
-        ></app-query-verification-step>
+        <form (submit)="onVerificationFormSubmit($event)">
+          <app-query-verification-step
+            [fg]="verificationFG"
+          ></app-query-verification-step>
 
-        <div class="actions-box">
-          <span class="grow"></span>
-          <button
-            type="button"
-            mat-flat-button
-            color="primary"
-            [disabled]="verifying"
-            (click)="forceValidation(verificationFG); onVerify()"
-          >
-            下一步
-          </button>
-        </div>
+          <div class="actions-box">
+            <span class="grow"></span>
+            <button
+              type="submit"
+              mat-flat-button
+              color="primary"
+              [disabled]="verifying"
+            >
+              下一步
+            </button>
+          </div>
+        </form>
       </mat-step>
 
       <!-- 申請紀錄 -->

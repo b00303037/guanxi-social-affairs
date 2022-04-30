@@ -1,8 +1,13 @@
-import { GENDER_MAP } from '../enums/gender.enum';
-import { YN_MAP } from '../enums/yn.enum';
+import { telephoneNoRegExp } from 'src/app/shared/validators/basic-info-form.validators';
+import { GENDER_MAP } from '../../shared/enums/gender.enum';
+import { YN_MAP } from '../../shared/enums/yn.enum';
 import { BaseAPIResModel } from './base-api.models';
 import { ApplInList } from './get-appl-list.models';
-import { HospData } from './get-hosp-data.models';
+import {
+  HospData,
+  HospDataHCProgram,
+  HospDataHospital,
+} from './get-hosp-data.models';
 
 export interface GetApplReq {
   /**
@@ -25,7 +30,7 @@ export interface Appl extends ApplInList {
   /**
    * 存摺封面圖檔，格式為 Base64
    */
-  imgBankBook: string;
+  imgBankbook: string;
   /**
    * 戶籍謄本圖檔，格式為 Base64
    */
@@ -37,7 +42,7 @@ export interface ExtendedAppl extends Appl {
   hasCancerText?: string;
   hospitalName: string;
   programName: string;
-  displayedImg: 'imgIDA' | 'imgIDB' | 'imgBankBook' | 'imgRegTranscript';
+  displayedImg: 'imgIDA' | 'imgIDB' | 'imgBankbook' | 'imgRegTranscript';
 }
 
 interface Property {
@@ -62,17 +67,13 @@ export const DETAIL_PROPERTY_LIST: Array<Property> = [
 export const IMG_PROPERTY_LIST: Array<Property> = [
   { label: '身分證正面', key: 'imgIDA' },
   { label: '身分證反面', key: 'imgIDB' },
-  { label: '存摺封面', key: 'imgBankBook' },
+  { label: '存摺封面', key: 'imgBankbook' },
   { label: '戶籍謄本', key: 'imgRegTranscript' },
 ];
 
-export function extendAppl(appl: Appl, hospData: HospData): ExtendedAppl {
-  const hospital = hospData.hospitalList.find(
-    (h) => h.hospitalID === appl.hospitalID
-  );
-  const program = hospData.HCProgramList.find(
-    (p) => p.programID === appl.programID
-  );
+export function getExtendedAppl(appl: Appl, hospData: HospData): ExtendedAppl {
+  const hospital = findHospital(appl.hospitalID, hospData.hospitalList);
+  const program = findHCProgram(appl.programID, hospData.HCProgramList);
 
   return {
     ...appl,
@@ -82,4 +83,52 @@ export function extendAppl(appl: Appl, hospData: HospData): ExtendedAppl {
     programName: program ? program.name : '',
     displayedImg: 'imgIDA',
   };
+}
+
+export function findHospital(
+  hospitalID: number,
+  hospitalList: Array<HospDataHospital>
+): HospDataHospital | undefined {
+  return hospitalList.find((h) => h.hospitalID === hospitalID);
+}
+
+export function findHCProgram(
+  programID: number,
+  HCProgramList: Array<HospDataHCProgram>
+): HospDataHCProgram | undefined {
+  return HCProgramList.find((p) => p.programID === programID);
+}
+
+export function getTelephoneNo(
+  prefix: string | undefined,
+  no: string | undefined,
+  ext: string | undefined
+): string {
+  if (prefix && no) {
+    return `${prefix}-${no}#${ext ?? ''}`;
+  }
+
+  return '';
+}
+
+export function getTelPrefixNoExt(
+  telephoneNo: string | undefined | null
+): [string | undefined, string | undefined, string | undefined] {
+  let telPrefix = undefined;
+  let telNo = undefined;
+  let telExt = undefined;
+  if (
+    telephoneNo !== undefined &&
+    telephoneNo !== null &&
+    telephoneNoRegExp.test(telephoneNo)
+  ) {
+    const prefixAndOther = telephoneNo.split('-', 2);
+    const noAndExt = prefixAndOther[1].split('#');
+
+    telPrefix = prefixAndOther[0];
+    telExt = noAndExt.splice(-1, 1)[0];
+    telNo = noAndExt.join();
+  }
+
+  return [telPrefix, telNo, telExt];
 }

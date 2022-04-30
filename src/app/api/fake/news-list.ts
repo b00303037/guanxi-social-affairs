@@ -1,4 +1,4 @@
-import { YN } from '../enums/yn.enum';
+import { YN } from '../../shared/enums/yn.enum';
 import { News } from '../models/get-news.models';
 
 const pinnedNewsIDs = [2, 3, 5, 8];

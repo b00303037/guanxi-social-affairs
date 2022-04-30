@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   catchError,
@@ -12,6 +11,9 @@ import {
 } from 'rxjs';
 import { GsaService } from 'src/app/api/gsa.service';
 import { GetNewsReq, News } from 'src/app/api/models/get-news.models';
+import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
+import { Snack } from 'src/app/shared/services/snack-bar.models';
+import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 
 @Component({
   selector: 'app-news',
@@ -28,7 +30,7 @@ export class NewsComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService,
     private gsaService: GsaService
   ) {}
 
@@ -66,7 +68,8 @@ export class NewsComponent implements OnInit, OnDestroy {
   }
 
   onError(err: string): Observable<never> {
-    this.snackBar.open(err, '', { panelClass: 'error' });
+    const snack = new Snack({ message: err, type: SnackTypes.Error });
+    this.snackBarService.add(snack);
 
     return EMPTY;
   }

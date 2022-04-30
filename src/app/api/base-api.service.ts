@@ -2,7 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { BaseAPICodes, BaseAPIResModel } from './models/base-api.models';
+import { BaseAPICodes } from '../shared/enums/base-api-codes.enum';
+import { BaseAPIResModel } from './models/base-api.models';
 
 @Injectable({
   providedIn: 'root',
@@ -48,7 +49,7 @@ export class BaseApiService {
       );
   }
 
-  protected throwNotIn<T>(codes: BaseAPICodes[], res: BaseAPIResModel<T>) {
+  protected throwNotIn<T>(codes: Array<BaseAPICodes>, res: BaseAPIResModel<T>) {
     const { code, message } = res;
 
     if (!codes.includes(code)) {

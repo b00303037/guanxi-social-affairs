@@ -1,14 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  startWith,
-  Subject,
-  takeUntil,
-  tap,
-} from 'rxjs';
+import { startWith, Subject, takeUntil, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { VerificationFCsModel } from '../apply.models';
 
 @Component({
   selector: 'app-apply-verification-step',
@@ -19,7 +13,7 @@ export class ApplyVerificationStepComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<null>();
 
   @Input() fg!: FormGroup;
-  @Input() fcs!: { [key: string]: AbstractControl };
+  fcs!: VerificationFCsModel;
 
   showPassword = false;
   captchaImgSrc: string | undefined;
@@ -29,19 +23,29 @@ export class ApplyVerificationStepComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.initFCs();
+
     const isFirstTime = this.fcs['isFirstTime'].value;
 
     this.fcs['isFirstTime'].valueChanges
       .pipe(
         takeUntil(this.destroy$),
-        debounceTime(300),
-        distinctUntilChanged(),
         startWith(isFirstTime),
         tap<boolean>((next) =>
           this.fcs['password'][next ? 'disable' : 'enable']()
         )
       )
       .subscribe();
+  }
+
+  initFCs(): void {
+    this.fcs = {
+      isFirstTime: this.fg.controls['isFirstTime'],
+      IDNo: this.fg.controls['IDNo'],
+      password: this.fg.controls['password'],
+      captcha: this.fg.controls['captcha'],
+      passed: this.fg.controls['passed'],
+    };
   }
 
   refreshCaptcha(): void {

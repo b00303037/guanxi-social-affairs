@@ -7,7 +7,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { format, parse } from 'date-fns';
@@ -20,23 +19,32 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { Genders } from 'src/app/api/enums/gender.enum';
+import { Genders } from 'src/app/shared/enums/gender.enum';
 import { GsaService } from 'src/app/api/gsa.service';
 import { AddApplReq } from 'src/app/api/models/add-appl.models';
 import { Settings } from 'src/app/api/models/get-settings.models';
 import { VerifyReq } from 'src/app/api/models/verify.models';
+import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
+import { Snack } from 'src/app/shared/services/snack-bar.models';
+import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import {
   EmailOrMobileNoValidator,
-  MobileNoValidator,
+  mobileNoRegExp,
   TelephoneNoValidator,
 } from 'src/app/shared/validators/basic-info-form.validators';
 import { IDNoValidator } from 'src/app/shared/validators/IDNo.validator';
 import {
+  BasicInfoFCsModel,
   BasicInfoFormModel,
+  HCProgramFCsModel,
   HCProgramFormModel,
+  IDPhotosFCsModel,
   IDPhotosFormModel,
+  VerificationFCsModel,
   VerificationFormModel,
 } from './apply.models';
+import { DateRangeValidator } from 'src/app/shared/validators/validator-utils';
+import { getTelephoneNo } from 'src/app/api/models/get-appl.models';
 
 @Component({
   selector: 'app-apply',
@@ -74,7 +82,7 @@ export class ApplyComponent implements OnInit, OnDestroy {
     ]),
     passed: new FormControl(false, [Validators.requiredTrue]),
   });
-  verificationFCs = {
+  verificationFCs: VerificationFCsModel = {
     isFirstTime: this.verificationFG.controls['isFirstTime'],
     IDNo: this.verificationFG.controls['IDNo'],
     password: this.verificationFG.controls['password'],
@@ -92,7 +100,7 @@ export class ApplyComponent implements OnInit, OnDestroy {
     programName: new FormControl(null, [Validators.required]),
     programCharge: new FormControl(null, [Validators.required]),
   });
-  HCProgramFCs = {
+  HCProgramFCs: HCProgramFCsModel = {
     hospitalID: this.HCProgramFG.controls['hospitalID'],
     programID: this.HCProgramFG.controls['programID'],
     programName: this.HCProgramFG.controls['programName'],
@@ -114,23 +122,23 @@ export class ApplyComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.maxLength(20),
       ]),
-      gender: new FormControl(Genders.Male, [Validators.required]),
+      gender: new FormControl(null, [Validators.required]),
       birthDate: new FormControl(null, [Validators.required]),
       regDate: new FormControl(null, [Validators.required]),
       email: new FormControl(null, [
         Validators.maxLength(50),
         Validators.email,
       ]),
-      mobileNo: new FormControl(null, [MobileNoValidator]),
-      telPrefix: new FormControl(null),
-      telNo: new FormControl(null),
-      telExt: new FormControl(null),
+      mobileNo: new FormControl(null, [Validators.pattern(mobileNoRegExp)]),
+      telPrefix: new FormControl(null, [Validators.maxLength(3)]),
+      telNo: new FormControl(null, [Validators.maxLength(8)]),
+      telExt: new FormControl(null, [Validators.maxLength(6)]),
     },
     {
       validators: [EmailOrMobileNoValidator, TelephoneNoValidator],
     }
   );
-  basicInfoFCs = {
+  basicInfoFCs: BasicInfoFCsModel = {
     newPassword: this.basicInfoFG.controls['newPassword'],
     name: this.basicInfoFG.controls['name'],
     gender: this.basicInfoFG.controls['gender'],
@@ -138,7 +146,9 @@ export class ApplyComponent implements OnInit, OnDestroy {
     regDate: this.basicInfoFG.controls['regDate'],
     email: this.basicInfoFG.controls['email'],
     mobileNo: this.basicInfoFG.controls['mobileNo'],
-    telephoneNo: this.basicInfoFG.controls['telephoneNo'],
+    telPrefix: this.basicInfoFG.controls['telPrefix'],
+    telNo: this.basicInfoFG.controls['telNo'],
+    telExt: this.basicInfoFG.controls['telExt'],
   };
   get basicInfoFV(): BasicInfoFormModel {
     return this.basicInfoFG.value;
@@ -152,7 +162,7 @@ export class ApplyComponent implements OnInit, OnDestroy {
     imgRegTranscript: new FormControl(null, [Validators.required]),
     passed: new FormControl(false, [Validators.requiredTrue]),
   });
-  IDPhotosFCs = {
+  IDPhotosFCs: IDPhotosFCsModel = {
     imgIDA: this.IDPhotosFG.controls['imgIDA'],
     imgIDB: this.IDPhotosFG.controls['imgIDB'],
     imgBankbook: this.IDPhotosFG.controls['imgBankbook'],
@@ -163,7 +173,7 @@ export class ApplyComponent implements OnInit, OnDestroy {
     return this.IDPhotosFG.value;
   }
 
-  IDNoSuffixList: Array<string> = [];
+  acceptedIDNoSuffix: string = '';
   maxRegDate = new Date();
 
   verifying = false;
@@ -173,38 +183,47 @@ export class ApplyComponent implements OnInit, OnDestroy {
     private media: MediaMatcher,
     private changeDetectorRef: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService,
     private gsaService: GsaService
   ) {
     this.gtMDQuery.addEventListener('change', this._gtMDQueryListener);
 
     const { settings } = this.route.snapshot.data as { settings: Settings };
 
-    this.IDNoSuffixList = settings.IDNoSuffixList;
-    this.maxRegDate = parse(settings.regDateMin, 'yyyy/MM/dd', new Date());
+    this.acceptedIDNoSuffix =
+      settings.IDNoSuffixList[new Date().getDay()] ?? '';
+    this.maxRegDate = parse(
+      `${settings.maxRegDate} 00:00:00 0`,
+      'yyyy/MM/dd HH:mm:ss S',
+      new Date()
+    );
+
+    this.basicInfoFCs['regDate'].addValidators([
+      DateRangeValidator({ max: this.maxRegDate }),
+    ]);
   }
 
-  ngOnInit(): void {
-    const fv: Partial<VerificationFormModel> = {
-      IDNo: 'A123456789',
-      captcha: '896062',
-    };
-    this.verificationFG.patchValue(fv);
-  }
+  ngOnInit(): void {}
 
-  onVerify(): void {
-    if (this.verifying || !this.checkVerificationFG()) {
+  onVerificationFormSubmit(e: Event): void {
+    e.preventDefault();
+
+    this.forceValidation(this.verificationFG);
+
+    if (!this.checkIDNoSuffix()) {
+      const snack = new Snack({
+        message: '目前採分流管制，敬請擇日再做申請',
+        type: SnackTypes.Error,
+      });
+      this.snackBarService.add(snack);
       return;
     }
-    if (!this.checkIDNoSuffix()) {
-      this.snackBar.open('目前採分流管制，敬請擇日再做申請', '', {
-        panelClass: 'error',
-      });
+    if (this.verifying || !this.checkFG(this.verificationFG, ['passed'])) {
       return;
     }
     this.verifying = true;
 
-    const { IDNo, password, captcha } = this.verificationFV;
+    const { isFirstTime, IDNo, password, captcha } = this.verificationFV;
     const req: VerifyReq = {
       action: 'apply',
       IDNo,
@@ -220,7 +239,7 @@ export class ApplyComponent implements OnInit, OnDestroy {
         map((res) => {
           this.verificationFCs['passed'].setValue(true);
           this.basicInfoFCs['newPassword'][
-            res.content.hasApplied ? 'disable' : 'enable'
+            isFirstTime ? 'enable' : 'disable'
           ]();
 
           // TODO save token
@@ -232,8 +251,39 @@ export class ApplyComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  onAdd(): void {
-    if (this.adding || !this.checkIDPhotosFG()) {
+  onHCProgramFormSubmit(e: Event): void {
+    e.preventDefault();
+
+    this.stepper.next();
+  }
+
+  onBasicInfoFormSubmit(e: Event): void {
+    e.preventDefault();
+
+    this.forceValidation(this.basicInfoFG);
+
+    if (!this.checkRegDate()) {
+      const message = `未符合申請資格，設籍日期須早於 ${format(
+        this.maxRegDate,
+        'yyyy/MM/dd'
+      )}`;
+      const snack = new Snack({ message, type: SnackTypes.Error });
+      this.snackBarService.add(snack);
+      return;
+    }
+    if (!this.checkFG(this.basicInfoFG)) {
+      return;
+    }
+
+    this.stepper.next();
+  }
+
+  onIDPhotosFormSubmit(e: Event): void {
+    e.preventDefault();
+
+    this.forceValidation(this.IDPhotosFG);
+
+    if (this.adding || !this.checkFG(this.IDPhotosFG, ['passed'])) {
       return;
     }
     this.adding = true;
@@ -255,14 +305,14 @@ export class ApplyComponent implements OnInit, OnDestroy {
     const { imgIDA, imgIDB, imgBankbook, imgRegTranscript } = this.IDPhotosFV;
     const req: AddApplReq = {
       IDNo,
-      password: (isFirstTime ? newPassword : password) as string,
+      password: isFirstTime ? newPassword : password,
       name,
       gender,
       birthDate: format(birthDate, 'yyyy/MM/dd'),
       regDate: format(regDate, 'yyyy/MM/dd'),
       email,
       mobileNo,
-      telephoneNo: this.getTelephoneNo(telPrefix, telNo, telExt),
+      telephoneNo: getTelephoneNo(telPrefix, telNo, telExt),
       imgIDA,
       imgIDB,
       imgBankbook,
@@ -276,7 +326,11 @@ export class ApplyComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         finalize(() => (this.adding = false)),
         map((res) => {
-          this.snackBar.open(res.message, '', { panelClass: 'success' });
+          const snack = new Snack({
+            message: res.message,
+            type: SnackTypes.Success,
+          });
+          this.snackBarService.add(snack);
 
           this.IDPhotosFCs['passed'].setValue(true);
 
@@ -296,47 +350,32 @@ export class ApplyComponent implements OnInit, OnDestroy {
     fg.updateValueAndValidity();
   }
 
-  checkVerificationFG(): boolean {
+  checkFG(fg: FormGroup, skippedFCNames: Array<string> = []): boolean {
     return (
-      this.verificationFG.errors === null &&
-      Object.entries(this.verificationFCs)
-        .filter(([key, fc]) => key !== 'passed')
-        .every(([key, fc]) => fc.errors === null)
+      fg.errors === null &&
+      Object.entries(fg.controls)
+        .filter(([name, fc]) => !skippedFCNames.includes(name))
+        .every(([name, fc]) => fc.errors === null)
     );
   }
 
   checkIDNoSuffix(): boolean {
     const IDNo: string | null = this.verificationFCs['IDNo'].value;
-    const suffixes = this.IDNoSuffixList[new Date().getDay()];
 
     return (
-      IDNo === null || suffixes === '' || suffixes.includes(IDNo.slice(-1))
+      IDNo === null ||
+      this.acceptedIDNoSuffix === '' ||
+      this.acceptedIDNoSuffix.includes(IDNo.slice(-1))
     );
   }
 
-  checkIDPhotosFG(): boolean {
-    return (
-      this.IDPhotosFG.errors === null &&
-      Object.entries(this.IDPhotosFCs)
-        .filter(([key, fc]) => key !== 'passed')
-        .every(([key, fc]) => fc.errors === null)
-    );
-  }
-
-  getTelephoneNo(
-    prefix: string | undefined,
-    no: string | undefined,
-    ext: string | undefined
-  ): string {
-    if (prefix && no) {
-      return `${prefix}-${no}` + ext ? `#${ext}` : '';
-    }
-
-    return '';
+  checkRegDate(): boolean {
+    return !this.basicInfoFCs['regDate'].hasError('dateRange');
   }
 
   onError(err: string): Observable<never> {
-    this.snackBar.open(err, '', { panelClass: 'error' });
+    const snack = new Snack({ message: err, type: SnackTypes.Error });
+    this.snackBarService.add(snack);
 
     return EMPTY;
   }

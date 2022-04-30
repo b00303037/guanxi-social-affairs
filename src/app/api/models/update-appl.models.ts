@@ -1,4 +1,4 @@
-import { Genders } from '../enums/gender.enum';
+import { Genders } from '../../shared/enums/gender.enum';
 import { BaseAPIResModel } from './base-api.models';
 
 export interface UpdateApplReq {
@@ -52,6 +52,10 @@ export interface UpdateApplReq {
    * 戶籍謄本圖檔，格式為 Base64
    */
   imgRegTranscript?: string;
+  /**
+   * 健檢項目 ID
+   */
+  programID?: number;
 }
 
 export type UpdateApplRes = BaseAPIResModel<null>;

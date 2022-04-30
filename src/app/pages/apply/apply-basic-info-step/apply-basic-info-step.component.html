@@ -1,13 +1,20 @@
-<form [formGroup]="fg" class="grid grid-cols-12 gap-x-4 my-4">
+<div [formGroup]="fg" class="grid grid-cols-12 gap-x-4 my-4">
   <!-- 身分證字號 -->
   <mat-form-field class="col-span-12 sm:col-span-6">
     <mat-label>身分證字號</mat-label>
-    <input type="text" matInput [value]="IDNo" required readonly />
+    <input
+      type="text"
+      matInput
+      [value]="IDNo"
+      required
+      readonly
+      tabindex="-1"
+    />
   </mat-form-field>
 
-  <!-- 密碼 -->
+  <!-- 新密碼 -->
   <mat-form-field class="col-span-12 sm:col-span-6">
-    <mat-label>密碼</mat-label>
+    <mat-label>新密碼</mat-label>
     <input
       [type]="showPassword ? 'text' : 'password'"
       matInput
@@ -29,10 +36,10 @@
     </button>
 
     <mat-error *ngIf="fcs['newPassword'].hasError('required')"
-      >請輸入&nbsp;<strong>密碼</strong>
+      >請輸入&nbsp;<strong>新密碼</strong>
     </mat-error>
     <mat-error *ngIf="fcs['newPassword'].hasError('minlength')"
-      ><strong>密碼</strong>&nbsp;格式有誤</mat-error
+      >請輸入&nbsp;<strong>6 個字元以上</strong>&nbsp;的新密碼</mat-error
     >
   </mat-form-field>
 
@@ -55,6 +62,9 @@
   <!-- 性別 -->
   <div
     class="col-span-12 h-form-field form-field-style flex items-center sm:col-span-6"
+    [class.form-field-invalid]="
+      (fcs['gender'].touched || fcs['gender'].dirty) && fcs['gender'].invalid
+    "
   >
     <label class="form-field-label mr-4">性別 *</label>
     <mat-radio-group formControlName="gender">
@@ -78,6 +88,7 @@
       required
       [max]="today"
       readonly
+      tabindex="-1"
       class="cursor-pointer"
     />
 
@@ -101,11 +112,7 @@
       >請選擇&nbsp;<strong>出生日期</strong></mat-error
     >
 
-    <mat-datepicker
-      #birthDatepicker
-      startView="multi-year"
-      [touchUi]="mobileQuery.matches"
-    ></mat-datepicker>
+    <mat-datepicker #birthDatepicker startView="multi-year"></mat-datepicker>
   </mat-form-field>
 
   <!-- 設籍日期 -->
@@ -121,6 +128,7 @@
       required
       [max]="today"
       readonly
+      tabindex="-1"
       class="cursor-pointer"
     />
 
@@ -143,12 +151,11 @@
     <mat-error *ngIf="fcs['regDate'].hasError('required')"
       >請選擇&nbsp;<strong>設籍日期</strong></mat-error
     >
+    <mat-error *ngIf="fcs['regDate'].hasError('dateRange')"
+      >未符合申請資格，須早於{{ maxRegDate | date: "yyyy/MM/dd" }}
+    </mat-error>
 
-    <mat-datepicker
-      #regDatepicker
-      startView="multi-year"
-      [touchUi]="mobileQuery.matches"
-    ></mat-datepicker>
+    <mat-datepicker #regDatepicker startView="multi-year"></mat-datepicker>
   </mat-form-field>
 
   <!-- Email -->
@@ -187,7 +194,7 @@
         >行動電話</strong
       ></mat-error
     >
-    <mat-error *ngIf="fcs['mobileNo'].hasError('mobileNo')"
+    <mat-error *ngIf="fcs['mobileNo'].hasError('pattern')"
       ><strong>行動電話</strong>&nbsp;格式有誤</mat-error
     >
   </mat-form-field>
@@ -236,4 +243,4 @@
       />
     </mat-form-field>
   </div>
-</form>
+</div>

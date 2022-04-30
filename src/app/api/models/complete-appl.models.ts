@@ -1,4 +1,4 @@
-import { YN } from '../enums/yn.enum';
+import { YN } from '../../shared/enums/yn.enum';
 import { BaseAPIResModel } from './base-api.models';
 
 export interface CompleteApplReq {

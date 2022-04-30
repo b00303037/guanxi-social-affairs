@@ -1,8 +1,8 @@
-import { ApplStatuses } from '../enums/appl-status.enum';
-import { Genders } from '../enums/gender.enum';
-import { YN } from '../enums/yn.enum';
+import { ApplStatuses } from '../../shared/enums/appl-status.enum';
+import { Genders } from '../../shared/enums/gender.enum';
+import { YN } from '../../shared/enums/yn.enum';
 import { Appl } from '../models/get-appl.models';
-import { imgIDA, imgIDB, imgBankBook, imgRegTranscript } from './img-data';
+import { imgIDA, imgIDB, imgBankbook, imgRegTranscript } from './img-data';
 
 export const APPL_LIST: Array<Appl> = [
   // 'U': 待審核
@@ -19,7 +19,7 @@ export const APPL_LIST: Array<Appl> = [
     telephoneNo: '02-12345678#90',
     imgIDA,
     imgIDB,
-    imgBankBook,
+    imgBankbook: imgBankbook,
     imgRegTranscript,
     scheduledDate: undefined,
     completionDate: undefined,
@@ -43,7 +43,7 @@ export const APPL_LIST: Array<Appl> = [
     telephoneNo: '02-12345678#90',
     imgIDA,
     imgIDB,
-    imgBankBook,
+    imgBankbook: imgBankbook,
     imgRegTranscript,
     scheduledDate: undefined,
     completionDate: undefined,
@@ -67,7 +67,7 @@ export const APPL_LIST: Array<Appl> = [
     telephoneNo: '02-12345678#90',
     imgIDA,
     imgIDB,
-    imgBankBook,
+    imgBankbook: imgBankbook,
     imgRegTranscript,
     scheduledDate: undefined,
     completionDate: undefined,
@@ -91,7 +91,7 @@ export const APPL_LIST: Array<Appl> = [
     telephoneNo: '02-12345678#90',
     imgIDA,
     imgIDB,
-    imgBankBook,
+    imgBankbook: imgBankbook,
     imgRegTranscript,
     scheduledDate: undefined,
     completionDate: undefined,
@@ -115,7 +115,7 @@ export const APPL_LIST: Array<Appl> = [
     telephoneNo: '02-12345678#90',
     imgIDA,
     imgIDB,
-    imgBankBook,
+    imgBankbook: imgBankbook,
     imgRegTranscript,
     scheduledDate: '2022/11/05',
     completionDate: undefined,
@@ -139,7 +139,7 @@ export const APPL_LIST: Array<Appl> = [
     telephoneNo: '02-12345678#90',
     imgIDA,
     imgIDB,
-    imgBankBook,
+    imgBankbook: imgBankbook,
     imgRegTranscript,
     scheduledDate: '2022/11/06',
     completionDate: '2022/11/06',

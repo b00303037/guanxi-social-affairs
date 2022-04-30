@@ -144,7 +144,7 @@
       "
       mat-menu-item
       class="color-primary"
-      (click)="openArrangeApplDialog(appl)"
+      (click)="openArrangeApplDialog(appl.applicationID)"
     >
       <mat-icon class="color-primary">check_circle</mat-icon>
       <span>安排健檢</span>
@@ -158,7 +158,7 @@
       "
       mat-menu-item
       class="color-primary"
-      (click)="openCompleteApplDialog(appl)"
+      (click)="openCompleteApplDialog(appl.applicationID)"
     >
       <mat-icon class="color-primary">error</mat-icon>
       <span>完成健檢</span>

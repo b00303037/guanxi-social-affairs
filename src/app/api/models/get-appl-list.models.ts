@@ -1,6 +1,6 @@
-import { ApplStatuses } from '../enums/appl-status.enum';
-import { Genders } from '../enums/gender.enum';
-import { YN } from '../enums/yn.enum';
+import { ApplStatuses } from '../../shared/enums/appl-status.enum';
+import { Genders } from '../../shared/enums/gender.enum';
+import { YN } from '../../shared/enums/yn.enum';
 import { BaseAPIResModel } from './base-api.models';
 
 export interface GetApplListReq {}

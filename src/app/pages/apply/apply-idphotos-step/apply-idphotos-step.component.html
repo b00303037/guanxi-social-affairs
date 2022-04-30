@@ -1,15 +1,28 @@
-<form [formGroup]="fg" class="grid grid-cols-2 gap-x-4 my-4">
+<div [formGroup]="fg" class="grid grid-cols-2 gap-x-4 my-4">
   <!-- 身分證正面 -->
-  <div class="col-span-2 form-field-style sm:col-span-1">
+  <div
+    class="col-span-2 form-field-style sm:col-span-1"
+    [class.form-field-invalid]="
+      (fcs['imgIDA'].touched || fcs['imgIDA'].dirty) && fcs['imgIDA'].invalid
+    "
+  >
     <div class="w-full h-form-field flex justify-between items-center">
       <label class="form-field-label">身分證正面 *</label>
+
+      <input
+        #imgIDAInput
+        type="file"
+        accept="image/*"
+        (change)="handleImageUpload($event, fcs['imgIDA'])"
+        class="hidden"
+      />
 
       <button
         type="button"
         mat-icon-button
         color="primary"
         [disabled]="uploading"
-        (click)="uploadPhoto(fcs['imgIDA'])"
+        (click)="imgIDAInput.click()"
       >
         <mat-icon>add_photo_alternate</mat-icon>
       </button>
@@ -25,7 +38,7 @@
 
       <ng-template #noImgIDA>
         <span>請&nbsp;</span
-        ><span class="clickable-text" (click)="uploadPhoto(fcs['imgIDA'])"
+        ><span class="clickable-text" (click)="imgIDAInput.click()"
           >拍攝或上傳</span
         ><span>&nbsp;<strong>身分證正面</strong>&nbsp;照片</span>
       </ng-template>
@@ -33,16 +46,29 @@
   </div>
 
   <!-- 身分證反面 -->
-  <div class="col-span-2 form-field-style sm:col-span-1">
+  <div
+    class="col-span-2 form-field-style sm:col-span-1"
+    [class.form-field-invalid]="
+      (fcs['imgIDB'].touched || fcs['imgIDB'].dirty) && fcs['imgIDB'].invalid
+    "
+  >
     <div class="w-full h-form-field flex justify-between items-center">
       <label class="form-field-label">身分證反面 *</label>
+
+      <input
+        #imgIDBInput
+        type="file"
+        accept="image/*"
+        (change)="handleImageUpload($event, fcs['imgIDB'])"
+        class="hidden"
+      />
 
       <button
         type="button"
         mat-icon-button
         color="primary"
         [disabled]="uploading"
-        (click)="uploadPhoto(fcs['imgIDB'])"
+        (click)="imgIDBInput.click()"
       >
         <mat-icon>add_photo_alternate</mat-icon>
       </button>
@@ -58,7 +84,7 @@
 
       <ng-template #noImgIDB>
         <span>請&nbsp;</span
-        ><span class="clickable-text" (click)="uploadPhoto(fcs['imgIDB'])"
+        ><span class="clickable-text" (click)="imgIDBInput.click()"
           >拍攝或上傳</span
         ><span>&nbsp;<strong>身分證反面</strong>&nbsp;照片</span>
       </ng-template>
@@ -66,16 +92,30 @@
   </div>
 
   <!-- 存摺封面 -->
-  <div class="col-span-2 form-field-style sm:col-span-1">
+  <div
+    class="col-span-2 form-field-style sm:col-span-1"
+    [class.form-field-invalid]="
+      (fcs['imgBankbook'].touched || fcs['imgBankbook'].dirty) &&
+      fcs['imgBankbook'].invalid
+    "
+  >
     <div class="w-full h-form-field flex justify-between items-center">
       <label class="form-field-label">存摺封面 *</label>
+
+      <input
+        #imgBankbookInput
+        type="file"
+        accept="image/*"
+        (change)="handleImageUpload($event, fcs['imgBankbook'])"
+        class="hidden"
+      />
 
       <button
         type="button"
         mat-icon-button
         color="primary"
         [disabled]="uploading"
-        (click)="uploadPhoto(fcs['imgBankbook'])"
+        (click)="imgBankbookInput.click()"
       >
         <mat-icon>add_photo_alternate</mat-icon>
       </button>
@@ -91,7 +131,7 @@
 
       <ng-template #noImgBankbook>
         <span>請&nbsp;</span
-        ><span class="clickable-text" (click)="uploadPhoto(fcs['imgBankbook'])"
+        ><span class="clickable-text" (click)="imgBankbookInput.click()"
           >拍攝或上傳</span
         ><span>&nbsp;<strong>存摺封面</strong>&nbsp;照片</span>
       </ng-template>
@@ -99,16 +139,30 @@
   </div>
 
   <!-- 戶籍謄本 -->
-  <div class="col-span-2 form-field-style sm:col-span-1">
+  <div
+    class="col-span-2 form-field-style sm:col-span-1"
+    [class.form-field-invalid]="
+      (fcs['imgRegTranscript'].touched || fcs['imgRegTranscript'].dirty) &&
+      fcs['imgRegTranscript'].invalid
+    "
+  >
     <div class="w-full h-form-field flex justify-between items-center">
       <label class="form-field-label">戶籍謄本 *</label>
+
+      <input
+        #imgRegTranscriptInput
+        type="file"
+        accept="image/*"
+        (change)="handleImageUpload($event, fcs['imgRegTranscript'])"
+        class="hidden"
+      />
 
       <button
         type="button"
         mat-icon-button
         color="primary"
         [disabled]="uploading"
-        (click)="uploadPhoto(fcs['imgRegTranscript'])"
+        (click)="imgRegTranscriptInput.click()"
       >
         <mat-icon>add_photo_alternate</mat-icon>
       </button>
@@ -124,12 +178,10 @@
 
       <ng-template #noImgRegTranscript>
         <span>請&nbsp;</span
-        ><span
-          class="clickable-text"
-          (click)="uploadPhoto(fcs['imgRegTranscript'])"
+        ><span class="clickable-text" (click)="imgRegTranscriptInput.click()"
           >拍攝或上傳</span
         ><span>&nbsp;<strong>戶籍謄本</strong>&nbsp;照片</span>
       </ng-template>
     </div>
   </div>
-</form>
+</div>

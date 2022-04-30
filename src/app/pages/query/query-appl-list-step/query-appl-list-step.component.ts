@@ -16,7 +16,6 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -33,12 +32,12 @@ import {
 import {
   APPL_STATUS_MAP,
   APPL_STATUS_OBJ,
-} from 'src/app/api/enums/appl-status.enum';
+} from 'src/app/shared/enums/appl-status.enum';
 import { GsaService } from 'src/app/api/gsa.service';
 import { CancelApplReq } from 'src/app/api/models/cancel-appl.models';
 import { ApplInList } from 'src/app/api/models/get-appl-list.models';
 import {
-  extendAppl,
+  getExtendedAppl,
   ExtendedAppl,
   GetApplReq,
 } from 'src/app/api/models/get-appl.models';
@@ -48,6 +47,15 @@ import {
   ConfirmDialogData,
   ConfirmDialogResult,
 } from 'src/app/shared/components/confirm-dialog/confirm-dialog.models';
+import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
+import { Snack } from 'src/app/shared/services/snack-bar.models';
+import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
+import {
+  UpdateApplDialogData,
+  UpdateApplDialogResult,
+} from 'src/app/shared/components/update-appl-dialog/update-appl-dialog.models';
+import { Settings } from 'src/app/api/models/get-settings.models';
+import { UpdateApplDialogComponent } from 'src/app/shared/components/update-appl-dialog/update-appl-dialog.component';
 
 @Component({
   selector: 'app-query-appl-list-step',
@@ -98,7 +106,7 @@ export class QueryApplListStepComponent
     private changeDetectorRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private matDialog: MatDialog,
-    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService,
     private gsaService: GsaService
   ) {
     this.gtMDQuery.addEventListener('change', this._gtMDQueryListener);
@@ -152,7 +160,7 @@ export class QueryApplListStepComponent
           };
 
           this.expandingApplID = undefined;
-          this.expandedAppl = extendAppl(res.content, hospData);
+          this.expandedAppl = getExtendedAppl(res.content, hospData);
         }),
         catchError((err) => this.onError(err))
       )
@@ -191,7 +199,11 @@ export class QueryApplListStepComponent
         takeUntil(this.destroy$),
         finalize(() => (this.cancelling = false)),
         map((res) => {
-          this.snackBar.open(res.message, '', { panelClass: 'success' });
+          const snack = new Snack({
+            message: res.message,
+            type: SnackTypes.Success,
+          });
+          this.snackBarService.add(snack);
 
           this.onGetApplList();
         }),
@@ -201,11 +213,32 @@ export class QueryApplListStepComponent
   }
 
   openUpdateApplDialog(applicationID: string): void {
-    // TODO
+    // TODO open UpdateApplDialog
+    const { hospData, settings } = this.route.snapshot.data as {
+      hospData: HospData;
+      settings: Settings;
+    };
+
+    const data: UpdateApplDialogData = {
+      applicationID,
+      hospData,
+      settings,
+    };
+
+    this.matDialog
+      .open(UpdateApplDialogComponent, { data, width: '100%' })
+      .afterClosed()
+      .pipe(
+        takeUntil(this.destroy$),
+        filter<UpdateApplDialogResult>((result) => result === true),
+        tap(() => this.onGetApplList())
+      )
+      .subscribe();
   }
 
   onError(err: string): Observable<never> {
-    this.snackBar.open(err, '', { panelClass: 'error' });
+    const snack = new Snack({ message: err, type: SnackTypes.Error });
+    this.snackBarService.add(snack);
 
     return EMPTY;
   }

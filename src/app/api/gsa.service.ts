@@ -4,7 +4,6 @@ import { map, Observable, switchMap, throwError, timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { BaseApiService } from './base-api.service';
 import { APPL_LIST } from './fake/appl-list';
-import { HCPROGRAM_LIST } from './fake/hcprogram-list';
 import { HOME_DATA } from './fake/home-data';
 import { HOSP_DATA } from './fake/hosp-data';
 import { NEWS_LIST } from './fake/news-list';
@@ -16,7 +15,6 @@ import {
 } from './models/add-hcprogram.models';
 import { AddNewsReq, AddNewsRes } from './models/add-news.models';
 import { ArrangeApplReq, ArrangeApplRes } from './models/arrange-appl.models';
-import { BaseAPICodes } from './models/base-api.models';
 import { BatchNotifyReq, BatchNotifyRes } from './models/batch-notify.models';
 import { CancelApplReq, CancelApplRes } from './models/cancel-appl.models';
 import {
@@ -25,10 +23,6 @@ import {
 } from './models/complete-appl.models';
 import { GetApplListReq, GetApplListRes } from './models/get-appl-list.models';
 import { GetApplReq, GetApplRes } from './models/get-appl.models';
-import {
-  GetHCProgramListReq,
-  GetHCProgramListRes,
-} from './models/get-hcprogram-list.models';
 import { GetHomeDataRes } from './models/get-home-data.models';
 import { GetHospDataRes } from './models/get-hosp-data.models';
 import { GetNewsListReq, GetNewsListRes } from './models/get-news-list.models';
@@ -43,12 +37,15 @@ import {
 } from './models/update-hcprogram.models';
 import { UpdateNewsReq, UpdateNewsRes } from './models/update-news.models';
 import { VerifyReq, VerifyRes } from './models/verify.models';
+import { BaseAPICodes } from '../shared/enums/base-api-codes.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GsaService extends BaseApiService {
   private baseRoute = '/api';
+  private shortLatencyMS = 300;
+  private longLatencyMS = 600;
 
   constructor(protected override http: HttpClient) {
     super(http);
@@ -68,7 +65,7 @@ export class GsaService extends BaseApiService {
       console.log('GetHomeData');
       console.log(content);
 
-      return timer(1500).pipe(
+      return timer(this.longLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -98,7 +95,7 @@ export class GsaService extends BaseApiService {
       console.log('GetHospData');
       console.log(content);
 
-      return timer(1500).pipe(
+      return timer(this.longLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -128,7 +125,7 @@ export class GsaService extends BaseApiService {
       console.log('GetSettings');
       console.log(content);
 
-      return timer(1500).pipe(
+      return timer(this.longLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -162,7 +159,7 @@ export class GsaService extends BaseApiService {
       console.log(req);
       console.log(content);
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -190,7 +187,7 @@ export class GsaService extends BaseApiService {
       console.log('AddAppl');
       console.log(req);
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -218,7 +215,7 @@ export class GsaService extends BaseApiService {
       console.log('UpdateAppl');
       console.log(req);
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -246,7 +243,7 @@ export class GsaService extends BaseApiService {
       console.log('CancelAppl');
       console.log(req);
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -279,7 +276,7 @@ export class GsaService extends BaseApiService {
         hosp: '醫院',
       };
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -313,7 +310,7 @@ export class GsaService extends BaseApiService {
       console.log(req);
       console.log(content);
 
-      return timer(1500).pipe(
+      return timer(this.longLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -347,7 +344,7 @@ export class GsaService extends BaseApiService {
       console.log(content);
 
       return content
-        ? timer(1500).pipe(
+        ? timer(this.longLatencyMS).pipe(
             map(() => ({
               success: true,
               code: BaseAPICodes.SUCCESS,
@@ -376,7 +373,7 @@ export class GsaService extends BaseApiService {
       console.log('ReviewAppl');
       console.log(req);
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -404,7 +401,7 @@ export class GsaService extends BaseApiService {
       console.log('ArrangeAppl');
       console.log(req);
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -432,7 +429,7 @@ export class GsaService extends BaseApiService {
       console.log('CompleteAppl');
       console.log(req);
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -463,7 +460,7 @@ export class GsaService extends BaseApiService {
       console.log(req);
       console.log(content);
 
-      return timer(1500).pipe(
+      return timer(this.longLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -495,7 +492,7 @@ export class GsaService extends BaseApiService {
       console.log(content);
 
       return content
-        ? timer(1500).pipe(
+        ? timer(this.longLatencyMS).pipe(
             map(() => ({
               success: true,
               code: BaseAPICodes.SUCCESS,
@@ -524,7 +521,7 @@ export class GsaService extends BaseApiService {
       console.log('AddNews');
       console.log(req);
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -552,7 +549,7 @@ export class GsaService extends BaseApiService {
       console.log('UpdateNews');
       console.log(req);
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -569,37 +566,6 @@ export class GsaService extends BaseApiService {
   }
 
   /**
-   * 取得健檢項目列表
-   */
-  GetHCProgramList(req: GetHCProgramListReq): Observable<GetHCProgramListRes> {
-    const apiUri = this.baseRoute + '/GetHCProgramList';
-    const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
-
-    if (environment.fakeData) {
-      const content = HCPROGRAM_LIST;
-
-      console.log('---');
-      console.log('GetHCProgramList');
-      console.log(req);
-      console.log(content);
-
-      return timer(1500).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '取得健檢項目列表成功',
-          content,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
-
-    return super
-      .post<GetHCProgramListReq, GetHCProgramListRes>(apiUri, req)
-      .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
-  }
-
-  /**
    * 新增健檢項目
    */
   AddHCProgram(req: AddHCProgramReq): Observable<AddHCProgramRes> {
@@ -611,7 +577,7 @@ export class GsaService extends BaseApiService {
       console.log('AddHCProgram');
       console.log(req);
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -639,7 +605,7 @@ export class GsaService extends BaseApiService {
       console.log('UpdateHCProgram');
       console.log(req);
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
@@ -667,7 +633,7 @@ export class GsaService extends BaseApiService {
       console.log('BatchNotify');
       console.log(req);
 
-      return timer(300).pipe(
+      return timer(this.shortLatencyMS).pipe(
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,

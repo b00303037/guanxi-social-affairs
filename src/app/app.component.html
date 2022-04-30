@@ -1,5 +1,5 @@
 <router-outlet></router-outlet>
 
-<div *ngIf="blocking$ | async" class="blocking spinner" appStopPropagation>
+<div *ngIf="blocking$ | async" class="blocking spinner" appStopClickPropagation>
   <mat-spinner diameter="80"></mat-spinner>
 </div>

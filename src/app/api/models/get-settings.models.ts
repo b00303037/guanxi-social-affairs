@@ -6,13 +6,17 @@ export interface Settings {
   /**
    * 每日身分證字號尾碼限制
    */
-  IDNoSuffixList: Array<string>;
+  IDNoSuffixList: Array<string | undefined>;
   /**
    * 設籍日期限制，格式為 YYYY/MM/DD
    */
-  regDateMin: string;
+  maxRegDate: string;
   /**
    * 申請間隔限制，單位為年
    */
   applIntervalYears: number;
+  /**
+   * 圖檔大小限制，單位為 MB
+   */
+  maxImgSizeMB: number;
 }
