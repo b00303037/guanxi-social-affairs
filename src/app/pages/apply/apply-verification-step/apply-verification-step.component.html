@@ -21,6 +21,16 @@
       appUpperCase
     />
 
+    <button
+      type="button"
+      matSuffix
+      mat-icon-button
+      color="accent"
+      (click)="openIDNoHintDialog()"
+    >
+      <mat-icon>info</mat-icon>
+    </button>
+
     <mat-error *ngIf="fcs['IDNo'].hasError('required')"
       >請輸入&nbsp;<strong>身分證字號</strong></mat-error
     >

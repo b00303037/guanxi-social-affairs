@@ -34,7 +34,7 @@
           <td mat-cell *matCellDef="let news" class="border-b-0">
             <mat-slide-toggle
               color="primary"
-              [checked]="news.enabled === ynObj.Y"
+              [checked]="news.enabled === YNObj.Y"
               [disabled]="news.newsID | isInSet: updatingIDs"
               (change)="onNewsEnabledChange($event, news.newsID)"
             ></mat-slide-toggle>
@@ -47,7 +47,7 @@
           <td mat-cell *matCellDef="let news" class="border-b-0">
             <mat-slide-toggle
               color="primary"
-              [checked]="news.pinned === ynObj.Y"
+              [checked]="news.pinned === YNObj.Y"
               [disabled]="news.newsID | isInSet: updatingIDs"
               (change)="onNewsPinnedChange($event, news.newsID)"
             ></mat-slide-toggle>
@@ -107,7 +107,7 @@
                     <td>
                       <mat-slide-toggle
                         color="primary"
-                        [checked]="news.enabled === ynObj.Y"
+                        [checked]="news.enabled === YNObj.Y"
                         [disabled]="news.newsID | isInSet: updatingIDs"
                         (change)="onNewsEnabledChange($event, news.newsID)"
                       ></mat-slide-toggle>
@@ -119,7 +119,7 @@
                     <td>
                       <mat-slide-toggle
                         color="primary"
-                        [checked]="news.pinned === ynObj.Y"
+                        [checked]="news.pinned === YNObj.Y"
                         [disabled]="news.newsID | isInSet: updatingIDs"
                         (change)="onNewsPinnedChange($event, news.newsID)"
                       ></mat-slide-toggle>

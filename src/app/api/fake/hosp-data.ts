@@ -19,7 +19,10 @@ export const HOSP_DATA: HospData = {
       list.push({
         programID: PID,
         name: `name ${HID}-${n}`,
-        description: `description ${HID}-${n}`,
+        description: `description ${HID}-${n}
+第二行
+第三行
+`,
         charge: PID * 100,
         hospitalID: HID,
         enabled: YN.Y,

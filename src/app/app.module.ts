@@ -7,9 +7,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 // ngx-owl-carousel-o
 import { CarouselModule } from 'ngx-owl-carousel-o';
 
-// ngx-editor
-import { NgxEditorModule } from 'ngx-editor';
-
 // @angular/material
 
 import { MatButtonModule } from '@angular/material/button';
@@ -84,8 +81,6 @@ registerLocaleData(localeZhHant);
     ReactiveFormsModule,
     // ngx-owl-carousel-o
     CarouselModule,
-    // ngx-editor
-    NgxEditorModule,
     // @angular/material
     MatButtonModule,
     MatCardModule,

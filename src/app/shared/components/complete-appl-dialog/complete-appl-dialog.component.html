@@ -1,0 +1,72 @@
+<h1 mat-dialog-title>完成健檢</h1>
+
+<form [formGroup]="fg">
+  <div mat-dialog-content class="grid grid-cols-1">
+    <!-- 完成健檢日期 -->
+    <mat-form-field
+      (click)="completionDatepicker.open()"
+      class="col-span-2 cursor-pointer sm:col-span-1"
+    >
+      <mat-label>完成健檢日期</mat-label>
+      <input
+        matInput
+        [matDatepicker]="completionDatepicker"
+        formControlName="completionDate"
+        required
+        readonly
+        tabindex="-1"
+        class="cursor-pointer"
+      />
+
+      <button
+        *ngIf="fcs['completionDate'].value; else completionDateToggle"
+        type="button"
+        matSuffix
+        mat-icon-button
+        color="primary"
+        (click)="clearDate($event, fcs['completionDate'])"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+      <ng-template #completionDateToggle>
+        <button type="button" matSuffix mat-icon-button color="primary">
+          <mat-icon>today</mat-icon>
+        </button>
+      </ng-template>
+
+      <mat-error *ngIf="fcs['completionDate'].hasError('required')"
+        >請選擇&nbsp;<strong>完成健檢日期</strong></mat-error
+      >
+
+      <mat-datepicker #completionDatepicker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- 是否罹癌 -->
+    <div
+      class="col-span-1 h-form-field form-field-style flex items-center"
+      [class.form-field-invalid]="
+        (fcs['hasCancer'].touched || fcs['hasCancer'].dirty) &&
+        fcs['hasCancer'].invalid
+      "
+    >
+      <label class="form-field-label mr-4">是否罹癌 *</label>
+      <mat-radio-group formControlName="hasCancer">
+        <mat-radio-button [value]="YNObj.Y" class="mr-4">是</mat-radio-button>
+        <mat-radio-button [value]="YNObj.N">否</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+
+  <div mat-dialog-actions align="end">
+    <button type="button" mat-button [mat-dialog-close]="false">取消</button>
+    <button
+      type="submit"
+      mat-flat-button
+      color="primary"
+      [disabled]="completing"
+      (click)="onCompleteAppl()"
+    >
+      確認
+    </button>
+  </div>
+</form>

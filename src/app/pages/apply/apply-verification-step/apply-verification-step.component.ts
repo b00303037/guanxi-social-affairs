@@ -1,6 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { startWith, Subject, takeUntil, tap } from 'rxjs';
+import { Settings } from 'src/app/api/models/get-settings.models';
+import { IDNoHintDialogComponent } from 'src/app/shared/components/idno-hint-dialog/idno-hint-dialog.component';
+import { IDNoHintDialogData } from 'src/app/shared/components/idno-hint-dialog/idno-hint-dialog.models';
 import { environment } from 'src/environments/environment';
 import { VerificationFCsModel } from '../apply.models';
 
@@ -18,7 +23,7 @@ export class ApplyVerificationStepComponent implements OnInit, OnDestroy {
   showPassword = false;
   captchaImgSrc: string | undefined;
 
-  constructor() {
+  constructor(private route: ActivatedRoute, private matDialog: MatDialog) {
     this.refreshCaptcha();
   }
 
@@ -46,6 +51,18 @@ export class ApplyVerificationStepComponent implements OnInit, OnDestroy {
       captcha: this.fg.controls['captcha'],
       passed: this.fg.controls['passed'],
     };
+  }
+
+  openIDNoHintDialog(): void {
+    const { settings } = this.route.snapshot.data as {
+      settings: Settings;
+    };
+
+    const data: IDNoHintDialogData = {
+      IDNoSuffixList: settings.IDNoSuffixList,
+    };
+
+    this.matDialog.open(IDNoHintDialogComponent, { data });
   }
 
   refreshCaptcha(): void {

@@ -1,0 +1,57 @@
+<h1 mat-dialog-title>安排健檢</h1>
+
+<form [formGroup]="fg">
+  <div mat-dialog-content class="grid grid-cols-1">
+    <!-- 安排健檢日期 -->
+    <mat-form-field
+      (click)="scheduledDatepicker.open()"
+      class="col-span-2 cursor-pointer sm:col-span-1"
+    >
+      <mat-label>安排健檢日期</mat-label>
+      <input
+        matInput
+        [matDatepicker]="scheduledDatepicker"
+        formControlName="scheduledDate"
+        required
+        readonly
+        tabindex="-1"
+        class="cursor-pointer"
+      />
+
+      <button
+        *ngIf="fcs['scheduledDate'].value; else scheduledDateToggle"
+        type="button"
+        matSuffix
+        mat-icon-button
+        color="primary"
+        (click)="clearDate($event, fcs['scheduledDate'])"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+      <ng-template #scheduledDateToggle>
+        <button type="button" matSuffix mat-icon-button color="primary">
+          <mat-icon>today</mat-icon>
+        </button>
+      </ng-template>
+
+      <mat-error *ngIf="fcs['scheduledDate'].hasError('required')"
+        >請選擇&nbsp;<strong>安排健檢日期</strong></mat-error
+      >
+
+      <mat-datepicker #scheduledDatepicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions align="end">
+    <button type="button" mat-button [mat-dialog-close]="false">取消</button>
+    <button
+      type="submit"
+      mat-flat-button
+      color="primary"
+      [disabled]="arranging"
+      (click)="onArrangeAppl()"
+    >
+      確認
+    </button>
+  </div>
+</form>

@@ -4,10 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { parse } from 'date-fns';
 import { Settings } from 'src/app/api/models/get-settings.models';
 import { GENDER_OBJ } from 'src/app/shared/enums/gender.enum';
-import {
-  EmailOrMobileNoErrorStateMatcher,
-  TelephoneNoErrorStateMatcher,
-} from 'src/app/shared/validators/basic-info-form.validators';
+import { EmailOrMobileNoErrorStateMatcher } from 'src/app/shared/validators/email-or-mobile-no.validator';
+import { TelephoneNoErrorStateMatcher } from 'src/app/shared/validators/telephone-no.validator';
 import { BasicInfoFCsModel } from '../apply.models';
 
 @Component({

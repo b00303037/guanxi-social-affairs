@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -7,8 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatTabGroup } from '@angular/material/tabs';
-import { format, isBefore, parse } from 'date-fns';
+import { format, parse } from 'date-fns';
 import {
   catchError,
   EMPTY,
@@ -36,11 +35,12 @@ import { SnackBarService } from '../../services/snack-bar.service';
 import {
   EmailOrMobileNoErrorStateMatcher,
   EmailOrMobileNoValidator,
-  mobileNoRegExp,
+} from '../../validators/email-or-mobile-no.validator';
+import { mobileNoRegExp } from '../../validators/mobile-no.validator';
+import {
   TelephoneNoErrorStateMatcher,
-  telephoneNoRegExp,
   TelephoneNoValidator,
-} from '../../validators/basic-info-form.validators';
+} from '../../validators/telephone-no.validator';
 import { DateRangeValidator } from '../../validators/validator-utils';
 import {
   BasicInfoFCsModel,
@@ -60,7 +60,8 @@ import {
 export class UpdateApplDialogComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<null>();
 
-  @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
+  tabLabels: Array<string> = ['健檢項目', '資料填寫', '文件上傳'];
+  selectedIndex = 0;
 
   // 健檢項目
   HCProgramFG = new FormGroup({
@@ -166,6 +167,8 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.dialogRef.updateSize('100%');
+
     this.onGetAppl(this.data.applicationID);
   }
 
@@ -277,18 +280,16 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
       this.IDPhotosFG.invalid,
     ].indexOf(true);
     if (invalidFGIndex !== -1) {
-      this.tabGroup.selectedIndex = invalidFGIndex;
+      this.selectedIndex = invalidFGIndex;
       return;
     }
     if (this.updating || this.appl === undefined) {
       return;
     }
-
     this.updating = true;
 
-    const req: UpdateApplReq = {
-      applicationID: this.appl.applicationID,
-    };
+    const req: UpdateApplReq = { applicationID: this.appl.applicationID };
+
     this.patchUpdateApplReq(req, this.appl, {
       HCProgramFV: this.HCProgramFV,
       basicInfoFV: this.basicInfoFV,
@@ -299,6 +300,8 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
         message: '沒有異動的資料',
       });
       this.snackBarService.add(snack);
+
+      this.updating = false;
       return;
     }
 

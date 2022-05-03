@@ -35,5 +35,5 @@ export function isEmpty(value: unknown): boolean {
 }
 
 export function asValid(control: AbstractControl): boolean {
-  return control.untouched && control.pristine;
+  return control.untouched && control.pristine && control.enabled;
 }

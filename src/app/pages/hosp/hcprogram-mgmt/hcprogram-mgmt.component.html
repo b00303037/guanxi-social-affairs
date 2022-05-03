@@ -34,7 +34,7 @@
           <td mat-cell *matCellDef="let program" class="border-b-0">
             <mat-slide-toggle
               color="primary"
-              [checked]="program.enabled === ynObj.Y"
+              [checked]="program.enabled === YNObj.Y"
               [disabled]="program.programID | isInSet: updatingIDs"
               (change)="onHCProgramEnabledChange($event, program.programID)"
             ></mat-slide-toggle>
@@ -74,7 +74,7 @@
             <button
               mat-icon-button
               color="primary"
-              (click)="openUpdateHCProgramDialog(program.programID)"
+              (click)="openUpdateHCProgramDialog(program)"
               matTooltip="編輯健檢項目"
             >
               <mat-icon>edit</mat-icon>
@@ -102,7 +102,7 @@
                     <td>
                       <mat-slide-toggle
                         color="primary"
-                        [checked]="program.enabled === ynObj.Y"
+                        [checked]="program.enabled === YNObj.Y"
                         [disabled]="program.programID | isInSet: updatingIDs"
                         (change)="
                           onHCProgramEnabledChange($event, program.programID)

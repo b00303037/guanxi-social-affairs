@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
+// ngx-editor
+import { NgxEditorModule } from 'ngx-editor';
+
 // @angular/material
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -46,14 +49,21 @@ import {
 import { zhTW } from 'date-fns/locale';
 
 // components
+import { ArrangeApplDialogComponent } from './components/arrange-appl-dialog/arrange-appl-dialog.component';
+import { CancelApplDialogComponent } from './components/cancel-appl-dialog/cancel-appl-dialog.component';
+import { CompleteApplDialogComponent } from './components/complete-appl-dialog/complete-appl-dialog.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ExpandedApplComponent } from './components/expanded-appl/expanded-appl.component';
+import { IDNoHintDialogComponent } from './components/idno-hint-dialog/idno-hint-dialog.component';
+import { ReviewApplDialogComponent } from './components/review-appl-dialog/review-appl-dialog.component';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
 import { SnackBarComponent } from './components/snack-bar/snack-bar.component';
 import { UpdateApplDialogComponent } from './components/update-appl-dialog/update-appl-dialog.component';
 import { BasicInfoFormComponent } from './components/update-appl-dialog/basic-info-form/basic-info-form.component';
 import { HCProgramFormComponent } from './components/update-appl-dialog/hcprogram-form/hcprogram-form.component';
 import { IDPhotosFormComponent } from './components/update-appl-dialog/idphotos-form/idphotos-form.component';
+import { UpdateHCProgramDialogComponent } from './components/update-hcprogram-dialog/update-hcprogram-dialog.component';
+import { UpdateNewsDialogComponent } from './components/update-news-dialog/update-news-dialog.component';
 
 // directives
 import { ClickThrottleDirective } from './directives/click-throttle.directive';
@@ -82,8 +92,8 @@ const DATE_FORMATS: MatDateFormats = {
 };
 const DIALOG_DEFAULT_OPTIONS: MatDialogConfig = {
   hasBackdrop: true,
-  minWidth: '240px',
-  maxWidth: 'calc(100% - 2rem)',
+  width: '320px',
+  maxWidth: 'min(calc(100% - 2rem), 1280px)',
 };
 const FORM_FIELD_DEFAULT_OPTIONS: MatFormFieldDefaultOptions = {
   appearance: 'fill',
@@ -96,11 +106,18 @@ const PROGRESS_SPINNER_DEFAULT_OPTIONS: MatProgressSpinnerDefaultOptions = {
 };
 
 const COMPONENTS = [
+  ArrangeApplDialogComponent,
+  CancelApplDialogComponent,
+  CompleteApplDialogComponent,
   ConfirmDialogComponent,
   ExpandedApplComponent,
+  IDNoHintDialogComponent,
+  ReviewApplDialogComponent,
   LoginDialogComponent,
   SnackBarComponent,
   UpdateApplDialogComponent,
+  UpdateHCProgramDialogComponent,
+  UpdateNewsDialogComponent,
 ];
 const DIRECTIVES = [
   ClickThrottleDirective,
@@ -123,6 +140,45 @@ const PIPES = [IsInSetPipe, SafeHTMLPipe];
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    // ngx-editor
+    NgxEditorModule.forRoot({
+      locals: {
+        // menu
+        bold: '粗體',
+        italic: '斜體',
+        code: '程式碼',
+        underline: '底線',
+        strike: '刪除線',
+        blockquote: '引用',
+        bullet_list: '無序清單',
+        ordered_list: '有序清單',
+        heading: '標頭',
+        h1: 'Header 1',
+        h2: 'Header 2',
+        h3: 'Header 3',
+        h4: 'Header 4',
+        h5: 'Header 5',
+        h6: 'Header 6',
+        align_left: '靠左對齊',
+        align_center: '置中',
+        align_right: '靠右對齊',
+        align_justify: '左右對齊',
+        text_color: '文字顏色',
+        background_color: '背景顏色',
+        insertLink: '插入連結',
+        removeLink: '移除連結',
+        insertImage: '插入圖片',
+
+        // pupups, forms, others...
+        url: 'URL',
+        text: '文字',
+        openInNewTab: '在新分頁中開啟',
+        insert: '插入',
+        altText: '圖片替代文字',
+        title: '圖片標題',
+        remove: '移除',
+      },
+    }),
     // @angular/material
     MatButtonModule,
     MatDatepickerModule,

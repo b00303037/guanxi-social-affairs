@@ -18,6 +18,8 @@ import {
   catchError,
   Observable,
   EMPTY,
+  filter,
+  tap,
 } from 'rxjs';
 import { YN, YN_OBJ } from 'src/app/shared/enums/yn.enum';
 import { GsaService } from 'src/app/api/gsa.service';
@@ -27,6 +29,12 @@ import { Snack } from 'src/app/shared/services/snack-bar.models';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { UpdateNewsReq } from 'src/app/api/models/update-news.models';
+import { MatDialog } from '@angular/material/dialog';
+import { UpdateNewsDialogComponent } from 'src/app/shared/components/update-news-dialog/update-news-dialog.component';
+import {
+  UpdateNewsDialogData,
+  UpdateNewsDialogResult,
+} from 'src/app/shared/components/update-news-dialog/update-news-dialog.models';
 
 @Component({
   selector: 'app-news-mgmt',
@@ -52,7 +60,7 @@ export class NewsMgmtComponent implements OnInit, AfterViewInit, OnDestroy {
     'actions',
   ];
 
-  ynObj = YN_OBJ;
+  YNObj = YN_OBJ;
 
   getting = false;
   updatingIDs = new Set<number>();
@@ -60,6 +68,7 @@ export class NewsMgmtComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private media: MediaMatcher,
     private changeDetectorRef: ChangeDetectorRef,
+    private matDialog: MatDialog,
     private snackBarService: SnackBarService,
     private gsaService: GsaService
   ) {
@@ -158,7 +167,7 @@ export class NewsMgmtComponent implements OnInit, AfterViewInit, OnDestroy {
             n.newsID === newsID
               ? ({
                   ...n,
-                  pinned: req.enabled,
+                  pinned: req.pinned,
                 } as NewsInList)
               : n
           );
@@ -169,7 +178,19 @@ export class NewsMgmtComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openUpdateNewsDialog(newsID: number): void {
-    // TODO open UpdateNewsDialog
+    const data: UpdateNewsDialogData = {
+      newsID,
+    };
+
+    this.matDialog
+      .open(UpdateNewsDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        takeUntil(this.destroy$),
+        filter<UpdateNewsDialogResult>((result) => result === true),
+        tap(() => this.onGetNewsList())
+      )
+      .subscribe();
   }
 
   onError(err: string): Observable<never> {

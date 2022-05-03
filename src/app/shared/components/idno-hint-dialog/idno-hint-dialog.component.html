@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>每日身分證字號尾碼限制</h1>
+
+<div mat-dialog-content>
+  <ul>
+    <li
+      *ngFor="let hint of hintList; let i = index"
+      [class.text-amber-400]="dayOfTheWeek === i"
+      class="flex items-start"
+    >
+      <label class="shrink-0 leading-6 text-sm mr-2 md:leading-7">{{
+        hint.label
+      }}</label>
+      <span class="text-base md:text-lg"> {{ hint.IDNoSuffix }} </span>
+    </li>
+  </ul>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-flat-button color="primary" mat-dialog-close cdkFocusInitial>
+    瞭解
+  </button>
+</div>

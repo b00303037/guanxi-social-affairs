@@ -1,4 +1,4 @@
-import { telephoneNoRegExp } from 'src/app/shared/validators/basic-info-form.validators';
+import { telephoneNoRegExp } from 'src/app/shared/validators/telephone-no.validator';
 import { GENDER_MAP } from '../../shared/enums/gender.enum';
 import { YN_MAP } from '../../shared/enums/yn.enum';
 import { BaseAPIResModel } from './base-api.models';

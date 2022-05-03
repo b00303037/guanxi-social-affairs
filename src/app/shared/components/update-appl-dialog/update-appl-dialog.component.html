@@ -1,8 +1,17 @@
-<div mat-dialog-title>編輯申請單</div>
+<div mat-dialog-title class="flex justify-around">
+  <h1
+    *ngFor="let label of tabLabels; let i = index"
+    [class.text-amber-400]="selectedIndex === i"
+    class="clickable-text"
+    (click)="selectedIndex = i"
+  >
+    {{ label }}
+  </h1>
+</div>
 
 <div mat-dialog-content>
   <div class="spinner-box">
-    <mat-tab-group #tabGroup mat-stretch-tabs>
+    <mat-tab-group [selectedIndex]="selectedIndex" class="header-hidden">
       <!-- 健檢項目 -->
       <mat-tab label="健檢項目">
         <app-hcprogram-form
@@ -37,7 +46,9 @@
     mat-flat-button
     color="primary"
     [disabled]="updating || appl === undefined"
-    (click)="onUpdateAppl()"
+    appClickThrottle
+    [clickThrottleTime]="2000"
+    (clickThrottle)="onUpdateAppl()"
   >
     更新
   </button>

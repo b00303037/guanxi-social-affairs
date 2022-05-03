@@ -36,7 +36,6 @@ import {
   APPL_STATUS_OBJ,
 } from 'src/app/shared/enums/appl-status.enum';
 import { GsaService } from 'src/app/api/gsa.service';
-import { CancelApplReq } from 'src/app/api/models/cancel-appl.models';
 import { ApplInList } from 'src/app/api/models/get-appl-list.models';
 import {
   getExtendedAppl,
@@ -44,14 +43,19 @@ import {
   GetApplReq,
 } from 'src/app/api/models/get-appl.models';
 import { HospData } from 'src/app/api/models/get-hosp-data.models';
-import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
-import {
-  ConfirmDialogData,
-  ConfirmDialogResult,
-} from 'src/app/shared/components/confirm-dialog/confirm-dialog.models';
 import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
 import { Snack } from 'src/app/shared/services/snack-bar.models';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
+import {
+  CancelApplDialogData,
+  CancelApplDialogResult,
+} from 'src/app/shared/components/cancel-appl-dialog/cancel-appl-dialog.models';
+import { CancelApplDialogComponent } from 'src/app/shared/components/cancel-appl-dialog/cancel-appl-dialog.component';
+import {
+  ReviewApplDialogData,
+  ReviewApplDialogResult,
+} from 'src/app/shared/components/review-appl-dialog/review-appl-dialog.models';
+import { ReviewApplDialogComponent } from 'src/app/shared/components/review-appl-dialog/review-appl-dialog.component';
 
 @Component({
   selector: 'app-govt-appl-list',
@@ -165,53 +169,37 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe();
   }
 
-  onConfirmCancelAppl(applicationID: string): void {
-    const data = new ConfirmDialogData({
-      title: '是否取消申請？',
-    });
+  openReviewApplDialog(applicationID: string, status: ApplStatuses): void {
+    const data: ReviewApplDialogData = {
+      applicationID,
+      status,
+    };
 
     this.matDialog
-      .open(ConfirmDialogComponent, { data })
+      .open(ReviewApplDialogComponent, { data })
       .afterClosed()
       .pipe(
         takeUntil(this.destroy$),
-        filter<ConfirmDialogResult>((result) => result === true),
-        tap(() => this.onCancelAppl(applicationID))
+        filter<ReviewApplDialogResult>((result) => result === true),
+        tap(() => this.onGetApplList())
       )
       .subscribe();
   }
 
-  onCancelAppl(applicationID: string): void {
-    if (this.cancelling) {
-      return;
-    }
-    this.cancelling = true;
-
-    const req: CancelApplReq = {
+  openCancelApplDialog(applicationID: string): void {
+    const data: CancelApplDialogData = {
       applicationID,
     };
 
-    this.gsaService
-      .CancelAppl(req)
+    this.matDialog
+      .open(CancelApplDialogComponent, { data })
+      .afterClosed()
       .pipe(
         takeUntil(this.destroy$),
-        finalize(() => (this.cancelling = false)),
-        map((res) => {
-          const snack = new Snack({
-            message: res.message,
-            type: SnackTypes.Success,
-          });
-          this.snackBarService.add(snack);
-
-          this.onGetApplList();
-        }),
-        catchError((err) => this.onError(err))
+        filter<CancelApplDialogResult>((result) => result === true),
+        tap(() => this.onGetApplList())
       )
       .subscribe();
-  }
-
-  onConfirmReviewAppl(applicationID: string, status: ApplStatuses): void {
-    // TODO open ReviewApplDialog
   }
 
   onError(err: string): Observable<never> {

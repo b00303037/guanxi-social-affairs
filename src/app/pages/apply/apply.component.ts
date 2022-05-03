@@ -19,7 +19,6 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { Genders } from 'src/app/shared/enums/gender.enum';
 import { GsaService } from 'src/app/api/gsa.service';
 import { AddApplReq } from 'src/app/api/models/add-appl.models';
 import { Settings } from 'src/app/api/models/get-settings.models';
@@ -27,11 +26,6 @@ import { VerifyReq } from 'src/app/api/models/verify.models';
 import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
 import { Snack } from 'src/app/shared/services/snack-bar.models';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
-import {
-  EmailOrMobileNoValidator,
-  mobileNoRegExp,
-  TelephoneNoValidator,
-} from 'src/app/shared/validators/basic-info-form.validators';
 import { IDNoValidator } from 'src/app/shared/validators/IDNo.validator';
 import {
   BasicInfoFCsModel,
@@ -45,6 +39,9 @@ import {
 } from './apply.models';
 import { DateRangeValidator } from 'src/app/shared/validators/validator-utils';
 import { getTelephoneNo } from 'src/app/api/models/get-appl.models';
+import { mobileNoRegExp } from 'src/app/shared/validators/mobile-no.validator';
+import { EmailOrMobileNoValidator } from 'src/app/shared/validators/email-or-mobile-no.validator';
+import { TelephoneNoValidator } from 'src/app/shared/validators/telephone-no.validator';
 
 @Component({
   selector: 'app-apply',

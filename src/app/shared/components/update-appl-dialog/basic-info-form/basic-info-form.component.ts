@@ -1,10 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { GENDER_OBJ } from 'src/app/shared/enums/gender.enum';
-import {
-  EmailOrMobileNoErrorStateMatcher,
-  TelephoneNoErrorStateMatcher,
-} from 'src/app/shared/validators/basic-info-form.validators';
+import { EmailOrMobileNoErrorStateMatcher } from 'src/app/shared/validators/email-or-mobile-no.validator';
+import { TelephoneNoErrorStateMatcher } from 'src/app/shared/validators/telephone-no.validator';
 import { BasicInfoFCsModel } from '../update-appl-dialog.models';
 
 @Component({

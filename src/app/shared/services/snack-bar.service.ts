@@ -40,7 +40,6 @@ export class SnackBarService {
               console.log(`${snack.seq}: open snackBar`);
               console.time(`${snack.seq}`);
 
-              // TODO open from Component with status icon
               this.matSnackBar
                 .openFromComponent(SnackBarComponent, {
                   data,

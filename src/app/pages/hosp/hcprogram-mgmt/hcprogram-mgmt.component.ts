@@ -18,6 +18,8 @@ import {
   catchError,
   Observable,
   EMPTY,
+  filter,
+  tap,
 } from 'rxjs';
 import { YN, YN_OBJ } from 'src/app/shared/enums/yn.enum';
 import { GsaService } from 'src/app/api/gsa.service';
@@ -27,6 +29,9 @@ import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import { HospDataHCProgram } from 'src/app/api/models/get-hosp-data.models';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { UpdateHCProgramReq } from 'src/app/api/models/update-hcprogram.models';
+import { UpdateHCProgramDialogData, UpdateHCProgramDialogResult } from 'src/app/shared/components/update-hcprogram-dialog/update-hcprogram-dialog.models';
+import { UpdateHCProgramDialogComponent } from 'src/app/shared/components/update-hcprogram-dialog/update-hcprogram-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-hcprogram-mgmt',
@@ -54,7 +59,7 @@ export class HcprogramMgmtComponent
     'actions',
   ];
 
-  ynObj = YN_OBJ;
+  YNObj = YN_OBJ;
 
   getting = false;
   updatingIDs = new Set<number>();
@@ -62,6 +67,7 @@ export class HcprogramMgmtComponent
   constructor(
     private media: MediaMatcher,
     private changeDetectorRef: ChangeDetectorRef,
+    private matDialog: MatDialog,
     private snackBarService: SnackBarService,
     private gsaService: GsaService
   ) {
@@ -89,7 +95,7 @@ export class HcprogramMgmtComponent
         takeUntil(this.destroy$),
         finalize(() => (this.getting = false)),
         map((res) => {
-          const hospitalID = 0; // TODO get it from token
+          const hospitalID = 1; // TODO get it from token
 
           this.dataSource.data = res.content.HCProgramList.filter(
             (p) => p.hospitalID === hospitalID
@@ -137,8 +143,18 @@ export class HcprogramMgmtComponent
       .subscribe();
   }
 
-  openUpdateHCProgramDialog(programID: number): void {
-    // TODO open UpdateHCProgramDialog
+  openUpdateHCProgramDialog(program: HospDataHCProgram): void {
+    const data: UpdateHCProgramDialogData = { program };
+
+    this.matDialog
+      .open(UpdateHCProgramDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        takeUntil(this.destroy$),
+        filter<UpdateHCProgramDialogResult>((result) => result === true),
+        tap(() => this.onGetHospData())
+      )
+      .subscribe();
   }
 
   onError(err: string): Observable<never> {

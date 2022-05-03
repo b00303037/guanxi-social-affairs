@@ -1,8 +1,8 @@
 export class ConfirmDialogData {
   title: string = '';
   content: string = '';
-  closeButtonText: string = '否';
-  confirmButtonText: string = '是';
+  closeButtonText: string = '取消';
+  confirmButtonText: string = '確認';
 
   constructor(data?: {
     title?: string;

@@ -1,0 +1,257 @@
+<h1 mat-dialog-title>編輯最新消息</h1>
+
+<form [formGroup]="fg">
+  <div mat-dialog-content class="grid grid-cols-2 gap-x-4">
+    <!-- 標題 -->
+    <mat-form-field class="col-span-2 sm:col-span-1">
+      <mat-label>標題</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="title"
+        required
+        maxlength="50"
+        autocomplete="off"
+      />
+
+      <mat-error *ngIf="fcs['title'].hasError('required')"
+        >請輸入&nbsp;<strong>標題</strong></mat-error
+      >
+    </mat-form-field>
+
+    <!-- 日期 -->
+    <mat-form-field
+      (click)="datepicker.open()"
+      class="col-span-2 cursor-pointer sm:col-span-1"
+    >
+      <mat-label>日期</mat-label>
+      <input
+        matInput
+        [matDatepicker]="datepicker"
+        formControlName="date"
+        required
+        readonly
+        tabindex="-1"
+        class="cursor-pointer"
+      />
+
+      <button
+        *ngIf="fcs['date'].value; else dateToggle"
+        type="button"
+        matSuffix
+        mat-icon-button
+        color="primary"
+        (click)="clearDate($event, fcs['date'])"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+      <ng-template #dateToggle>
+        <button type="button" matSuffix mat-icon-button color="primary">
+          <mat-icon>today</mat-icon>
+        </button>
+      </ng-template>
+
+      <mat-error *ngIf="fcs['date'].hasError('required')"
+        >請選擇&nbsp;<strong>日期</strong></mat-error
+      >
+
+      <mat-datepicker #datepicker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- 內容 -->
+    <div class="col-span-2 form-field-style">
+      <div class="w-full h-form-field flex items-center">
+        <label class="form-field-label">內容 *</label>
+      </div>
+
+      <ngx-editor-menu [editor]="editor" class="w-full"></ngx-editor-menu>
+      <ngx-editor
+        [editor]="editor"
+        outputFormat="html"
+        formControlName="content"
+        placeholder="請輸入內容"
+        class="w-full h-60"
+      ></ngx-editor>
+    </div>
+
+    <!-- 啟用狀態 -->
+    <div
+      class="col-span-2 h-form-field form-field-style flex items-center sm:col-span-1"
+      [class.form-field-invalid]="
+        (fcs['enabled'].touched || fcs['enabled'].dirty) &&
+        fcs['enabled'].invalid
+      "
+    >
+      <label class="form-field-label mr-4">啟用狀態 *</label>
+      <mat-radio-group formControlName="enabled">
+        <mat-radio-button [value]="YNObj.Y" class="mr-4">啟用</mat-radio-button>
+        <mat-radio-button [value]="YNObj.N">停用</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <!-- 首頁輪播 -->
+    <div
+      class="col-span-2 h-form-field form-field-style flex items-center sm:col-span-1"
+      [class.form-field-invalid]="
+        (fcs['pinned'].touched || fcs['pinned'].dirty) && fcs['pinned'].invalid
+      "
+    >
+      <label class="form-field-label mr-4">首頁輪播 *</label>
+      <mat-radio-group formControlName="pinned">
+        <mat-radio-button [value]="YNObj.Y" class="mr-4">是</mat-radio-button>
+        <mat-radio-button [value]="YNObj.N">否</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <!-- 開始日期 -->
+    <mat-form-field
+      (click)="startDatepicker.open()"
+      class="col-span-2 cursor-pointer sm:col-span-1"
+    >
+      <mat-label>開始日期</mat-label>
+      <input
+        matInput
+        [matDatepicker]="startDatepicker"
+        formControlName="startDate"
+        readonly
+        tabindex="-1"
+        class="cursor-pointer"
+      />
+
+      <button
+        *ngIf="fcs['startDate'].value; else startDateToggle"
+        type="button"
+        matSuffix
+        mat-icon-button
+        color="primary"
+        (click)="clearStartDateAndTime($event)"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+      <ng-template #startDateToggle>
+        <button type="button" matSuffix mat-icon-button color="primary">
+          <mat-icon>today</mat-icon>
+        </button>
+      </ng-template>
+
+      <mat-datepicker #startDatepicker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- 開始時間 -->
+    <div class="flex col-span-2 sm:col-span-1">
+      <mat-form-field class="w-1/2">
+        <mat-label>開始時間（時）</mat-label>
+        <mat-select
+          formControlName="startHours"
+          [errorStateMatcher]="startTimeErrorStateMatcher"
+        >
+          <mat-option *ngFor="let hours of hoursSelectList" [value]="hours">
+            {{ hours }}
+          </mat-option>
+        </mat-select>
+
+        <mat-error *ngIf="fg.hasError('startTime')"
+          >請選擇&nbsp;<strong>開始時間</strong></mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field class="w-1/2">
+        <mat-label>開始時間（分）</mat-label>
+        <mat-select
+          formControlName="startMinutes"
+          [errorStateMatcher]="startTimeErrorStateMatcher"
+        >
+          <mat-option
+            *ngFor="let minutes of minutesSelectList"
+            [value]="minutes"
+          >
+            {{ minutes }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- 結束日期 -->
+    <mat-form-field
+      (click)="endDatepicker.open()"
+      class="col-span-2 cursor-pointer sm:col-span-1"
+    >
+      <mat-label>結束日期</mat-label>
+      <input
+        matInput
+        [matDatepicker]="endDatepicker"
+        formControlName="endDate"
+        readonly
+        tabindex="-1"
+        class="cursor-pointer"
+      />
+
+      <button
+        *ngIf="fcs['endDate'].value; else endDateToggle"
+        type="button"
+        matSuffix
+        mat-icon-button
+        color="primary"
+        (click)="clearEndDateAndTime($event)"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+      <ng-template #endDateToggle>
+        <button type="button" matSuffix mat-icon-button color="primary">
+          <mat-icon>today</mat-icon>
+        </button>
+      </ng-template>
+
+      <mat-datepicker #endDatepicker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- 結束時間 -->
+    <div class="flex col-span-2 sm:col-span-1">
+      <mat-form-field class="w-1/2">
+        <mat-label>結束時間（時）</mat-label>
+        <mat-select
+          formControlName="endHours"
+          [errorStateMatcher]="endTimeErrorStateMatcher"
+        >
+          <mat-option *ngFor="let hours of hoursSelectList" [value]="hours">
+            {{ hours }}
+          </mat-option>
+        </mat-select>
+
+        <mat-error *ngIf="fg.hasError('endTime')"
+          >請選擇&nbsp;<strong>結束時間</strong></mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field class="w-1/2">
+        <mat-label>結束時間（分）</mat-label>
+        <mat-select
+          formControlName="endMinutes"
+          [errorStateMatcher]="endTimeErrorStateMatcher"
+        >
+          <mat-option
+            *ngFor="let minutes of minutesSelectList"
+            [value]="minutes"
+          >
+            {{ minutes }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions align="end">
+    <button type="button" mat-button [mat-dialog-close]="false">取消</button>
+    <button
+      type="submit"
+      mat-flat-button
+      color="primary"
+      [disabled]="updating || news === undefined"
+      appClickThrottle
+      [clickThrottleTime]="2000"
+      (clickThrottle)="onUpdateNews()"
+    >
+      更新
+    </button>
+  </div>
+</form>

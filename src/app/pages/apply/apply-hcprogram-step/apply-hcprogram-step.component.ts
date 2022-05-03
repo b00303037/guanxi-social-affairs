@@ -42,8 +42,11 @@ export class ApplyHCProgramStepComponent implements OnInit, OnDestroy {
     const { hospData } = this.route.snapshot.data as { hospData: HospData };
 
     this.enabledHCProgramList = hospData.HCProgramList.filter(
-      (h) => h.enabled === YN.Y
-    );
+      (p) => p.enabled === YN.Y
+    ).map((p) => ({
+      ...p,
+      description: p.description.replace(/\n/g, '<br/>'),
+    }));
     this.hospitalSelectList = hospData.hospitalList.map((h) => {
       const hasPrograms = this.enabledHCProgramList.some(
         (p) => p.hospitalID === h.hospitalID
@@ -74,9 +77,14 @@ export class ApplyHCProgramStepComponent implements OnInit, OnDestroy {
           );
 
           if (program === undefined) {
-            this.fcs['programID'].setValue(null);
-            this.fcs['programName'].setValue(null);
-            this.fcs['programCharge'].setValue(null);
+            this.fg.patchValue(
+              {
+                programID: null,
+                programName: null,
+                programCharge: null,
+              },
+              { emitEvent: false }
+            );
           }
         })
       )

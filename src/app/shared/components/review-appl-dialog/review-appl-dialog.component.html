@@ -1,0 +1,26 @@
+<ng-container [ngSwitch]="data.status">
+  <h1 mat-dialog-title *ngSwitchCase="applStatusObj.Y">審核通過</h1>
+  <h1 mat-dialog-title *ngSwitchCase="applStatusObj.N">退回補正</h1>
+</ng-container>
+
+<ng-container [ngSwitch]="data.status">
+  <div mat-dialog-content *ngSwitchCase="applStatusObj.Y">
+    審核通過單號 {{ data.applicationID }} 的申請單？
+  </div>
+  <div mat-dialog-content *ngSwitchCase="applStatusObj.N">
+    退回補正單號 {{ data.applicationID }} 的申請單？
+  </div>
+</ng-container>
+
+<div mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="false">返回</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="reviewing"
+    cdkFocusInitial
+    (click)="onReviewAppl(data.applicationID, data.status)"
+  >
+    確認
+  </button>
+</div>

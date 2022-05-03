@@ -169,6 +169,25 @@ body {
   background-color: #fafafa; // from @angular/material mat-drawer-container
 }
 
+textarea {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+  resize: none !important;
+}
+
+/* adjustments for ngx-editor */
+.NgxEditor__MenuBar {
+  border-top-left-radius: 4px !important;
+  border-top-right-radius: 4px !important;
+  border: 1px solid #ccc !important;
+  border-bottom: none !important;
+}
+.NgxEditor {
+  border-radius: 0 !important;
+  border: 1px solid #ccc !important;
+  border-bottom: none !important;
+}
+
 /* adjustments for @angular/material */
 // button
 .mat-icon-button {
@@ -242,6 +261,11 @@ td.mat-footer-cell {
 }
 th.mat-header-cell {
   word-break: keep-all;
+}
+
+// tabs
+mat-tab-group.header-hidden .mat-tab-header {
+  display: none;
 }
 
 // tooltip

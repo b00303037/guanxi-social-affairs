@@ -84,7 +84,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     this.loginFG.markAllAsTouched();
     this.loginFG.updateValueAndValidity();
 
-    if (this.loggingIn || this.loginFG.invalid) {
+    if (this.loginFG.invalid || this.loggingIn) {
       return;
     }
     this.loggingIn = true;

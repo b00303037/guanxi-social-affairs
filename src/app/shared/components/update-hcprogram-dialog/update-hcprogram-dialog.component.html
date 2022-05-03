@@ -1,0 +1,85 @@
+<h1 mat-dialog-title>編輯健檢項目</h1>
+
+<form [formGroup]="fg">
+  <div mat-dialog-content class="grid grid-cols-1">
+    <!-- 名稱 -->
+    <mat-form-field class="col-span-1">
+      <mat-label>名稱</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="name"
+        required
+        maxlength="50"
+        autocomplete="off"
+      />
+
+      <mat-error *ngIf="fcs['name'].hasError('required')"
+        >請輸入&nbsp;<strong>名稱</strong></mat-error
+      >
+    </mat-form-field>
+
+    <!-- 描述 -->
+    <mat-form-field class="col-span-1">
+      <mat-label>描述</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        required
+        rows="8"
+        autocomplete="off"
+      ></textarea>
+
+      <mat-error *ngIf="fcs['description'].hasError('required')"
+        >請輸入&nbsp;<strong>描述</strong></mat-error
+      >
+    </mat-form-field>
+
+    <!-- 費用 -->
+    <mat-form-field class="col-span-1">
+      <mat-label>費用</mat-label>
+      <input
+        type="number"
+        matInput
+        formControlName="charge"
+        required
+        min="0"
+        autocomplete="off"
+      />
+
+      <mat-error *ngIf="fcs['charge'].hasError('required')"
+        >請輸入&nbsp;<strong>費用</strong></mat-error
+      >
+    </mat-form-field>
+
+    <!-- 啟用狀態 -->
+    <div
+      class="col-span-1 h-form-field form-field-style flex items-center"
+      [class.form-field-invalid]="
+        (fcs['enabled'].touched || fcs['enabled'].dirty) &&
+        fcs['enabled'].invalid
+      "
+    >
+      <label class="form-field-label mr-4">啟用狀態 *</label>
+      <mat-radio-group formControlName="enabled">
+        <mat-radio-button [value]="YNObj.Y" class="mr-4">是</mat-radio-button>
+        <mat-radio-button [value]="YNObj.N">否</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+
+  <div mat-dialog-actions align="end">
+    <button type="button" mat-button [mat-dialog-close]="false">取消</button>
+    <button
+      type="submit"
+      mat-flat-button
+      color="primary"
+      [disabled]="updating"
+      appClickThrottle
+      [clickThrottleTime]="2000"
+      (clickThrottle)="onUpdateHCProgram()"
+    >
+      更新
+    </button>
+  </div>
+</form>

@@ -36,7 +36,6 @@ import {
   ApplStatuses,
 } from 'src/app/shared/enums/appl-status.enum';
 import { GsaService } from 'src/app/api/gsa.service';
-import { CancelApplReq } from 'src/app/api/models/cancel-appl.models';
 import { ApplInList } from 'src/app/api/models/get-appl-list.models';
 import {
   ExtendedAppl,
@@ -44,14 +43,25 @@ import {
   getExtendedAppl,
 } from 'src/app/api/models/get-appl.models';
 import { HospData } from 'src/app/api/models/get-hosp-data.models';
-import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
-import {
-  ConfirmDialogData,
-  ConfirmDialogResult,
-} from 'src/app/shared/components/confirm-dialog/confirm-dialog.models';
 import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
 import { Snack } from 'src/app/shared/services/snack-bar.models';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
+import {
+  CancelApplDialogData,
+  CancelApplDialogResult,
+} from 'src/app/shared/components/cancel-appl-dialog/cancel-appl-dialog.models';
+import { CancelApplDialogComponent } from 'src/app/shared/components/cancel-appl-dialog/cancel-appl-dialog.component';
+import {
+  ArrangeApplDialogData,
+  ArrangeApplDialogResult,
+} from 'src/app/shared/components/arrange-appl-dialog/arrange-appl-dialog.models';
+import { ArrangeApplDialogComponent } from 'src/app/shared/components/arrange-appl-dialog/arrange-appl-dialog.component';
+import {
+  CompleteApplDialogData,
+  CompleteApplDialogResult,
+} from 'src/app/shared/components/complete-appl-dialog/complete-appl-dialog.models';
+import { CompleteApplDialogComponent } from 'src/app/shared/components/complete-appl-dialog/complete-appl-dialog.component';
+import { YN } from 'src/app/shared/enums/yn.enum';
 
 @Component({
   selector: 'app-hosp-appl-list',
@@ -172,57 +182,55 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe();
   }
 
-  onConfirmCancelAppl(applicationID: string): void {
-    const data = new ConfirmDialogData({
-      title: '是否取消申請？',
-    });
+  openArrangeApplDialog(applicationID: string, scheduledDate: string): void {
+    const data: ArrangeApplDialogData = {
+      applicationID,
+      scheduledDate,
+    };
 
     this.matDialog
-      .open(ConfirmDialogComponent, { data })
+      .open(ArrangeApplDialogComponent, { data })
       .afterClosed()
       .pipe(
         takeUntil(this.destroy$),
-        filter<ConfirmDialogResult>((result) => result === true),
-        tap(() => this.onCancelAppl(applicationID))
+        filter<ArrangeApplDialogResult>((result) => result === true),
+        tap(() => this.onGetApplList())
       )
       .subscribe();
   }
 
-  onCancelAppl(applicationID: string): void {
-    if (this.cancelling) {
-      return;
-    }
-    this.cancelling = true;
+  openCompleteApplDialog(applicationID: string, completionDate: string, hasCancer: YN): void {
+    const data: CompleteApplDialogData = {
+      applicationID,
+      completionDate,
+      hasCancer
+    };
 
-    const req: CancelApplReq = {
+    this.matDialog
+      .open(CompleteApplDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        takeUntil(this.destroy$),
+        filter<CompleteApplDialogResult>((result) => result === true),
+        tap(() => this.onGetApplList())
+      )
+      .subscribe();
+  }
+
+  openCancelApplDialog(applicationID: string): void {
+    const data: CancelApplDialogData = {
       applicationID,
     };
 
-    this.gsaService
-      .CancelAppl(req)
+    this.matDialog
+      .open(CancelApplDialogComponent, { data })
+      .afterClosed()
       .pipe(
         takeUntil(this.destroy$),
-        finalize(() => (this.cancelling = false)),
-        map((res) => {
-          const snack = new Snack({
-            message: res.message,
-            type: SnackTypes.Success,
-          });
-          this.snackBarService.add(snack);
-
-          this.onGetApplList();
-        }),
-        catchError((err) => this.onError(err))
+        filter<CancelApplDialogResult>((result) => result === true),
+        tap(() => this.onGetApplList())
       )
       .subscribe();
-  }
-
-  openArrangeApplDialog(applicationID: string): void {
-    // TODO open ArrangeApplDialog
-  }
-
-  openCompleteApplDialog(applicationID: string): void {
-    // TODO open CompleteApplDialog
   }
 
   onError(err: string): Observable<never> {

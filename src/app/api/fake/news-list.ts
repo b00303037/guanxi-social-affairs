@@ -1,3 +1,4 @@
+import { parse } from 'date-fns';
 import { YN } from '../../shared/enums/yn.enum';
 import { News } from '../models/get-news.models';
 
@@ -92,7 +93,11 @@ export const NEWS_LIST: Array<News> = newsDataList.map<News>((data, i) => {
     content: data.content,
     pinned: pinnedNewsIDs.includes(newsID) ? YN.Y : YN.N,
     enabled: !disabledNewsIDs.includes(newsID) ? YN.Y : YN.N,
-    startDatetime: new Date(`2022/${newsID}/${newsID}`).toISOString(),
+    startDatetime: parse(
+      `2022/${newsID}/${newsID} ${newsID}:${(newsID * 5) % 60}:0 0`,
+      'yyyy/M/d h:m:s S',
+      new Date()
+    ).toISOString(),
     endDatetime: new Date('2022/12/31').toISOString(),
   };
 });

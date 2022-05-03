@@ -46,7 +46,7 @@
         <div class="text-xl font-semibold font-mono mb-2">
           {{ HCProgram.charge | currency: "TWD":"symbol":"1.0-2" }}
         </div>
-        <div>{{ HCProgram.description }}</div>
+        <div [innerHTML]="HCProgram.description"></div>
       </li>
     </ul>
   </div>
