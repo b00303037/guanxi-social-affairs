@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 // ngx-editor
-import { NgxEditorModule } from 'ngx-editor';
+import { NgxEditorConfig, NgxEditorModule } from 'ngx-editor';
 
 // @angular/material
 import { MatButtonModule } from '@angular/material/button';
@@ -49,6 +49,8 @@ import {
 import { zhTW } from 'date-fns/locale';
 
 // components
+import { AddHCProgramDialogComponent } from './components/add-hcprogram-dialog/add-hcprogram-dialog.component';
+import { AddNewsDialogComponent } from './components/add-news-dialog/add-news-dialog.component';
 import { ArrangeApplDialogComponent } from './components/arrange-appl-dialog/arrange-appl-dialog.component';
 import { CancelApplDialogComponent } from './components/cancel-appl-dialog/cancel-appl-dialog.component';
 import { CompleteApplDialogComponent } from './components/complete-appl-dialog/complete-appl-dialog.component';
@@ -79,6 +81,45 @@ import { SafeHTMLPipe } from './pipes/safe-html.pipe';
 import { PaginatorIntl } from './paginator-intl';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 
+const EDITOR_CONFIG: NgxEditorConfig = {
+  locals: {
+    // menu
+    bold: '粗體',
+    italic: '斜體',
+    code: '程式碼',
+    underline: '底線',
+    strike: '刪除線',
+    blockquote: '引用',
+    bullet_list: '無序清單',
+    ordered_list: '有序清單',
+    heading: 'Heading',
+    h1: 'Header 1',
+    h2: 'Header 2',
+    h3: 'Header 3',
+    h4: 'Header 4',
+    h5: 'Header 5',
+    h6: 'Header 6',
+    align_left: '靠左對齊',
+    align_center: '置中',
+    align_right: '靠右對齊',
+    align_justify: '左右對齊',
+    text_color: '文字顏色',
+    background_color: '背景顏色',
+    insertLink: '插入連結',
+    removeLink: '移除連結',
+    insertImage: '插入圖片',
+
+    // pupups, forms, others...
+    url: 'URL',
+    text: '文字',
+    openInNewTab: '在新分頁中開啟',
+    insert: '插入',
+    altText: '圖片替代文字',
+    title: '圖片標題',
+    remove: '移除',
+  },
+};
+
 const DATE_FORMATS: MatDateFormats = {
   parse: {
     dateInput: 'yyyy/MM/dd',
@@ -91,9 +132,10 @@ const DATE_FORMATS: MatDateFormats = {
   },
 };
 const DIALOG_DEFAULT_OPTIONS: MatDialogConfig = {
+  disableClose: true,
   hasBackdrop: true,
-  width: '320px',
   maxWidth: 'min(calc(100% - 2rem), 1280px)',
+  width: '320px',
 };
 const FORM_FIELD_DEFAULT_OPTIONS: MatFormFieldDefaultOptions = {
   appearance: 'fill',
@@ -106,6 +148,8 @@ const PROGRESS_SPINNER_DEFAULT_OPTIONS: MatProgressSpinnerDefaultOptions = {
 };
 
 const COMPONENTS = [
+  AddHCProgramDialogComponent,
+  AddNewsDialogComponent,
   ArrangeApplDialogComponent,
   CancelApplDialogComponent,
   CompleteApplDialogComponent,
@@ -141,44 +185,7 @@ const PIPES = [IsInSetPipe, SafeHTMLPipe];
     CommonModule,
     ReactiveFormsModule,
     // ngx-editor
-    NgxEditorModule.forRoot({
-      locals: {
-        // menu
-        bold: '粗體',
-        italic: '斜體',
-        code: '程式碼',
-        underline: '底線',
-        strike: '刪除線',
-        blockquote: '引用',
-        bullet_list: '無序清單',
-        ordered_list: '有序清單',
-        heading: '標頭',
-        h1: 'Header 1',
-        h2: 'Header 2',
-        h3: 'Header 3',
-        h4: 'Header 4',
-        h5: 'Header 5',
-        h6: 'Header 6',
-        align_left: '靠左對齊',
-        align_center: '置中',
-        align_right: '靠右對齊',
-        align_justify: '左右對齊',
-        text_color: '文字顏色',
-        background_color: '背景顏色',
-        insertLink: '插入連結',
-        removeLink: '移除連結',
-        insertImage: '插入圖片',
-
-        // pupups, forms, others...
-        url: 'URL',
-        text: '文字',
-        openInNewTab: '在新分頁中開啟',
-        insert: '插入',
-        altText: '圖片替代文字',
-        title: '圖片標題',
-        remove: '移除',
-      },
-    }),
+    NgxEditorModule.forRoot(EDITOR_CONFIG),
     // @angular/material
     MatButtonModule,
     MatDatepickerModule,

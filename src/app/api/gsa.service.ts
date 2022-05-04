@@ -594,7 +594,7 @@ export class GsaService extends BaseApiService {
   }
 
   /**
-   * 更新最新消息
+   * 更新健檢項目
    */
   UpdateHCProgram(req: UpdateHCProgramReq): Observable<UpdateHCProgramRes> {
     const apiUri = this.baseRoute + '/UpdateHCProgram';
@@ -609,7 +609,7 @@ export class GsaService extends BaseApiService {
         map(() => ({
           success: true,
           code: BaseAPICodes.SUCCESS,
-          message: '更新最新消息成功',
+          message: '更新健檢項目成功',
           content: null,
         })),
         switchMap((res) => super.throwNotIn(acceptedCodes, res))

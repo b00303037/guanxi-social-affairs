@@ -16,6 +16,7 @@
           mat-table
           [dataSource]="dataSource"
           multiTemplateDataRows
+          matSort
           class="w-full"
         >
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -36,7 +37,7 @@
 
           <!-- 日期 date: date -->
           <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef>日期</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>日期</th>
             <td mat-cell *matCellDef="let news">
               <span>
                 {{ news.date | date: "yyyy-MM-dd" }}

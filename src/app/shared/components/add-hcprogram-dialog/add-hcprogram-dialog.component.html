@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>編輯健檢項目</h1>
+<h1 mat-dialog-title>新增健檢項目</h1>
 
 <form [formGroup]="fg">
   <div mat-dialog-content class="grid grid-cols-1">
@@ -76,12 +76,10 @@
       type="submit"
       mat-flat-button
       color="primary"
-      [disabled]="updating"
-      appClickThrottle
-      [clickThrottleTime]="2000"
-      (clickThrottle)="onUpdateHCProgram()"
+      [disabled]="adding"
+      (click)="onAddHCProgram()"
     >
-      更新
+      新增
     </button>
   </div>
 </form>

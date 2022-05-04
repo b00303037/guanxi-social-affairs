@@ -29,9 +29,14 @@ import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import { HospDataHCProgram } from 'src/app/api/models/get-hosp-data.models';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { UpdateHCProgramReq } from 'src/app/api/models/update-hcprogram.models';
-import { UpdateHCProgramDialogData, UpdateHCProgramDialogResult } from 'src/app/shared/components/update-hcprogram-dialog/update-hcprogram-dialog.models';
+import {
+  UpdateHCProgramDialogData,
+  UpdateHCProgramDialogResult,
+} from 'src/app/shared/components/update-hcprogram-dialog/update-hcprogram-dialog.models';
 import { UpdateHCProgramDialogComponent } from 'src/app/shared/components/update-hcprogram-dialog/update-hcprogram-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AddHCProgramDialogComponent } from 'src/app/shared/components/add-hcprogram-dialog/add-hcprogram-dialog.component';
+import { AddHCProgramDialogResult } from 'src/app/shared/components/add-hcprogram-dialog/add-hcprogram-dialog.models';
 
 @Component({
   selector: 'app-hcprogram-mgmt',
@@ -102,6 +107,18 @@ export class HcprogramMgmtComponent
           );
         }),
         catchError((err) => this.onError(err))
+      )
+      .subscribe();
+  }
+
+  openAddHCProgramDialog(): void {
+    this.matDialog
+      .open(AddHCProgramDialogComponent)
+      .afterClosed()
+      .pipe(
+        takeUntil(this.destroy$),
+        filter<AddHCProgramDialogResult>((result) => result === true),
+        tap(() => this.onGetHospData())
       )
       .subscribe();
   }

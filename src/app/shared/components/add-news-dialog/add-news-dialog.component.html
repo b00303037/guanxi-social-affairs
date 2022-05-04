@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>編輯最新消息</h1>
+<h1 mat-dialog-title>新增最新消息</h1>
 
 <form [formGroup]="fg">
   <div mat-dialog-content class="grid grid-cols-2 gap-x-4">
@@ -250,12 +250,10 @@
       type="submit"
       mat-flat-button
       color="primary"
-      [disabled]="updating || news === undefined"
-      appClickThrottle
-      [clickThrottleTime]="2000"
-      (clickThrottle)="onUpdateNews()"
+      [disabled]="adding"
+      (click)="onAddNews()"
     >
-      更新
+      新增
     </button>
   </div>
 </form>

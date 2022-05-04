@@ -35,6 +35,8 @@ import {
   UpdateNewsDialogData,
   UpdateNewsDialogResult,
 } from 'src/app/shared/components/update-news-dialog/update-news-dialog.models';
+import { AddNewsDialogComponent } from 'src/app/shared/components/add-news-dialog/add-news-dialog.component';
+import { AddNewsDialogResult } from 'src/app/shared/components/add-news-dialog/add-news-dialog.models';
 
 @Component({
   selector: 'app-news-mgmt',
@@ -99,6 +101,18 @@ export class NewsMgmtComponent implements OnInit, AfterViewInit, OnDestroy {
           this.dataSource.data = res.content;
         }),
         catchError((err) => this.onError(err))
+      )
+      .subscribe();
+  }
+
+  openAddNewsDialog(): void {
+    this.matDialog
+      .open(AddNewsDialogComponent)
+      .afterClosed()
+      .pipe(
+        takeUntil(this.destroy$),
+        filter<AddNewsDialogResult>((result) => result === true),
+        tap(() => this.onGetNewsList())
       )
       .subscribe();
   }

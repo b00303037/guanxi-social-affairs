@@ -1,12 +1,12 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { format, parse } from 'date-fns';
+import { MatDialogRef } from '@angular/material/dialog';
+import { format } from 'date-fns';
 import { Editor, Toolbar, Validators as NGXValidators } from 'ngx-editor';
 import {
   catchError,
@@ -19,12 +19,8 @@ import {
   tap,
 } from 'rxjs';
 import { GsaService } from 'src/app/api/gsa.service';
-import {
-  getDatetime,
-  GetNewsReq,
-  News,
-} from 'src/app/api/models/get-news.models';
-import { UpdateNewsReq } from 'src/app/api/models/update-news.models';
+import { AddNewsReq } from 'src/app/api/models/add-news.models';
+import { getDatetime } from 'src/app/api/models/get-news.models';
 import { SnackTypes } from '../../enums/snack-type.enum';
 import { YN_OBJ } from '../../enums/yn.enum';
 import { Snack } from '../../services/snack-bar.models';
@@ -38,18 +34,14 @@ import {
   StartTimeErrorStateMatcher,
   StartTimeValidator,
 } from '../../validators/start-time.validator';
-import {
-  UpdateNewsFCsModel,
-  UpdateNewsFormModel,
-  UpdateNewsDialogData,
-} from './update-news-dialog.models';
+import { AddNewsFCsModel, AddNewsFormModel } from './add-news-dialog.models';
 
 @Component({
-  selector: 'app-update-news-dialog',
-  templateUrl: './update-news-dialog.component.html',
-  styleUrls: ['./update-news-dialog.component.scss'],
+  selector: 'app-add-news-dialog',
+  templateUrl: './add-news-dialog.component.html',
+  styleUrls: ['./add-news-dialog.component.scss'],
 })
-export class UpdateNewsDialogComponent implements OnInit, OnDestroy {
+export class AddNewsDialogComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<null>();
 
   fg = new FormGroup(
@@ -73,7 +65,7 @@ export class UpdateNewsDialogComponent implements OnInit, OnDestroy {
       validators: [StartTimeValidator, EndTimeValidator],
     }
   );
-  fcs: UpdateNewsFCsModel = {
+  fcs: AddNewsFCsModel = {
     title: this.fg.controls['title'],
     date: this.fg.controls['date'],
     content: this.fg.controls['content'],
@@ -86,7 +78,7 @@ export class UpdateNewsDialogComponent implements OnInit, OnDestroy {
     endHours: this.fg.controls['endHours'],
     endMinutes: this.fg.controls['endMinutes'],
   };
-  get fv(): UpdateNewsFormModel {
+  get fv(): AddNewsFormModel {
     return this.fg.value;
   }
   editor!: Editor;
@@ -101,8 +93,6 @@ export class UpdateNewsDialogComponent implements OnInit, OnDestroy {
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
 
-  news: News | undefined;
-
   hoursSelectList: Array<number> = getNumberList(0, 23);
   minutesSelectList: Array<number> = getNumberList(0, 55, 5);
 
@@ -111,12 +101,10 @@ export class UpdateNewsDialogComponent implements OnInit, OnDestroy {
   startTimeErrorStateMatcher = new StartTimeErrorStateMatcher();
   endTimeErrorStateMatcher = new EndTimeErrorStateMatcher();
 
-  getting = false;
-  updating = false;
+  adding = false;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: UpdateNewsDialogData,
-    private dialogRef: MatDialogRef<UpdateNewsDialogComponent>,
+    private dialogRef: MatDialogRef<AddNewsDialogComponent>,
     private snackBarService: SnackBarService,
     private gsaService: GsaService
   ) {
@@ -159,63 +147,6 @@ export class UpdateNewsDialogComponent implements OnInit, OnDestroy {
     this.dialogRef.updateSize('100%');
 
     this.editor = new Editor();
-
-    this.onGetNews(this.data.newsID);
-  }
-
-  onGetNews(newsID: number): void {
-    if (this.getting) {
-      return;
-    }
-    this.getting = true;
-
-    const req: GetNewsReq = {
-      newsID,
-    };
-    this.gsaService
-      .GetNews(req)
-      .pipe(
-        takeUntil(this.destroy$),
-        finalize(() => (this.getting = false)),
-        map((res) => {
-          const news = res.content;
-
-          this.news = news;
-
-          this.patchFV(news);
-        }),
-        catchError((err) => this.onError(err))
-      )
-      .subscribe();
-  }
-
-  patchFV(news: News): void {
-    const {
-      title,
-      date,
-      content,
-      pinned,
-      enabled,
-      startDatetime,
-      endDatetime,
-    } = news;
-    const startDate = startDatetime ? new Date(startDatetime) : undefined;
-    const endDate = endDatetime ? new Date(endDatetime) : undefined;
-
-    const fv: UpdateNewsFormModel = {
-      title,
-      date: parse(`${date} 00:00:00 0`, 'yyyy/MM/dd HH:mm:ss S', new Date()),
-      content,
-      pinned,
-      enabled,
-      startDate,
-      startHours: startDate?.getHours(),
-      startMinutes: startDate?.getMinutes(),
-      endDate,
-      endHours: endDate?.getHours(),
-      endMinutes: endDate?.getMinutes(),
-    };
-    this.fg.patchValue(fv);
   }
 
   clearDate(e: Event, control: AbstractControl): void {
@@ -240,33 +171,41 @@ export class UpdateNewsDialogComponent implements OnInit, OnDestroy {
     this.fcs['endMinutes'].setValue(undefined);
   }
 
-  onUpdateNews(): void {
+  onAddNews(): void {
     this.fg.markAllAsTouched();
     this.fg.updateValueAndValidity();
 
-    if (this.fg.invalid || this.updating || this.news === undefined) {
+    if (this.fg.invalid || this.adding) {
       return;
     }
-    this.updating = true;
+    this.adding = true;
 
-    const req: UpdateNewsReq = { newsID: this.news.newsID };
-
-    this.patchUpdateNewsReq(req, this.news, this.fv);
-    if (Object.keys(req).length === 1) {
-      const snack = new Snack({
-        message: '沒有異動的資料',
-      });
-      this.snackBarService.add(snack);
-
-      this.updating = false;
-      return;
-    }
+    const { title, content, pinned, enabled } = this.fv;
+    const startDatetime = getDatetime(
+      this.fv.startDate,
+      this.fv.startHours,
+      this.fv.startMinutes
+    );
+    const endDatetime = getDatetime(
+      this.fv.endDate,
+      this.fv.endHours,
+      this.fv.endMinutes
+    );
+    const req: AddNewsReq = {
+      title,
+      date: format(this.fv.date, 'yyyy/MM/dd'),
+      content,
+      pinned,
+      enabled,
+      startDatetime,
+      endDatetime,
+    };
 
     this.gsaService
-      .UpdateNews(req)
+      .AddNews(req)
       .pipe(
         takeUntil(this.destroy$),
-        finalize(() => (this.updating = false)),
+        finalize(() => (this.adding = false)),
         map((res) => {
           const snack = new Snack({
             message: res.message,
@@ -279,44 +218,6 @@ export class UpdateNewsDialogComponent implements OnInit, OnDestroy {
         catchError((err) => this.onError(err))
       )
       .subscribe();
-  }
-
-  patchUpdateNewsReq(
-    req: UpdateNewsReq,
-    news: News,
-    fv: UpdateNewsFormModel
-  ): UpdateNewsReq {
-    const date = format(fv.date, 'yyyy/MM/dd');
-    const startDatetime = getDatetime(
-      fv.startDate,
-      fv.startHours,
-      fv.startMinutes
-    );
-    const endDatetime = getDatetime(fv.endDate, fv.endHours, fv.endMinutes);
-
-    if (news.title !== fv.title) {
-      req.title = fv.title;
-    }
-    if (news.date !== date) {
-      req.date = date;
-    }
-    if (news.content !== fv.content) {
-      req.content = fv.content;
-    }
-    if (news.pinned !== fv.pinned) {
-      req.pinned = fv.pinned;
-    }
-    if (news.enabled !== fv.enabled) {
-      req.enabled = fv.enabled;
-    }
-    if (news.startDatetime !== startDatetime) {
-      req.startDatetime = startDatetime;
-    }
-    if (news.endDatetime !== endDatetime) {
-      req.endDatetime = endDatetime;
-    }
-
-    return req;
   }
 
   onError(err: string): Observable<never> {

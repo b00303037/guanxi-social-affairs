@@ -181,6 +181,24 @@ textarea {
   border-top-right-radius: 4px !important;
   border: 1px solid #ccc !important;
   border-bottom: none !important;
+
+  input[type="text"],
+  input[type="href"] {
+    border: 1px solid #ccc !important;
+  }
+  button[type="submit"],
+  button.NgxEditor__MenuItem--Button {
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+
+    color: rgba(0, 0, 0, 0.87) !important;
+    background-color: rgba(0, 0, 0, 0.04) !important;
+  }
+  button[type="submit"]:disabled,
+  button.NgxEditor__MenuItem--Button:disabled {
+    color: rgba(0, 0, 0, 0.26) !important;
+    background-color: rgba(0, 0, 0, 0.12) !important;
+  }
 }
 .NgxEditor {
   border-radius: 0 !important;
