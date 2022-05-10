@@ -16,6 +16,7 @@
         readonly
         tabindex="-1"
         class="cursor-pointer"
+        appAutoFocus
       />
 
       <button
@@ -24,12 +25,19 @@
         matSuffix
         mat-icon-button
         color="primary"
+        matTooltip="清除日期"
         (click)="clearDate($event, fcs['scheduledDate'])"
       >
         <mat-icon>clear</mat-icon>
       </button>
       <ng-template #scheduledDateToggle>
-        <button type="button" matSuffix mat-icon-button color="primary">
+        <button
+          type="button"
+          matSuffix
+          mat-icon-button
+          color="primary"
+          matTooltip="選擇日期"
+        >
           <mat-icon>today</mat-icon>
         </button>
       </ng-template>

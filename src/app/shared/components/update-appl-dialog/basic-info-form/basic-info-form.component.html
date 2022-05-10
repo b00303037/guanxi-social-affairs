@@ -1,6 +1,6 @@
-<form [formGroup]="fg" class="grid grid-cols-12 gap-x-4 my-4">
+<form [formGroup]="fg" class="grid grid-cols-2 gap-x-4 my-4">
   <!-- 姓名 -->
-  <mat-form-field class="col-span-12 sm:col-span-6">
+  <mat-form-field class="col-span-2 sm:col-span-1">
     <mat-label>姓名</mat-label>
     <input
       type="text"
@@ -17,7 +17,7 @@
 
   <!-- 性別 -->
   <div
-    class="col-span-12 h-form-field form-field-style flex items-center sm:col-span-6"
+    class="col-span-2 h-form-field form-field-style flex items-center sm:col-span-1"
     [class.form-field-invalid]="
       (fcs['gender'].touched || fcs['gender'].dirty) && fcs['gender'].invalid
     "
@@ -34,7 +34,7 @@
   <!-- 出生日期 -->
   <mat-form-field
     (click)="birthDatepicker.open()"
-    class="col-span-12 cursor-pointer sm:col-span-6"
+    class="col-span-2 cursor-pointer sm:col-span-1"
   >
     <mat-label>出生日期</mat-label>
     <input
@@ -54,12 +54,19 @@
       matSuffix
       mat-icon-button
       color="primary"
+      matTooltip="清除日期"
       (click)="clearDate($event, fcs['birthDate'])"
     >
       <mat-icon>clear</mat-icon>
     </button>
     <ng-template #birthDateToggle>
-      <button type="button" matSuffix mat-icon-button color="primary">
+      <button
+        type="button"
+        matSuffix
+        mat-icon-button
+        color="primary"
+        matTooltip="選擇日期"
+      >
         <mat-icon>today</mat-icon>
       </button>
     </ng-template>
@@ -74,7 +81,7 @@
   <!-- 設籍日期 -->
   <mat-form-field
     (click)="regDatepicker.open()"
-    class="col-span-12 cursor-pointer sm:col-span-6"
+    class="col-span-2 cursor-pointer sm:col-span-1"
   >
     <mat-label>設籍日期</mat-label>
     <input
@@ -94,12 +101,19 @@
       matSuffix
       mat-icon-button
       color="primary"
+      matTooltip="清除日期"
       (click)="clearDate($event, fcs['regDate'])"
     >
       <mat-icon>clear</mat-icon>
     </button>
     <ng-template #regDateToggle>
-      <button type="button" matSuffix mat-icon-button color="primary">
+      <button
+        type="button"
+        matSuffix
+        mat-icon-button
+        color="primary"
+        matTooltip="選擇日期"
+      >
         <mat-icon>today</mat-icon>
       </button>
     </ng-template>
@@ -115,7 +129,7 @@
   </mat-form-field>
 
   <!-- Email -->
-  <mat-form-field class="col-span-12 sm:col-span-6">
+  <mat-form-field class="col-span-2 sm:col-span-1">
     <mat-label>Email</mat-label>
     <input
       type="email"
@@ -134,7 +148,7 @@
   </mat-form-field>
 
   <!-- 行動電話 -->
-  <mat-form-field class="col-span-12 sm:col-span-6">
+  <mat-form-field class="col-span-2 sm:col-span-1">
     <mat-label>行動電話</mat-label>
     <input
       type="text"
@@ -155,7 +169,7 @@
     >
   </mat-form-field>
 
-  <div class="col-span-12 flex">
+  <div class="col-span-2 flex">
     <!-- 住家電話 - 區碼 -->
     <mat-form-field class="w-14 grow shrink-0">
       <mat-label>區碼</mat-label>

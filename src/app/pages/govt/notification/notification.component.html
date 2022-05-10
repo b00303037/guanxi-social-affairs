@@ -1,1 +1,71 @@
-<div class="page-title">發送通知</div>
+<section class="w-page py-4">
+  <div class="page-title">發送通知</div>
+
+  <mat-card>
+    <mat-stepper
+      #stepper
+      linear
+      [orientation]="gtMDQuery.matches ? 'horizontal' : 'vertical'"
+    >
+      <!-- 發送對象 -->
+      <mat-step
+        label="發送對象"
+        [stepControl]="receiverFG"
+        [editable]="flagsOfEditable.receiver"
+      >
+        <form (submit)="onReceiverFormSubmit($event)">
+          <app-notify-receiver-step
+            [fg]="receiverFG"
+          ></app-notify-receiver-step>
+
+          <div class="actions-box">
+            <span class="grow"></span>
+            <button type="submit" mat-flat-button color="primary">
+              下一步
+            </button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- 通知內容 -->
+      <mat-step
+        label="通知內容"
+        [stepControl]="contentFG"
+        [editable]="flagsOfEditable.content"
+      >
+        <form (submit)="onContentFormSubmit($event)">
+          <app-notify-content-step [fg]="contentFG"></app-notify-content-step>
+
+          <div class="actions-box">
+            <span class="grow"></span>
+            <button
+              type="submit"
+              mat-flat-button
+              color="primary"
+              [disabled]="notifying"
+            >
+              下一步
+            </button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- 發送完成 -->
+      <mat-step label="發送完成">
+        <span>發送完成</span>
+
+        <div class="actions-box">
+          <span class="grow"></span>
+          <button
+            type="button"
+            mat-flat-button
+            color="primary"
+            (click)="reset()"
+          >
+            再發送一封
+          </button>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </mat-card>
+</section>

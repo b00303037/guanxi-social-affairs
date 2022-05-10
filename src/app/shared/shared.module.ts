@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
 // ngx-editor
@@ -7,6 +8,8 @@ import { NgxEditorConfig, NgxEditorModule } from 'ngx-editor';
 
 // @angular/material
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
 import {
   MatDateFormats,
   DateAdapter,
@@ -26,6 +29,7 @@ import {
 } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import {
   MatProgressSpinnerDefaultOptions,
   MatProgressSpinnerModule,
@@ -38,6 +42,7 @@ import {
   MatSnackBarModule,
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
 } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -51,6 +56,7 @@ import { zhTW } from 'date-fns/locale';
 // components
 import { AddHCProgramDialogComponent } from './components/add-hcprogram-dialog/add-hcprogram-dialog.component';
 import { AddNewsDialogComponent } from './components/add-news-dialog/add-news-dialog.component';
+import { ApplListPickerComponent } from './components/appl-list-picker/appl-list-picker.component';
 import { ArrangeApplDialogComponent } from './components/arrange-appl-dialog/arrange-appl-dialog.component';
 import { CancelApplDialogComponent } from './components/cancel-appl-dialog/cancel-appl-dialog.component';
 import { CompleteApplDialogComponent } from './components/complete-appl-dialog/complete-appl-dialog.component';
@@ -68,6 +74,7 @@ import { UpdateHCProgramDialogComponent } from './components/update-hcprogram-di
 import { UpdateNewsDialogComponent } from './components/update-news-dialog/update-news-dialog.component';
 
 // directives
+import { AutofocusDirective } from './directives/autofocus.directive';
 import { ClickThrottleDirective } from './directives/click-throttle.directive';
 import { MatStepperScrollerDirective } from './directives/mat-stepper-scroller.directive';
 import { StopClickPropagationDirective } from './directives/stop-click-propagation.directive';
@@ -75,6 +82,7 @@ import { SubmitThrottleDirective } from './directives/submit-throttle.directive'
 import { UpperCaseDirective } from './directives/upper-case.directive';
 
 // pipes
+import { IncludesAppl } from './pipes/includes-appl.pipe';
 import { IsInSetPipe } from './pipes/is-in-set.pipe';
 import { SafeHTMLPipe } from './pipes/safe-html.pipe';
 
@@ -142,6 +150,8 @@ const FORM_FIELD_DEFAULT_OPTIONS: MatFormFieldDefaultOptions = {
 };
 const SNACK_BAR_DEFAULT_OPTIONS: MatSnackBarConfig = {
   duration: 4000,
+  horizontalPosition: 'center',
+  verticalPosition: 'top',
 };
 const PROGRESS_SPINNER_DEFAULT_OPTIONS: MatProgressSpinnerDefaultOptions = {
   diameter: 40,
@@ -150,6 +160,7 @@ const PROGRESS_SPINNER_DEFAULT_OPTIONS: MatProgressSpinnerDefaultOptions = {
 const COMPONENTS = [
   AddHCProgramDialogComponent,
   AddNewsDialogComponent,
+  ApplListPickerComponent,
   ArrangeApplDialogComponent,
   CancelApplDialogComponent,
   CompleteApplDialogComponent,
@@ -164,13 +175,14 @@ const COMPONENTS = [
   UpdateNewsDialogComponent,
 ];
 const DIRECTIVES = [
+  AutofocusDirective,
   ClickThrottleDirective,
   MatStepperScrollerDirective,
   StopClickPropagationDirective,
   SubmitThrottleDirective,
   UpperCaseDirective,
 ];
-const PIPES = [IsInSetPipe, SafeHTMLPipe];
+const PIPES = [IncludesAppl, IsInSetPipe, SafeHTMLPipe];
 
 @NgModule({
   declarations: [
@@ -183,20 +195,25 @@ const PIPES = [IsInSetPipe, SafeHTMLPipe];
   ],
   imports: [
     CommonModule,
+    RouterModule,
     ReactiveFormsModule,
     // ngx-editor
     NgxEditorModule.forRoot(EDITOR_CONFIG),
     // @angular/material
     MatButtonModule,
+    MatCheckboxModule,
+    MatChipsModule,
     MatDatepickerModule,
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatPaginatorModule,
     MatProgressSpinnerModule,
     MatRadioModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatTableModule,
     MatTabsModule,
     MatTooltipModule,
     // @angular/material-date-fns-adapter

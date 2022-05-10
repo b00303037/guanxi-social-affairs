@@ -39,7 +39,7 @@
         ></tr>
         <tr
           mat-row
-          *matRowDef="let row; columns: ['expandedDetail']"
+          *matRowDef="let program; columns: ['expandedDetail']"
           class="h-0"
         ></tr>
 
@@ -89,8 +89,8 @@
             <button
               mat-icon-button
               color="primary"
-              (click)="openUpdateHCProgramDialog(program)"
               matTooltip="編輯健檢項目"
+              (click)="openUpdateHCProgramDialog(program)"
             >
               <mat-icon>edit</mat-icon>
             </button>

@@ -126,7 +126,8 @@ $guanxi-social-affairs-theme: mat.define-light-theme(
     @apply md:border-b-0;
   }
   .news.detail-col tr:last-of-type td,
-  .program.detail-col tr:last-of-type td {
+  .program.detail-col tr:last-of-type td,
+  .receiver.detail-col tr:last-of-type td {
     @apply border-b-0;
   }
 
@@ -233,6 +234,8 @@ mat-form-field {
 
   .form-field-label {
     color: rgba(0, 0, 0, 0.6);
+
+    white-space: nowrap;
   }
 }
 .form-field-style::after {

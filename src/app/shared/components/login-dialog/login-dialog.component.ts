@@ -16,7 +16,11 @@ import { environment } from 'src/environments/environment';
 import { SnackTypes } from '../../enums/snack-type.enum';
 import { Snack } from '../../services/snack-bar.models';
 import { SnackBarService } from '../../services/snack-bar.service';
-import { LoginDialogData, LoginFormModel } from './login-dialog.models';
+import {
+  LoginDialogData,
+  LoginFCsModel,
+  LoginFormModel,
+} from './login-dialog.models';
 
 @Component({
   selector: 'app-login-dialog',
@@ -43,7 +47,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
       Validators.maxLength(6),
     ]),
   });
-  loginFCs = {
+  loginFCs: LoginFCsModel = {
     role: this.loginFG.controls['role'],
     username: this.loginFG.controls['username'],
     password: this.loginFG.controls['password'],

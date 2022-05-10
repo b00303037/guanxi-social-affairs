@@ -16,7 +16,15 @@
 </div>
 
 <div mat-dialog-actions align="end">
-  <button mat-flat-button color="primary" mat-dialog-close cdkFocusInitial>
-    瞭解
+  <button
+    type="button"
+    mat-button
+    routerLink="/home"
+    [mat-dialog-close]="false"
+  >
+    返回首頁
+  </button>
+  <button mat-flat-button color="primary" mat-dialog-close appAutoFocus>
+    繼續申請
   </button>
 </div>

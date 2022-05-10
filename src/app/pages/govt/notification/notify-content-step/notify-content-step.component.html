@@ -1,0 +1,39 @@
+<div [formGroup]="fg" class="grid grid-cols-1 my-4">
+  <!-- 主旨 -->
+  <mat-form-field class="col-span-1">
+    <mat-label>主旨</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="subject"
+      required
+      maxlength="50"
+      autocomplete="off"
+    />
+
+    <mat-hint align="end">{{ fcs["subject"].value?.length ?? 0 }} / 50</mat-hint>
+
+    <mat-error *ngIf="fcs['subject'].hasError('required')"
+      >請輸入&nbsp;<strong>主旨</strong></mat-error
+    >
+  </mat-form-field>
+
+  <!-- 內容 -->
+  <mat-form-field class="col-span-1">
+    <mat-label>內容</mat-label>
+    <textarea
+      matInput
+      formControlName="body"
+      required
+      maxlength="200"
+      rows="8"
+      autocomplete="off"
+    ></textarea>
+
+    <mat-hint align="end">{{ fcs["body"].value?.length ?? 0 }} / 200</mat-hint>
+
+    <mat-error *ngIf="fcs['body'].hasError('required')"
+      >請輸入&nbsp;<strong>內容</strong></mat-error
+    >
+  </mat-form-field>
+</div>

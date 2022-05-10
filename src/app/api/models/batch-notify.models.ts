@@ -1,12 +1,19 @@
+import { ApplStatuses } from 'src/app/shared/enums/appl-status.enum';
 import { BaseAPIResModel } from './base-api.models';
 
 export type BatchNotifyReq = BatchNotifyByStatusReq | BatchNotifyByIDReq;
 
 interface BatchNotifyByStatusReq {
   /**
-   * 申請單狀態
+   * 發送方式
+   * 'status': 依申請單狀態
+   * 'id': 依申請單編號
    */
-  applStatusList: string;
+  type: 'status';
+  /**
+   * 申請單狀態列表
+   */
+  applStatusList: Array<ApplStatuses>;
   /**
    * 主旨
    */
@@ -17,6 +24,12 @@ interface BatchNotifyByStatusReq {
   body: string;
 }
 interface BatchNotifyByIDReq {
+  /**
+   * 發送方式
+   * 'status': 依申請單狀態
+   * 'id': 依申請單編號
+   */
+  type: 'id';
   /**
    * 申請單編號列表
    */

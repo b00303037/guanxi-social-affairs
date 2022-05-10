@@ -12,7 +12,10 @@
         required
         maxlength="50"
         autocomplete="off"
+        appAutoFocus
       />
+
+      <mat-hint align="end">{{ fcs["name"].value?.length ?? 0 }} / 50</mat-hint>
 
       <mat-error *ngIf="fcs['name'].hasError('required')"
         >請輸入&nbsp;<strong>名稱</strong></mat-error

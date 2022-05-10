@@ -24,7 +24,7 @@ import { Snack } from 'src/app/shared/services/snack-bar.models';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import { IDNoValidator } from 'src/app/shared/validators/IDNo.validator';
 import { QueryApplListStepComponent } from './query-appl-list-step/query-appl-list-step.component';
-import { VerificationFormModel } from './query.models';
+import { VerificationFCsModel, VerificationFormModel } from './query.models';
 
 @Component({
   selector: 'app-query',
@@ -60,7 +60,7 @@ export class QueryComponent implements OnInit, OnDestroy {
     ]),
     passed: new FormControl(false, [Validators.requiredTrue]),
   });
-  verificationFCs = {
+  verificationFCs: VerificationFCsModel = {
     IDNo: this.verificationFG.controls['IDNo'],
     password: this.verificationFG.controls['password'],
     captcha: this.verificationFG.controls['captcha'],

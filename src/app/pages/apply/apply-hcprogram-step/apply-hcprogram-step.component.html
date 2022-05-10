@@ -2,7 +2,7 @@
   <!-- 醫院 -->
   <mat-form-field class="col-span-2">
     <mat-label>醫院</mat-label>
-    <mat-select formControlName="hospitalID">
+    <mat-select formControlName="hospitalID" required>
       <mat-option
         *ngFor="let hospital of hospitalSelectList"
         [value]="hospital.hospitalID"

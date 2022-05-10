@@ -5,10 +5,10 @@
 
 <ng-container [ngSwitch]="data.status">
   <div mat-dialog-content *ngSwitchCase="applStatusObj.Y">
-    審核通過單號 {{ data.applicationID }} 的申請單？
+    審核通過編號 {{ data.applicationID }} 的申請單？
   </div>
   <div mat-dialog-content *ngSwitchCase="applStatusObj.N">
-    退回補正單號 {{ data.applicationID }} 的申請單？
+    退回補正編號 {{ data.applicationID }} 的申請單？
   </div>
 </ng-container>
 
@@ -18,8 +18,8 @@
     mat-flat-button
     color="primary"
     [disabled]="reviewing"
-    cdkFocusInitial
     (click)="onReviewAppl(data.applicationID, data.status)"
+    appAutoFocus
   >
     確認
   </button>

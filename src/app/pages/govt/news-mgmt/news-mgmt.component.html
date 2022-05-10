@@ -39,7 +39,7 @@
         ></tr>
         <tr
           mat-row
-          *matRowDef="let row; columns: ['expandedDetail']"
+          *matRowDef="let news; columns: ['expandedDetail']"
           class="h-0"
         ></tr>
 
@@ -94,8 +94,8 @@
             <button
               mat-icon-button
               color="primary"
-              (click)="openUpdateNewsDialog(news.newsID)"
               matTooltip="編輯最新消息"
+              (click)="openUpdateNewsDialog(news.newsID)"
             >
               <mat-icon>edit</mat-icon>
             </button>

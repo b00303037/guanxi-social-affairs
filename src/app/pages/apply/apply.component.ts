@@ -251,6 +251,8 @@ export class ApplyComponent implements OnInit, OnDestroy {
   onHCProgramFormSubmit(e: Event): void {
     e.preventDefault();
 
+    this.forceValidation(this.HCProgramFG);
+
     this.stepper.next();
   }
 

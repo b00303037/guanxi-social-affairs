@@ -1,0 +1,198 @@
+<h1 mat-dialog-title>選擇申請單</h1>
+
+<form [formGroup]="fg">
+  <div mat-dialog-content>
+    <div class="spinner-box grid grid-cols-2 gap-x-4 my-4">
+      <!-- 申請單狀態 -->
+      <mat-form-field class="col-span-2 sm:col-span-1">
+        <mat-label>申請單狀態</mat-label>
+        <mat-select formControlName="applStatusList" multiple appAutoFocus>
+          <mat-option
+            *ngFor="let status of applStatusSelectList"
+            [value]="status.value"
+          >
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- 申請單編號、姓名關鍵字 -->
+      <mat-form-field class="col-span-2 sm:col-span-1">
+        <mat-label>申請單編號、姓名關鍵字</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="keyword"
+          autocomplete="off"
+        />
+      </mat-form-field>
+
+      <div class="col-span-2 overflow-auto">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          multiTemplateDataRows
+          matSort
+          class="w-full"
+        >
+          <tr
+            mat-header-row
+            *matHeaderRowDef="
+              gtSMQuery.matches ? displayedColumnsSM : displayedColumns
+            "
+          ></tr>
+          <tr
+            mat-row
+            (click)="toggle(appl)"
+            *matRowDef="
+              let appl;
+              columns: gtSMQuery.matches ? displayedColumnsSM : displayedColumns
+            "
+            class="cursor-pointer"
+          ></tr>
+          <tr
+            mat-row
+            (click)="toggle(appl)"
+            *matRowDef="let appl; columns: ['expandedDetail']"
+            class="h-0 cursor-pointer"
+          ></tr>
+
+          <!-- 勾選 checkbox -->
+          <ng-container matColumnDef="checkbox">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>勾選</th>
+            <td mat-cell *matCellDef="let appl" class="border-b-0">
+              <mat-checkbox
+                color="primary"
+                (click)="$event.stopPropagation()"
+                (change)="$event ? toggle(appl) : null"
+                [checked]="appl | includesAppl: pickedList"
+              >
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- 申請單編號 applicationID: applicationID -->
+          <ng-container matColumnDef="applicationID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              申請單編號
+            </th>
+            <td mat-cell *matCellDef="let appl" class="border-b-0">
+              <span class="block text-base py-2">{{ appl.applicationID }}</span>
+            </td>
+          </ng-container>
+
+          <!-- 申請日期 createDatetime: createDatetime -->
+          <ng-container matColumnDef="createDatetime">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>申請日期</th>
+            <td mat-cell *matCellDef="let appl" class="border-b-0">
+              <span>
+                {{ appl.createDatetime | date: "yyyy/MM/dd" }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- 姓名 name: name -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>姓名</th>
+            <td mat-cell *matCellDef="let appl" class="border-b-0">
+              <span>{{ appl.name }}</span>
+            </td>
+          </ng-container>
+
+          <!-- 申請狀態 status: status -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>申請狀態</th>
+            <td mat-cell *matCellDef="let appl" class="border-b-0">
+              <span>{{ appl.status | i18nSelect: applStatusMap }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="expandedDetail">
+            <td
+              mat-cell
+              *matCellDef="let appl"
+              [attr.colspan]="
+                (gtSMQuery.matches ? displayedColumnsSM : displayedColumns)
+                  .length
+              "
+            >
+              <div class="w-full receiver detail-col">
+                <div
+                  *ngIf="!gtSMQuery.matches"
+                  class="grid grid-cols-1 border-t border-black border-opacity-6"
+                >
+                  <table class="col-span-1">
+                    <!-- 申請日期 -->
+                    <tr>
+                      <td><label>申請日期</label></td>
+                      <td>
+                        <span>{{
+                          appl.createDatetime | date: "yyyy/MM/dd"
+                        }}</span>
+                      </td>
+                    </tr>
+                    <!-- 姓名 -->
+                    <tr>
+                      <td><label>姓名</label></td>
+                      <td>
+                        <span>{{ appl.name }}</span>
+                      </td>
+                    </tr>
+                    <!-- 申請狀態 -->
+                    <tr>
+                      <td><label>申請狀態</label></td>
+                      <td>
+                        <span>{{
+                          appl.status | i18nSelect: applStatusMap
+                        }}</span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+        </table>
+      </div>
+      <mat-paginator
+        pageSize="10"
+        hidePageSize
+        class="col-span-2"
+      ></mat-paginator>
+
+      <div *ngIf="gettingList" class="spinner">
+        <mat-spinner></mat-spinner>
+      </div>
+    </div>
+  </div>
+
+  <div mat-dialog-actions align="end">
+    <mat-chip-list class="w-full h-20 overflow-x-hidden overflow-y-auto mb-2">
+      <mat-chip
+        *ngFor="let appl of pickedList"
+        [selectable]="false"
+        removable
+        (removed)="remove(appl)"
+      >
+        {{ appl.applicationID }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+
+    <div class="actions-box">
+      <span class="grow"></span>
+      <button type="button" mat-button [mat-dialog-close]="undefined">
+        取消
+      </button>
+      <button
+        type="submit"
+        mat-flat-button
+        color="primary"
+        [disabled]="gettingList"
+        (click)="onPickApplList()"
+      >
+        確認
+      </button>
+    </div>
+  </div>
+</form>

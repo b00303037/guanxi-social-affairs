@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'isInSet',
 })
 export class IsInSetPipe implements PipeTransform {
-  transform(value: unknown, set: Set<unknown>): unknown {
+  transform(value: unknown, set: Set<unknown>): boolean {
     return set.has(value);
   }
 }

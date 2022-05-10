@@ -1,7 +1,7 @@
 <div [formGroup]="fg" class="grid grid-cols-2 gap-x-4 my-4">
   <!-- 初次申請 -->
   <div class="col-span-2 h-form-field form-field-style flex items-center">
-    <label class="mr-4">初次申請</label>
+    <label class="mr-4">初次申請 *</label>
     <mat-radio-group formControlName="isFirstTime">
       <mat-radio-button [value]="true" class="mr-4">是</mat-radio-button>
       <mat-radio-button [value]="false">否</mat-radio-button>
@@ -26,6 +26,7 @@
       matSuffix
       mat-icon-button
       color="accent"
+      matTooltip="每日身分證字號尾碼限制"
       (click)="openIDNoHintDialog()"
     >
       <mat-icon>info</mat-icon>
@@ -39,9 +40,9 @@
     >
   </mat-form-field>
 
-  <!-- 密碼 -->
+  <!-- 存取密碼 -->
   <mat-form-field class="col-span-2 sm:col-span-1">
-    <mat-label>密碼</mat-label>
+    <mat-label>存取密碼</mat-label>
     <input
       [type]="showPassword ? 'text' : 'password'"
       matInput
@@ -57,13 +58,14 @@
       mat-icon-button
       color="primary"
       [disabled]="fcs['password'].disabled"
+      [matTooltip]="showPassword ? '隱藏密碼' : '顯示密碼'"
       (click)="showPassword = !showPassword"
     >
       <mat-icon>{{ showPassword ? "visibility" : "visibility_off" }}</mat-icon>
     </button>
 
     <mat-error *ngIf="fcs['password'].hasError('required')"
-      >請輸入&nbsp;<strong>密碼</strong></mat-error
+      >請輸入&nbsp;<strong>存取密碼</strong></mat-error
     >
     <mat-error *ngIf="fcs['password'].hasError('minlength')"
       >請輸入&nbsp;<strong>6 個字元以上</strong>&nbsp;的密碼</mat-error
@@ -97,6 +99,7 @@
       type="button"
       mat-icon-button
       color="primary"
+      matTooltip="更新圖形驗證碼"
       (click)="refreshCaptcha()"
     >
       <mat-icon>refresh</mat-icon>

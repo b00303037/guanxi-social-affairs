@@ -15,6 +15,7 @@
         required
         maxlength="20"
         autocomplete="off"
+        appAutoFocus
       />
 
       <mat-error *ngIf="loginFCs['username'].hasError('required')"
@@ -39,6 +40,7 @@
         matSuffix
         mat-icon-button
         color="primary"
+        [matTooltip]="showPassword ? '隱藏密碼' : '顯示密碼'"
         (click)="showPassword = !showPassword"
       >
         <mat-icon>{{
@@ -81,6 +83,7 @@
         type="button"
         mat-icon-button
         color="primary"
+        matTooltip="更新圖形驗證碼"
         (click)="refreshCaptcha()"
       >
         <mat-icon>refresh</mat-icon>

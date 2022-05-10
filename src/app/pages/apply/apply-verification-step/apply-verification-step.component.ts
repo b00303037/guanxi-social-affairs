@@ -30,7 +30,7 @@ export class ApplyVerificationStepComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initFCs();
 
-    const isFirstTime = this.fcs['isFirstTime'].value;
+    const isFirstTime: boolean = this.fcs['isFirstTime'].value;
 
     this.fcs['isFirstTime'].valueChanges
       .pipe(
@@ -41,6 +41,8 @@ export class ApplyVerificationStepComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe();
+
+    this.openIDNoHintDialog();
   }
 
   initFCs(): void {
