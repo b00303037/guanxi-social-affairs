@@ -1,12 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import {
-  debounceTime,
-  Subject,
-  takeUntil,
-  tap,
-} from 'rxjs';
+import { debounceTime, Subject, takeUntil, tap } from 'rxjs';
 import {
   HospData,
   HospDataHCProgram,
@@ -34,6 +29,8 @@ export class HCProgramFormComponent implements OnInit, OnDestroy {
 
   hospitalSelectList: Array<HospDataHospital> = [];
   HCProgramSelectList: Array<HospDataHCProgram> = [];
+
+  selectedHospital: HospDataHospital | undefined;
 
   YNObj = YN_OBJ;
 
@@ -64,6 +61,10 @@ export class HCProgramFormComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         debounceTime(300),
         tap<HCProgramFormModel>((next) => {
+          this.selectedHospital = this.hospitalSelectList.find(
+            (h) => h.hospitalID === next.hospitalID
+          );
+
           this.HCProgramSelectList = this.enabledHCProgramList.filter(
             (p) => p.hospitalID === next.hospitalID
           );
