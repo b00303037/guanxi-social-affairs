@@ -40,7 +40,7 @@ export const APPL_STATUS_MAP = {
   [ApplStatuses.Arranged]: '已安排健檢',
   [ApplStatuses.Completed]: '已完成健檢',
 };
-export const APPL_STATUS_SELECT_LIST: Array<{
+export const GOVT_APPL_STATUS_SELECT_LIST: Array<{
   label: string;
   value: ApplStatuses;
 }> = [
@@ -59,6 +59,23 @@ export const APPL_STATUS_SELECT_LIST: Array<{
   {
     label: APPL_STATUS_MAP[ApplStatuses.N],
     value: ApplStatuses.N,
+  },
+  {
+    label: APPL_STATUS_MAP[ApplStatuses.Arranged],
+    value: ApplStatuses.Arranged,
+  },
+  {
+    label: APPL_STATUS_MAP[ApplStatuses.Completed],
+    value: ApplStatuses.Completed,
+  },
+];
+export const HOSP_APPL_STATUS_SELECT_LIST: Array<{
+  label: string;
+  value: ApplStatuses;
+}> = [
+  {
+    label: APPL_STATUS_MAP[ApplStatuses.Y],
+    value: ApplStatuses.Y,
   },
   {
     label: APPL_STATUS_MAP[ApplStatuses.Arranged],

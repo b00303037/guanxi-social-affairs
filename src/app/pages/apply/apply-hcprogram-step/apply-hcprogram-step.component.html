@@ -17,6 +17,16 @@
     >
   </mat-form-field>
 
+  <div
+    *ngIf="selectedHospital !== undefined && selectedHospital.siteUrl"
+    class="col-span-2 text-base mb-4 md:text-lg"
+  >
+    <span>{{ selectedHospital.name }}&nbsp;</span>
+    <a [href]="selectedHospital.siteUrl" target="_blank" class="clickable-text"
+      >網站連結</a
+    >
+  </div>
+
   <!-- 健檢項目 -->
   <div class="col-span-2 HCProgram form-field-style">
     <div class="h-8 flex justify-center items-center">

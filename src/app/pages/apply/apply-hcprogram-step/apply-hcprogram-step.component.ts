@@ -1,14 +1,8 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  Subject,
-  takeUntil,
-  tap,
-} from 'rxjs';
+import { debounceTime, Subject, takeUntil, tap } from 'rxjs';
 import { YN, YN_OBJ } from 'src/app/shared/enums/yn.enum';
 import {
   HospData,
@@ -32,6 +26,8 @@ export class ApplyHCProgramStepComponent implements OnInit, OnDestroy {
 
   hospitalSelectList: Array<HospDataHospital> = [];
   HCProgramSelectList: Array<HospDataHCProgram> = [];
+
+  selectedHospital: HospDataHospital | undefined;
 
   YNObj = YN_OBJ;
 
@@ -66,8 +62,11 @@ export class ApplyHCProgramStepComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         debounceTime(300),
-        distinctUntilChanged(),
         tap<HCProgramFormModel>((next) => {
+          this.selectedHospital = this.hospitalSelectList.find(
+            (h) => h.hospitalID === next.hospitalID
+          );
+
           this.HCProgramSelectList = this.enabledHCProgramList.filter(
             (p) => p.hospitalID === next.hospitalID
           );

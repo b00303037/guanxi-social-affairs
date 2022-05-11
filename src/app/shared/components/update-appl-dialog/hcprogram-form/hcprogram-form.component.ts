@@ -3,7 +3,6 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import {
   debounceTime,
-  distinctUntilChanged,
   Subject,
   takeUntil,
   tap,
@@ -64,7 +63,6 @@ export class HCProgramFormComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         debounceTime(300),
-        distinctUntilChanged(),
         tap<HCProgramFormModel>((next) => {
           this.HCProgramSelectList = this.enabledHCProgramList.filter(
             (p) => p.hospitalID === next.hospitalID

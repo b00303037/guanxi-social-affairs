@@ -1,5 +1,26 @@
 <div class="page-title">申請單列表</div>
 
+<form [formGroup]="fg" class="grid grid-cols-2 gap-x-4 my-4">
+  <!-- 申請單狀態 -->
+  <mat-form-field class="col-span-2 sm:col-span-1">
+    <mat-label>申請單狀態</mat-label>
+    <mat-select formControlName="applStatusList" multiple appAutoFocus>
+      <mat-option
+        *ngFor="let status of applStatusSelectList"
+        [value]="status.value"
+      >
+        {{ status.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- 申請單編號、姓名關鍵字 -->
+  <mat-form-field class="col-span-2 sm:col-span-1">
+    <mat-label>申請單編號、姓名關鍵字</mat-label>
+    <input type="text" matInput formControlName="keyword" autocomplete="off" />
+  </mat-form-field>
+</form>
+
 <mat-card>
   <div class="spinner-box">
     <div class="overflow-auto">

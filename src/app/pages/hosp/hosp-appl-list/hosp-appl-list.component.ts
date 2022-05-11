@@ -29,11 +29,13 @@ import {
   tap,
   Observable,
   EMPTY,
+  debounceTime,
 } from 'rxjs';
 import {
   APPL_STATUS_OBJ,
   APPL_STATUS_MAP,
   ApplStatuses,
+  HOSP_APPL_STATUS_SELECT_LIST,
 } from 'src/app/shared/enums/appl-status.enum';
 import { GsaService } from 'src/app/api/gsa.service';
 import { ApplInList } from 'src/app/api/models/get-appl-list.models';
@@ -62,6 +64,11 @@ import {
 } from 'src/app/shared/components/complete-appl-dialog/complete-appl-dialog.models';
 import { CompleteApplDialogComponent } from 'src/app/shared/components/complete-appl-dialog/complete-appl-dialog.component';
 import { YN } from 'src/app/shared/enums/yn.enum';
+import { FormControl, FormGroup } from '@angular/forms';
+import {
+  HospApplListFilterFCsModel,
+  HospApplListFilterFormModel,
+} from './hosp-appl-list.models';
 
 @Component({
   selector: 'app-hosp-appl-list',
@@ -87,6 +94,19 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  fg = new FormGroup({
+    applStatusList: new FormControl(null),
+    keyword: new FormControl(null),
+  });
+  fcs: HospApplListFilterFCsModel = {
+    applStatusList: this.fg.controls['applStatusList'],
+    keyword: this.fg.controls['keyword'],
+  };
+  get fv(): HospApplListFilterFormModel {
+    return this.fg.value;
+  }
+
+  applList: Array<ApplInList> = [];
   dataSource = new MatTableDataSource<ApplInList>([]);
   displayedColumns: Array<string> = ['applicationID', 'actions'];
   displayedColumnsMD: Array<string> = [
@@ -99,6 +119,7 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   expandingApplID: string | undefined;
   expandedAppl: ExtendedAppl | null = null;
 
+  applStatusSelectList = HOSP_APPL_STATUS_SELECT_LIST;
   applStatusObj = APPL_STATUS_OBJ;
   applStatusMap = APPL_STATUS_MAP;
 
@@ -118,6 +139,29 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.fg.valueChanges
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(300),
+        tap<HospApplListFilterFormModel>((fv) => {
+          let result = [...this.applList];
+          const { applStatusList, keyword } = fv;
+
+          if ((applStatusList?.length ?? 0) !== 0) {
+            result = result.filter((a) => applStatusList.includes(a.status));
+          }
+          if (typeof keyword === 'string' && keyword.length > 0) {
+            result = result.filter((a) =>
+              [a.applicationID, a.name].some((value) => value.includes(keyword))
+            );
+          }
+
+          this.dataSource.data = result;
+          this.paginator.firstPage();
+        })
+      )
+      .subscribe();
+
     this.onGetApplList();
   }
 
@@ -140,13 +184,20 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
         finalize(() => (this.gettingList = false)),
         map((res) => {
           // TODO filter in GsaService
-          this.dataSource.data = res.content.filter((appl) =>
+          this.applList = res.content.filter((appl) =>
             [
               ApplStatuses.Y,
               ApplStatuses.Arranged,
               ApplStatuses.Completed,
             ].includes(appl.status)
           );
+
+          const defaultFV: HospApplListFilterFormModel = {
+            applStatusList: [],
+            keyword: '',
+          };
+
+          this.fg.setValue(defaultFV);
         }),
         catchError((err) => this.onError(err))
       )
@@ -199,11 +250,15 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe();
   }
 
-  openCompleteApplDialog(applicationID: string, completionDate: string, hasCancer: YN): void {
+  openCompleteApplDialog(
+    applicationID: string,
+    completionDate: string,
+    hasCancer: YN
+  ): void {
     const data: CompleteApplDialogData = {
       applicationID,
       completionDate,
-      hasCancer
+      hasCancer,
     };
 
     this.matDialog

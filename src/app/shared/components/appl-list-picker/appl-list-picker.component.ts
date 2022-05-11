@@ -28,7 +28,7 @@ import { GsaService } from 'src/app/api/gsa.service';
 import { ApplInList } from 'src/app/api/models/get-appl-list.models';
 import {
   APPL_STATUS_MAP,
-  APPL_STATUS_SELECT_LIST,
+  GOVT_APPL_STATUS_SELECT_LIST,
 } from '../../enums/appl-status.enum';
 import { SnackTypes } from '../../enums/snack-type.enum';
 import { Snack } from '../../services/snack-bar.models';
@@ -79,7 +79,7 @@ export class ApplListPickerComponent
   ];
 
   applStatusMap = APPL_STATUS_MAP;
-  applStatusSelectList = APPL_STATUS_SELECT_LIST;
+  applStatusSelectList = GOVT_APPL_STATUS_SELECT_LIST;
 
   gettingList = false;
 
@@ -117,6 +117,7 @@ export class ApplListPickerComponent
           }
 
           this.dataSource.data = result;
+          this.paginator.firstPage();
         })
       )
       .subscribe();

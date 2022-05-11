@@ -35,7 +35,7 @@ import {
 } from 'src/app/shared/components/appl-list-picker/appl-list-picker.models';
 import {
   APPL_STATUS_MAP,
-  APPL_STATUS_SELECT_LIST,
+  GOVT_APPL_STATUS_SELECT_LIST,
 } from 'src/app/shared/enums/appl-status.enum';
 import {
   ReceiverTypes,
@@ -76,7 +76,7 @@ export class NotifyReceiverStepComponent
   ];
 
   receiverTypeObj = RECEIVER_TYPE_OBJ;
-  applStatusSelectList = APPL_STATUS_SELECT_LIST;
+  applStatusSelectList = GOVT_APPL_STATUS_SELECT_LIST;
   applStatusMap = APPL_STATUS_MAP;
 
   gettingList = false;

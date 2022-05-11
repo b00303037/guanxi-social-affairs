@@ -21,6 +21,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import {
   catchError,
+  debounceTime,
   EMPTY,
   filter,
   finalize,
@@ -34,6 +35,7 @@ import {
   ApplStatuses,
   APPL_STATUS_MAP,
   APPL_STATUS_OBJ,
+  GOVT_APPL_STATUS_SELECT_LIST,
 } from 'src/app/shared/enums/appl-status.enum';
 import { GsaService } from 'src/app/api/gsa.service';
 import { ApplInList } from 'src/app/api/models/get-appl-list.models';
@@ -56,6 +58,11 @@ import {
   ReviewApplDialogResult,
 } from 'src/app/shared/components/review-appl-dialog/review-appl-dialog.models';
 import { ReviewApplDialogComponent } from 'src/app/shared/components/review-appl-dialog/review-appl-dialog.component';
+import { FormControl, FormGroup } from '@angular/forms';
+import {
+  GovtApplListFilterFCsModel,
+  GovtApplListFilterFormModel,
+} from './govt-appl-list.models';
 
 @Component({
   selector: 'app-govt-appl-list',
@@ -81,6 +88,19 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  fg = new FormGroup({
+    applStatusList: new FormControl(null),
+    keyword: new FormControl(null),
+  });
+  fcs: GovtApplListFilterFCsModel = {
+    applStatusList: this.fg.controls['applStatusList'],
+    keyword: this.fg.controls['keyword'],
+  };
+  get fv(): GovtApplListFilterFormModel {
+    return this.fg.value;
+  }
+
+  applList: Array<ApplInList> = [];
   dataSource = new MatTableDataSource<ApplInList>([]);
   displayedColumns: Array<string> = ['applicationID', 'actions'];
   displayedColumnsMD: Array<string> = [
@@ -93,6 +113,7 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   expandingApplID: string | undefined;
   expandedAppl: ExtendedAppl | null = null;
 
+  applStatusSelectList = GOVT_APPL_STATUS_SELECT_LIST;
   applStatusObj = APPL_STATUS_OBJ;
   applStatusMap = APPL_STATUS_MAP;
 
@@ -112,6 +133,29 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.fg.valueChanges
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(300),
+        tap<GovtApplListFilterFormModel>((fv) => {
+          let result = [...this.applList];
+          const { applStatusList, keyword } = fv;
+
+          if ((applStatusList?.length ?? 0) !== 0) {
+            result = result.filter((a) => applStatusList.includes(a.status));
+          }
+          if (typeof keyword === 'string' && keyword.length > 0) {
+            result = result.filter((a) =>
+              [a.applicationID, a.name].some((value) => value.includes(keyword))
+            );
+          }
+
+          this.dataSource.data = result;
+          this.paginator.firstPage();
+        })
+      )
+      .subscribe();
+
     this.onGetApplList();
   }
 
@@ -133,7 +177,14 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
         takeUntil(this.destroy$),
         finalize(() => (this.gettingList = false)),
         map((res) => {
-          this.dataSource.data = res.content;
+          this.applList = res.content;
+
+          const defaultFV: GovtApplListFilterFormModel = {
+            applStatusList: [],
+            keyword: '',
+          };
+
+          this.fg.setValue(defaultFV);
         }),
         catchError((err) => this.onError(err))
       )
