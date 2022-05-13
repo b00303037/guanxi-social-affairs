@@ -51,7 +51,7 @@ export class NewsComponent implements OnInit, OnDestroy {
     this.getting = true;
 
     const req: GetNewsReq = {
-      newsID,
+      newsID: newsID,
     };
 
     this.gsaService

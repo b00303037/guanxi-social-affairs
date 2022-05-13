@@ -1,6 +1,7 @@
 import { Breakpoints, MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-hosp-layouts',
@@ -33,7 +34,8 @@ export class HospLayoutsComponent implements OnInit, OnDestroy {
   constructor(
     private media: MediaMatcher,
     private changeDetectorRef: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.mobileQuery.addEventListener('change', this._mobileQueryListener);
   }
@@ -41,7 +43,7 @@ export class HospLayoutsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {}
 
   logout(): void {
-    // TODO clear token
+    this.authService.removeToken();
 
     this.router.navigate(['/home']);
   }

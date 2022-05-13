@@ -37,6 +37,8 @@ import { UpdateHCProgramDialogComponent } from 'src/app/shared/components/update
 import { MatDialog } from '@angular/material/dialog';
 import { AddHCProgramDialogComponent } from 'src/app/shared/components/add-hcprogram-dialog/add-hcprogram-dialog.component';
 import { AddHCProgramDialogResult } from 'src/app/shared/components/add-hcprogram-dialog/add-hcprogram-dialog.models';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { HospUser } from 'src/app/api/models/user.models';
 
 @Component({
   selector: 'app-hcprogram-mgmt',
@@ -74,7 +76,8 @@ export class HcprogramMgmtComponent
     private changeDetectorRef: ChangeDetectorRef,
     private matDialog: MatDialog,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: GsaService,
+    private authService: AuthService
   ) {
     this.gtSMQuery.addEventListener('change', this._gtSMQueryListener);
   }
@@ -100,10 +103,10 @@ export class HcprogramMgmtComponent
         takeUntil(this.destroy$),
         finalize(() => (this.getting = false)),
         map((res) => {
-          const hospitalID = 1; // TODO get it from token
+          const user = this.authService.user$.getValue() as HospUser;
 
           this.dataSource.data = res.content.HCProgramList.filter(
-            (p) => p.hospitalID === hospitalID
+            (p) => p.hospitalID === user.hospitalID
           );
         }),
         catchError((err) => this.onError(err))

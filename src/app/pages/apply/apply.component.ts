@@ -42,6 +42,7 @@ import { getTelephoneNo } from 'src/app/api/models/get-appl.models';
 import { mobileNoRegExp } from 'src/app/shared/validators/mobile-no.validator';
 import { EmailOrMobileNoValidator } from 'src/app/shared/validators/email-or-mobile-no.validator';
 import { TelephoneNoValidator } from 'src/app/shared/validators/telephone-no.validator';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-apply',
@@ -181,7 +182,8 @@ export class ApplyComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: GsaService,
+    private authService: AuthService
   ) {
     this.gtMDQuery.addEventListener('change', this._gtMDQueryListener);
 
@@ -234,12 +236,12 @@ export class ApplyComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         finalize(() => (this.verifying = false)),
         map((res) => {
+          this.authService.setToken(res.content.token);
+
           this.verificationFCs['passed'].setValue(true);
           this.basicInfoFCs['newPassword'][
             isFirstTime ? 'enable' : 'disable'
           ]();
-
-          // TODO save token
 
           this.stepper.next();
         }),

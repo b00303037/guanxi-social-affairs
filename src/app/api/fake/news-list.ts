@@ -87,7 +87,7 @@ export const NEWS_LIST: Array<News> = newsDataList.map<News>((data, i) => {
   const newsID: number = i + 1;
 
   return {
-    newsID,
+    newsID: newsID,
     title: data.title,
     date: data.date,
     content: data.content,

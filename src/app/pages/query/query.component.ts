@@ -20,6 +20,7 @@ import {
 import { GsaService } from 'src/app/api/gsa.service';
 import { VerifyReq } from 'src/app/api/models/verify.models';
 import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { Snack } from 'src/app/shared/services/snack-bar.models';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import { IDNoValidator } from 'src/app/shared/validators/IDNo.validator';
@@ -76,7 +77,8 @@ export class QueryComponent implements OnInit, OnDestroy {
     private media: MediaMatcher,
     private changeDetectorRef: ChangeDetectorRef,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: GsaService,
+    private authService: AuthService
   ) {
     this.gtMDQuery.addEventListener('change', this._gtMDQueryListener);
   }
@@ -107,9 +109,9 @@ export class QueryComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         finalize(() => (this.verifying = false)),
         map((res) => {
-          this.verificationFCs['passed'].setValue(true);
+          this.authService.setToken(res.content.token);
 
-          // TODO save token
+          this.verificationFCs['passed'].setValue(true);
 
           this.queryApplListStepComponent.onGetApplList();
 

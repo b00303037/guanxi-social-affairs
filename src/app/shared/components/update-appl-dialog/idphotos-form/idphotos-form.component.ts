@@ -63,8 +63,8 @@ export class IDPhotosFormComponent implements OnInit, OnDestroy {
 
           fc.setValue(encoded);
         }),
-        catchError((e) => {
-          console.log(e);
+        catchError((err) => {
+          console.error(err);
 
           return EMPTY;
         })

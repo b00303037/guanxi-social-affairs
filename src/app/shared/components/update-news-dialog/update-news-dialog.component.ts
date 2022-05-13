@@ -170,7 +170,7 @@ export class UpdateNewsDialogComponent implements OnInit, OnDestroy {
     this.getting = true;
 
     const req: GetNewsReq = {
-      newsID,
+      newsID: newsID,
     };
     this.gsaService
       .GetNews(req)

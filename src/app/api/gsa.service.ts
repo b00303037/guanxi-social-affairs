@@ -22,11 +22,11 @@ import {
   CompleteApplRes,
 } from './models/complete-appl.models';
 import { GetApplListReq, GetApplListRes } from './models/get-appl-list.models';
-import { GetApplReq, GetApplRes } from './models/get-appl.models';
+import { Appl, GetApplReq, GetApplRes } from './models/get-appl.models';
 import { GetHomeDataRes } from './models/get-home-data.models';
 import { GetHospDataRes } from './models/get-hosp-data.models';
 import { GetNewsListReq, GetNewsListRes } from './models/get-news-list.models';
-import { GetNewsReq, GetNewsRes } from './models/get-news.models';
+import { GetNewsReq, GetNewsRes, News } from './models/get-news.models';
 import { GetSettingsRes } from './models/get-settings.models';
 import { LoginReq, LoginRes } from './models/login.models';
 import { ReviewApplReq, ReviewApplRes } from './models/review-appl.models';
@@ -38,16 +38,24 @@ import {
 import { UpdateNewsReq, UpdateNewsRes } from './models/update-news.models';
 import { VerifyReq, VerifyRes } from './models/verify.models';
 import { BaseAPICodes } from '../shared/enums/base-api-codes.enum';
+import { TOKENS } from './fake/tokens';
+import { AuthService } from '../shared/services/auth.service';
+import { User } from './models/user.models';
+import { ApplStatuses } from '../shared/enums/appl-status.enum';
+import { YN } from '../shared/enums/yn.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GsaService extends BaseApiService {
-  private baseRoute = '/api';
+  private baseRoute = '';
   private shortLatencyMS = 300;
   private longLatencyMS = 600;
 
-  constructor(protected override http: HttpClient) {
+  constructor(
+    protected override http: HttpClient,
+    private authService: AuthService
+  ) {
     super(http);
   }
 
@@ -150,7 +158,7 @@ export class GsaService extends BaseApiService {
 
     if (environment.fakeData) {
       const content = {
-        token: req.action,
+        token: TOKENS.appl,
         hasApplied: false,
       };
 
@@ -282,7 +290,7 @@ export class GsaService extends BaseApiService {
           code: BaseAPICodes.SUCCESS,
           message: `${roleMapping[req.role]}帳戶登入成功`,
           content: {
-            token: req.role,
+            token: TOKENS[req.role],
           },
         })),
         switchMap((res) => super.throwNotIn(acceptedCodes, res))
@@ -302,8 +310,33 @@ export class GsaService extends BaseApiService {
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
     if (environment.fakeData) {
-      // TODO filter by role
-      const content = APPL_LIST;
+      let content: Array<Appl> = [];
+
+      const user = this.authService.user$.getValue() as User;
+
+      console.log('---');
+      console.log('check user role');
+      console.log(user);
+
+      switch (user.role) {
+        case 'appl':
+          content = APPL_LIST.filter((a) => a.IDNo === user.IDNo);
+          break;
+        case 'govt':
+          content = APPL_LIST;
+          break;
+        case 'hosp':
+          content = APPL_LIST.filter(
+            (a) =>
+              a.hospitalID === user.hospitalID &&
+              [
+                ApplStatuses.Y,
+                ApplStatuses.Arranged,
+                ApplStatuses.Completed,
+              ].includes(a.status)
+          );
+          break;
+      }
 
       console.log('---');
       console.log('GetApplList');
@@ -453,7 +486,21 @@ export class GsaService extends BaseApiService {
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
     if (environment.fakeData) {
-      const content = NEWS_LIST;
+      let content: Array<News> = [];
+
+      const user = this.authService.user$.getValue() as User;
+
+      console.log('---');
+      console.log('check user role');
+      console.log(user);
+
+      switch (user.role) {
+        case 'govt':
+          content = NEWS_LIST;
+          break;
+        default:
+          content = NEWS_LIST.filter((n) => n.enabled === YN.Y);
+      }
 
       console.log('---');
       console.log('GetNewsList');

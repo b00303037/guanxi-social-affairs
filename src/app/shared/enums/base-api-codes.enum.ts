@@ -1,6 +1,6 @@
 export enum BaseAPICodes {
-  SUCCESS = '000',
-  FIELD_ERROR = '100',
-  UNEXPECTED_ERROR = '400',
+  SUCCESS = '0000',
+  FIELD_ERROR = '1000',
+  UNEXPECTED_ERROR = '4000',
   // TODO more codes
 }

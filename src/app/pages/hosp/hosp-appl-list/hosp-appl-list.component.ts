@@ -183,14 +183,7 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
         takeUntil(this.destroy$),
         finalize(() => (this.gettingList = false)),
         map((res) => {
-          // TODO filter in GsaService
-          this.applList = res.content.filter((appl) =>
-            [
-              ApplStatuses.Y,
-              ApplStatuses.Arranged,
-              ApplStatuses.Completed,
-            ].includes(appl.status)
-          );
+          this.applList = res.content;
 
           const defaultFV: HospApplListFilterFormModel = {
             applStatusList: [],

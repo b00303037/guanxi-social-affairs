@@ -5,10 +5,10 @@ import { NEWS_LIST } from './news-list';
 export const HOME_DATA: HomeData = {
   newsList: NEWS_LIST.filter((news) => news.pinned === YN.Y).map<HomeDataNews>(
     (news) => {
-      const { newsID, title, date } = news;
+      const { newsID: newsID, title, date } = news;
 
       return {
-        newsID,
+        newsID: newsID,
         title,
         date,
       };

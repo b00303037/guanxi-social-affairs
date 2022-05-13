@@ -143,6 +143,7 @@ export class ApplListPickerComponent
         finalize(() => (this.gettingList = false)),
         map((res) => {
           this.applList = res.content;
+
           this.pickedList = this.applList.filter((a) =>
             this.data.defaultPickedIDList.includes(a.applicationID)
           );

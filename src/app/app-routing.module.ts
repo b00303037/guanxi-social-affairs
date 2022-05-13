@@ -5,6 +5,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { NewsListComponent } from './pages/news-list/news-list.component';
 import { NewsComponent } from './pages/news/news.component';
 import { QueryComponent } from './pages/query/query.component';
+import { GovtGuard } from './shared/guards/govt.guard';
+import { HospGuard } from './shared/guards/hosp.guard';
 import { LayoutsComponent } from './shared/layouts/layouts.component';
 
 import { HomeDataResolver } from './shared/resolvers/home-data.resolver';
@@ -16,17 +18,13 @@ const routes: Routes = [
     path: 'govt',
     loadChildren: () =>
       import('./pages/govt/govt.module').then((m) => m.GovtModule),
-    canLoad: [
-      // TODO check govt-token
-    ],
+    canLoad: [GovtGuard],
   },
   {
     path: 'hosp',
     loadChildren: () =>
       import('./pages/hosp/hosp.module').then((m) => m.HospModule),
-    canLoad: [
-      // TODO check hosp-token
-    ],
+    canLoad: [HospGuard],
   },
   {
     path: '',

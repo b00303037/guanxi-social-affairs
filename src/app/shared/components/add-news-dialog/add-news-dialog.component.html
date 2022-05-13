@@ -71,7 +71,13 @@
     </mat-form-field>
 
     <!-- 內容 -->
-    <div class="col-span-2 form-field-style">
+    <div
+      class="col-span-2 form-field-style"
+      [class.form-field-invalid]="
+        (fcs['content'].touched || fcs['content'].dirty) &&
+        fcs['content'].invalid
+      "
+    >
       <div class="w-full h-form-field flex items-center">
         <label class="form-field-label">內容 *</label>
       </div>

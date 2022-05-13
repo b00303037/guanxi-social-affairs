@@ -4,21 +4,23 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
+// @auth0/angular-jwt
+import { JwtModule } from '@auth0/angular-jwt';
+
 // ngx-owl-carousel-o
 import { CarouselModule } from 'ngx-owl-carousel-o';
 
 // @angular/material
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
+// import { MatDatepickerModule } from '@angular/material/datepicker';
+// import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+// import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -26,6 +28,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 // shared
 import { SharedModule } from './shared/shared.module';
@@ -53,6 +56,8 @@ import { QueryApplListStepComponent } from './pages/query/query-appl-list-step/q
 import { CurrencyPipe, registerLocaleData } from '@angular/common';
 import localeZhHant from '@angular/common/locales/zh-Hant';
 
+import { environment } from 'src/environments/environment';
+
 registerLocaleData(localeZhHant);
 
 @NgModule({
@@ -79,19 +84,30 @@ registerLocaleData(localeZhHant);
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    // @auth0/angular-jwt
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => localStorage.getItem(environment.tokenKey),
+        allowedDomains: [
+          'https://kuanhsiwelfaredevapi.azurewebsites.net',
+          'https://kuanhsiwelfareapi.azurewebsites.net',
+        ],
+        skipWhenExpired: true,
+      },
+    }),
     // ngx-owl-carousel-o
     CarouselModule,
     // @angular/material
     MatButtonModule,
     MatCardModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
+    // MatDatepickerModule,
+    // MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
     MatMenuModule,
     MatPaginatorModule,
-    MatProgressSpinnerModule,
+    // MatProgressSpinnerModule,
     MatRadioModule,
     MatSelectModule,
     MatSidenavModule,
@@ -99,6 +115,7 @@ registerLocaleData(localeZhHant);
     MatStepperModule,
     MatTableModule,
     MatToolbarModule,
+    MatTooltipModule,
     // shared
     SharedModule,
   ],

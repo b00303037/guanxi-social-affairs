@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
-  baseApiUrl: '',
+  baseApiUrl: 'https://kuanhsiwelfareapi.azurewebsites.net',
   fakeData: true,
+  tokenKey: 'token',
 };

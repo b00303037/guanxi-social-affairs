@@ -219,7 +219,15 @@ const PIPES = [IncludesAppl, IsInSetPipe, SafeHTMLPipe];
     // @angular/material-date-fns-adapter
     MatDateFnsModule,
   ],
-  exports: [MatTooltipModule, ...COMPONENTS, ...DIRECTIVES, ...PIPES],
+  exports: [
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    ...COMPONENTS,
+    ...DIRECTIVES,
+    ...PIPES,
+  ],
   providers: [
     { provide: DateAdapter, useClass: DateFnsAdapter },
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },

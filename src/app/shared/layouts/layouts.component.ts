@@ -30,8 +30,6 @@ export class LayoutsComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         filter<LoginDialogResult>((result) => result === true),
         tap(() => {
-          // TODO save token
-
           this.router.navigate([role]);
         })
       )

@@ -14,6 +14,7 @@ import { GsaService } from 'src/app/api/gsa.service';
 import { LoginReq } from 'src/app/api/models/login.models';
 import { environment } from 'src/environments/environment';
 import { SnackTypes } from '../../enums/snack-type.enum';
+import { AuthService } from '../../services/auth.service';
 import { Snack } from '../../services/snack-bar.models';
 import { SnackBarService } from '../../services/snack-bar.service';
 import {
@@ -66,7 +67,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: LoginDialogData,
     private dialogRef: MatDialogRef<LoginDialogComponent>,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: GsaService,
+    private authService: AuthService
   ) {
     this.loginFCs['role'].setValue(this.data.role);
 
@@ -107,6 +109,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         finalize(() => (this.loggingIn = false)),
         map((res) => {
+          this.authService.setToken(res.content.token);
+
           const snack = new Snack({
             message: res.message,
             type: SnackTypes.Success,

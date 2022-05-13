@@ -1,1 +1,32 @@
 <div class="page-title">申請件數統計</div>
+
+<mat-card>
+  <div class="spinner-box">
+    <div class="flex justify-between overflow-auto py-4">
+      <span class="grow"></span>
+
+      <ngx-charts-bar-vertical
+        [view]="[960, 320]"
+        [results]="resultsGroupedByCreateDatetime"
+        [legend]="true"
+        legendTitle="圖例"
+        [xAxis]="true"
+        [yAxis]="true"
+        [roundDomains]="true"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        xAxisLabel="年月"
+        yAxisLabel="件數"
+        [yAxisTickFormatting]="yAxisTickFormatting"
+        [barPadding]="16"
+      >
+      </ngx-charts-bar-vertical>
+
+      <span class="grow"></span>
+    </div>
+
+    <div *ngIf="gettingList" class="spinner">
+      <mat-spinner></mat-spinner>
+    </div>
+  </div>
+</mat-card>

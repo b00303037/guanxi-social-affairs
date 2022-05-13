@@ -66,7 +66,6 @@ export class NewsListComponent implements OnInit, AfterViewInit, OnDestroy {
         takeUntil(this.destroy$),
         finalize(() => (this.getting = false)),
         map((res) => {
-          // TODO filter in GsaService
           this.dataSource.data = res.content.filter(
             (news) => news.enabled === YN.Y
           );
