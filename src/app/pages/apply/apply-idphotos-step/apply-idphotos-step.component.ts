@@ -28,6 +28,12 @@ export class ApplyIDPhotosStepComponent implements OnInit, OnDestroy {
   maxImgSizeMB = Number.POSITIVE_INFINITY;
 
   uploading = false;
+  uploadingFCName:
+    | 'imgIDA'
+    | 'imgIDB'
+    | 'imgBankbook'
+    | 'imgRegTranscript'
+    | undefined = undefined;
 
   constructor(private route: ActivatedRoute) {
     const { settings } = this.route.snapshot.data as { settings: Settings };
@@ -50,13 +56,17 @@ export class ApplyIDPhotosStepComponent implements OnInit, OnDestroy {
     };
   }
 
-  handleImageUpload(event: Event, fc: AbstractControl): void {
+  handleImageUpload(
+    event: Event,
+    fcName: 'imgIDA' | 'imgIDB' | 'imgBankbook' | 'imgRegTranscript'
+  ): void {
     const target = event.target as HTMLInputElement;
 
     if (this.uploading || target.files === null || target.files.length === 0) {
       return;
     }
     this.uploading = true;
+    this.uploadingFCName = fcName;
 
     const image = target.files[0];
     const options = {
@@ -67,11 +77,14 @@ export class ApplyIDPhotosStepComponent implements OnInit, OnDestroy {
     from(imageCompression(image, options))
       .pipe(
         takeUntil(this.destroy$),
-        finalize(() => (this.uploading = false)),
+        finalize(() => {
+          this.uploading = false;
+          this.uploadingFCName = undefined;
+        }),
         tap(async (compressed) => {
           const encoded = await imageCompression.getDataUrlFromFile(compressed);
 
-          fc.setValue(encoded);
+          this.fcs[fcName].setValue(encoded);
         }),
         catchError((err) => {
           console.error(err);

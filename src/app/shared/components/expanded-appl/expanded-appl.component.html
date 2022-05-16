@@ -1,25 +1,28 @@
-<div class="grid grid-cols-2 gap-x-4 border-t border-black border-opacity-6">
+<div
+  *ngIf="expandedAppl !== null"
+  class="grid grid-cols-2 gap-x-4 border-t border-black border-opacity-6"
+>
   <table class="col-span-2 md:col-span-1">
     <ng-container *ngIf="!gtMDQuery.matches">
       <!-- 申請狀態 -->
       <tr>
         <td><label>申請狀態</label></td>
         <td>
-          <span>{{ appl.status | i18nSelect: applStatusMap }}</span>
+          <span>{{ expandedAppl.status | i18nSelect: applStatusMap }}</span>
         </td>
       </tr>
       <!-- 申請日期 -->
       <tr>
         <td><label>申請日期</label></td>
         <td>
-          <span>{{ appl.createDatetime | date: "yyyy/MM/dd" }}</span>
+          <span>{{ expandedAppl.createDatetime | date: "yyyy/MM/dd" }}</span>
         </td>
       </tr>
       <!-- 姓名 -->
       <tr>
         <td><label>姓名</label></td>
         <td>
-          <span>{{ appl.name }}</span>
+          <span>{{ expandedAppl.name }}</span>
         </td>
       </tr>
     </ng-container>

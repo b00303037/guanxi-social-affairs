@@ -27,7 +27,9 @@
 
     <div class="w-full h-1 bg-amber-400"></div>
 
-    <!-- TODO reset styles ? -->
-    <div [innerHTML]="news.content | safeHTML" class="py-4"></div>
+    <div
+      [innerHTML]="news.content | safeHTML"
+      class="NgxEditorViewer py-4"
+    ></div>
   </ng-container>
 </section>

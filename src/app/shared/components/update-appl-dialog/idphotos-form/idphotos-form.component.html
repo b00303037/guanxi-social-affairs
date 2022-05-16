@@ -1,7 +1,7 @@
 <form [formGroup]="fg" class="grid grid-cols-2 gap-x-4 my-4">
   <!-- 身分證正面 -->
   <div
-    class="col-span-2 form-field-style sm:col-span-1"
+    class="spinner-box col-span-2 form-field-style sm:col-span-1"
     [class.form-field-invalid]="
       (fcs['imgIDA'].touched || fcs['imgIDA'].dirty) && fcs['imgIDA'].invalid
     "
@@ -13,7 +13,7 @@
         #imgIDAInput
         type="file"
         accept="image/*"
-        (change)="handleImageUpload($event, fcs['imgIDA'])"
+        (change)="handleImageUpload($event, 'imgIDA')"
         class="hidden"
       />
 
@@ -47,11 +47,19 @@
         ><span>&nbsp;<strong>身分證正面</strong>&nbsp;照片</span>
       </ng-template>
     </div>
+
+    <div
+      *ngIf="uploading && uploadingFCName === 'imgIDA'"
+      class="spinner"
+      appStopClickPropagation
+    >
+      <mat-spinner></mat-spinner>
+    </div>
   </div>
 
   <!-- 身分證反面 -->
   <div
-    class="col-span-2 form-field-style sm:col-span-1"
+    class="spinner-box col-span-2 form-field-style sm:col-span-1"
     [class.form-field-invalid]="
       (fcs['imgIDB'].touched || fcs['imgIDB'].dirty) && fcs['imgIDB'].invalid
     "
@@ -63,7 +71,7 @@
         #imgIDBInput
         type="file"
         accept="image/*"
-        (change)="handleImageUpload($event, fcs['imgIDB'])"
+        (change)="handleImageUpload($event, 'imgIDB')"
         class="hidden"
       />
 
@@ -97,11 +105,19 @@
         ><span>&nbsp;<strong>身分證反面</strong>&nbsp;照片</span>
       </ng-template>
     </div>
+
+    <div
+      *ngIf="uploading && uploadingFCName === 'imgIDB'"
+      class="spinner"
+      appStopClickPropagation
+    >
+      <mat-spinner></mat-spinner>
+    </div>
   </div>
 
   <!-- 存摺封面 -->
   <div
-    class="col-span-2 form-field-style sm:col-span-1"
+    class="spinner-box col-span-2 form-field-style sm:col-span-1"
     [class.form-field-invalid]="
       (fcs['imgBankbook'].touched || fcs['imgBankbook'].dirty) &&
       fcs['imgBankbook'].invalid
@@ -114,7 +130,7 @@
         #imgBankbookInput
         type="file"
         accept="image/*"
-        (change)="handleImageUpload($event, fcs['imgBankbook'])"
+        (change)="handleImageUpload($event, 'imgBankbook')"
         class="hidden"
       />
 
@@ -148,11 +164,19 @@
         ><span>&nbsp;<strong>存摺封面</strong>&nbsp;照片</span>
       </ng-template>
     </div>
+
+    <div
+      *ngIf="uploading && uploadingFCName === 'imgBankbook'"
+      class="spinner"
+      appStopClickPropagation
+    >
+      <mat-spinner></mat-spinner>
+    </div>
   </div>
 
   <!-- 戶籍謄本 -->
   <div
-    class="col-span-2 form-field-style sm:col-span-1"
+    class="spinner-box col-span-2 form-field-style sm:col-span-1"
     [class.form-field-invalid]="
       (fcs['imgRegTranscript'].touched || fcs['imgRegTranscript'].dirty) &&
       fcs['imgRegTranscript'].invalid
@@ -165,7 +189,7 @@
         #imgRegTranscriptInput
         type="file"
         accept="image/*"
-        (change)="handleImageUpload($event, fcs['imgRegTranscript'])"
+        (change)="handleImageUpload($event, 'imgRegTranscript')"
         class="hidden"
       />
 
@@ -198,6 +222,14 @@
           >拍攝或上傳</span
         ><span>&nbsp;<strong>戶籍謄本</strong>&nbsp;照片</span>
       </ng-template>
+    </div>
+
+    <div
+      *ngIf="uploading && uploadingFCName === 'imgRegTranscript'"
+      class="spinner"
+      appStopClickPropagation
+    >
+      <mat-spinner></mat-spinner>
     </div>
   </div>
 </form>

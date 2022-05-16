@@ -1,9 +1,5 @@
 <div class="spinner-box">
   <div class="overflow-auto">
-    <div *ngIf="gettingList" class="spinner">
-      <mat-spinner></mat-spinner>
-    </div>
-
     <table
       mat-table
       [dataSource]="dataSource"
@@ -117,7 +113,6 @@
 
               <app-expanded-appl
                 *ngIf="expandedAppl?.applicationID === appl.applicationID"
-                [appl]="appl"
                 [expandedAppl]="expandedAppl"
               ></app-expanded-appl>
             </div>
@@ -127,6 +122,10 @@
     </table>
   </div>
   <mat-paginator pageSize="10" hidePageSize class="w-full"></mat-paginator>
+
+  <div *ngIf="gettingList" class="spinner">
+    <mat-spinner></mat-spinner>
+  </div>
 </div>
 
 <mat-menu #actionMenu="matMenu">

@@ -22,7 +22,6 @@ import {
 export class ExpandedApplComponent implements OnInit, OnDestroy {
   private _gtMDQueryListener = () => this.changeDetectorRef.detectChanges();
 
-  @Input() appl!: ApplInList;
   @Input() expandedAppl: ExtendedAppl | null = null;
 
   gtMDQuery: MediaQueryList = this.media.matchMedia('(min-width: 960px)');
@@ -39,7 +38,9 @@ export class ExpandedApplComponent implements OnInit, OnDestroy {
     this.gtMDQuery.addEventListener('change', this._gtMDQueryListener);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.expandedAppl);
+  }
 
   ngOnDestroy(): void {
     this.gtMDQuery.removeEventListener('change', this._gtMDQueryListener);
