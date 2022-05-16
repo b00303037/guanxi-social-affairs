@@ -73,7 +73,7 @@ export class ApplyComponent implements OnInit, OnDestroy {
       Validators.minLength(6),
       Validators.maxLength(20),
     ]),
-    captcha: new FormControl(null, [
+    captcha: new FormControl('123456', [
       Validators.required,
       Validators.minLength(6),
       Validators.maxLength(6),

@@ -89,8 +89,8 @@ registerLocaleData(localeZhHant);
       config: {
         tokenGetter: () => localStorage.getItem(environment.tokenKey),
         allowedDomains: [
-          'https://kuanhsiwelfaredevapi.azurewebsites.net',
-          'https://kuanhsiwelfareapi.azurewebsites.net',
+          'kuanhsiwelfaredevapi.azurewebsites.net',
+          'kuanhsiwelfareapi.azurewebsites.net',
         ],
         skipWhenExpired: true,
       },
