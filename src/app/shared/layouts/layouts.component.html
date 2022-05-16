@@ -20,12 +20,42 @@
         <span class="grow"></span>
 
         <div class="actions-box">
-          <button type="button" mat-button (click)="openLoginDialog('govt')">
-            社會課登入
-          </button>
-          <button type="button" mat-button (click)="openLoginDialog('hosp')">
-            醫院端登入
-          </button>
+          <div [ngSwitch]="role$ | async">
+            <div *ngSwitchCase="'govt'">
+              <button type="button" mat-button routerLink="/govt">
+                社會課管理
+              </button>
+              <button type="button" mat-button (click)="logout()">
+                社會課登出
+              </button>
+            </div>
+
+            <div *ngSwitchCase="'hosp'">
+              <button type="button" mat-button routerLink="/hosp">
+                醫院端管理
+              </button>
+              <button type="button" mat-button (click)="logout()">
+                醫院端登出
+              </button>
+            </div>
+
+            <div *ngSwitchDefault>
+              <button
+                type="button"
+                mat-button
+                (click)="openLoginDialog('govt')"
+              >
+                社會課登入
+              </button>
+              <button
+                type="button"
+                mat-button
+                (click)="openLoginDialog('hosp')"
+              >
+                醫院端登入
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </mat-toolbar>

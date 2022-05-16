@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { filter, Subject, takeUntil, tap } from 'rxjs';
+import { filter, map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { LoginDialogComponent } from '../components/login-dialog/login-dialog.component';
 import {
   LoginDialogData,
   LoginDialogResult,
 } from '../components/login-dialog/login-dialog.models';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-layouts',
@@ -16,7 +17,15 @@ import {
 export class LayoutsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<null>();
 
-  constructor(private router: Router, private matDialog: MatDialog) {}
+  role$: Observable<'appl' | 'govt' | 'hosp' | undefined>;
+
+  constructor(
+    private router: Router,
+    private matDialog: MatDialog,
+    private authService: AuthService
+  ) {
+    this.role$ = this.authService.user$.pipe(map((u) => u?.role));
+  }
 
   ngOnInit(): void {}
 
@@ -34,6 +43,10 @@ export class LayoutsComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+  }
+
+  logout(): void {
+    this.authService.removeToken();
   }
 
   ngOnDestroy(): void {

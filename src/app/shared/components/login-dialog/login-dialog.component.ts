@@ -128,6 +128,10 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     const snack = new Snack({ message: err, type: SnackTypes.Error });
     this.snackBarService.add(snack);
 
+    this.loginFCs['role'].reset(this.data.role);
+    this.loginFCs['password'].reset();
+    this.loginFCs['captcha'].reset('123456');
+
     return EMPTY;
   }
 
