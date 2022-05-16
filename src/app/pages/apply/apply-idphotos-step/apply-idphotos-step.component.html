@@ -38,8 +38,11 @@
       />
 
       <ng-template #noImgIDA>
-        <span>請&nbsp;</span
-        ><span class="clickable-text" (click)="imgIDAInput.click()"
+        <span>請&nbsp;</span><span *ngIf="uploading">拍攝或上傳</span
+        ><span
+          *ngIf="!uploading"
+          class="clickable-text"
+          (click)="imgIDAInput.click()"
           >拍攝或上傳</span
         ><span>&nbsp;<strong>身分證正面</strong>&nbsp;照片</span>
       </ng-template>
@@ -85,8 +88,11 @@
       />
 
       <ng-template #noImgIDB>
-        <span>請&nbsp;</span
-        ><span class="clickable-text" (click)="imgIDBInput.click()"
+        <span>請&nbsp;</span><span *ngIf="uploading">拍攝或上傳</span
+        ><span
+          *ngIf="!uploading"
+          class="clickable-text"
+          (click)="imgIDBInput.click()"
           >拍攝或上傳</span
         ><span>&nbsp;<strong>身分證反面</strong>&nbsp;照片</span>
       </ng-template>
@@ -133,8 +139,11 @@
       />
 
       <ng-template #noImgBankbook>
-        <span>請&nbsp;</span
-        ><span class="clickable-text" (click)="imgBankbookInput.click()"
+        <span>請&nbsp;</span><span *ngIf="uploading">拍攝或上傳</span
+        ><span
+          *ngIf="!uploading"
+          class="clickable-text"
+          (click)="imgBankbookInput.click()"
           >拍攝或上傳</span
         ><span>&nbsp;<strong>存摺封面</strong>&nbsp;照片</span>
       </ng-template>
@@ -181,8 +190,11 @@
       />
 
       <ng-template #noImgRegTranscript>
-        <span>請&nbsp;</span
-        ><span class="clickable-text" (click)="imgRegTranscriptInput.click()"
+        <span>請&nbsp;</span><span *ngIf="uploading">拍攝或上傳</span
+        ><span
+          *ngIf="!uploading"
+          class="clickable-text"
+          (click)="imgRegTranscriptInput.click()"
           >拍攝或上傳</span
         ><span>&nbsp;<strong>戶籍謄本</strong>&nbsp;照片</span>
       </ng-template>

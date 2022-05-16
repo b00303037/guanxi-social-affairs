@@ -14,9 +14,9 @@ export interface Settings {
   /**
    * 申請間隔限制，單位為年
    */
-  applIntervalYears: number;
+  applIntervalYears: string;
   /**
    * 圖檔大小限制，單位為 MB
    */
-  maxImgSizeMB: number;
+  maxImgSizeMB: string;
 }

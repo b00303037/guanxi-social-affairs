@@ -21,9 +21,8 @@ export class IDPhotosFormComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<null>();
 
   @Input() fg!: FormGroup;
+  @Input() maxImgSizeMB!: number;
   fcs!: IDPhotosFCsModel;
-
-  maxImgSizeMB = Number.POSITIVE_INFINITY;
 
   uploading = false;
 

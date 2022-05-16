@@ -30,7 +30,10 @@
 
       <!-- 文件上傳 -->
       <mat-tab label="文件上傳">
-        <app-idphotos-form [fg]="IDPhotosFG"></app-idphotos-form>
+        <app-idphotos-form
+          [fg]="IDPhotosFG"
+          [maxImgSizeMB]="maxImgSizeMB"
+        ></app-idphotos-form>
       </mat-tab>
     </mat-tab-group>
 

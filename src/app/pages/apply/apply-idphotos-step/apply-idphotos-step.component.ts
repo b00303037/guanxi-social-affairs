@@ -32,7 +32,8 @@ export class ApplyIDPhotosStepComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute) {
     const { settings } = this.route.snapshot.data as { settings: Settings };
 
-    this.maxImgSizeMB = settings.maxImgSizeMB;
+    this.maxImgSizeMB =
+      Number.parseFloat(settings.maxImgSizeMB) || this.maxImgSizeMB;
   }
 
   ngOnInit(): void {

@@ -16,7 +16,6 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -86,7 +85,6 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   gtMDQuery: MediaQueryList = this.media.matchMedia('(min-width: 960px)');
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
 
   fg = new FormGroup({
     applStatusList: new FormControl(null),
@@ -161,7 +159,6 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   onGetApplList(): void {

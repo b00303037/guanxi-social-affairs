@@ -138,6 +138,7 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
   appl: Appl | undefined;
 
   maxRegDate = new Date();
+  maxImgSizeMB = Number.POSITIVE_INFINITY;
 
   YNObj = YN_OBJ;
   genderObj = GENDER_OBJ;
@@ -160,6 +161,8 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
       'yyyy/MM/dd HH:mm:ss S',
       new Date()
     );
+    this.maxImgSizeMB =
+      parseInt(data.settings.maxImgSizeMB) || this.maxImgSizeMB;
 
     this.basicInfoFCs['regDate'].addValidators([
       DateRangeValidator({ max: this.maxRegDate }),
