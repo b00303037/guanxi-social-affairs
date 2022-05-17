@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanLoad, Route, UrlSegment, UrlTree } from '@angular/router';
+import { CanLoad, Route, Router, UrlSegment, UrlTree } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/api/models/user.models';
@@ -10,6 +10,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class GovtGuard implements CanLoad {
   constructor(
+    private router: Router,
     private jwtHelperService: JwtHelperService,
     private authService: AuthService
   ) {}
@@ -25,6 +26,7 @@ export class GovtGuard implements CanLoad {
     const token = this.authService.getToken();
 
     if (typeof token !== 'string' || token.length === 0) {
+      this.router.navigate(['/home']);
       return false;
     }
 
@@ -32,6 +34,7 @@ export class GovtGuard implements CanLoad {
       const user = this.jwtHelperService.decodeToken(token) as User;
 
       if (user.role !== 'govt') {
+        this.router.navigate(['/home']);
         return false;
       }
 
@@ -41,6 +44,7 @@ export class GovtGuard implements CanLoad {
 
       this.authService.removeToken();
 
+      this.router.navigate(['/home']);
       return false;
     }
 
