@@ -68,13 +68,13 @@ export class ApplyIDPhotosStepComponent implements OnInit, OnDestroy {
     this.uploading = true;
     this.uploadingFCName = fcName;
 
-    const image = target.files[0];
-    const options = {
-      maxSizeMB: this.maxImgSizeMB,
-      useWebWorker: true,
-    };
-
-    from(imageCompression(image, options))
+    from(
+      imageCompression(target.files[0], {
+        maxSizeMB: this.maxImgSizeMB,
+        maxWidthOrHeight: 640,
+        useWebWorker: true,
+      })
+    )
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => {
