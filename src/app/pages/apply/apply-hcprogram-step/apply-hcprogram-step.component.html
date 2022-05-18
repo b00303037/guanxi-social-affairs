@@ -17,14 +17,36 @@
     >
   </mat-form-field>
 
+  <!-- 網站連結 -->
   <div
     *ngIf="selectedHospital !== undefined && selectedHospital.siteUrl"
-    class="col-span-2 text-base mb-4 md:text-lg"
+    class="col-span-2 mb-4"
   >
-    <span>{{ selectedHospital.name }}&nbsp;</span>
-    <a [href]="selectedHospital.siteUrl" target="_blank" class="clickable-text"
-      >網站連結</a
+    <div class="leading-6 text-sm md:leading-7">網站連結</div>
+    <a
+      [href]="selectedHospital.siteUrl"
+      target="_blank"
+      class="clickable-text text-base md:text-lg"
+      >{{ selectedHospital.name }}</a
     >
+  </div>
+
+  <!-- 相關附檔 -->
+  <div
+    *ngIf="
+      selectedHospital !== undefined && selectedHospital.hospFileList.length > 0
+    "
+    class="col-span-2 mb-4"
+  >
+    <div class="leading-6 text-sm md:leading-7">相關附檔&nbsp;</div>
+    <div *ngFor="let hospFile of selectedHospital.hospFileList">
+      <a
+        [href]="hospFile.url"
+        target="_blank"
+        class="clickable-text text-base md:text-lg"
+        >{{ hospFile.name }}</a
+      >
+    </div>
   </div>
 
   <!-- 健檢項目 -->

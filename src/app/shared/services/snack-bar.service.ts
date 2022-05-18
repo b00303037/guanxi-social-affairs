@@ -33,12 +33,12 @@ export class SnackBarService {
             if (snack) {
               this.timestamp = new Date().valueOf();
 
-              console.log(`${snack?.seq}: snack taken`, [...this.snackQueue]);
+              // console.log(`${snack?.seq}: snack taken`, [...this.snackQueue]);
 
               const data: SnackBarData = snack;
 
-              console.log(`${snack.seq}: open snackBar`);
-              console.time(`${snack.seq}`);
+              // console.log(`${snack.seq}: open snackBar`);
+              // console.time(`${snack.seq}`);
 
               this.matSnackBar
                 .openFromComponent(SnackBarComponent, {
@@ -47,8 +47,8 @@ export class SnackBarService {
                 })
                 .afterDismissed()
                 .subscribe(() => {
-                  console.log(`${snack.seq}: snackBar dismissed`);
-                  console.timeEnd(`${snack.seq}`);
+                  // console.log(`${snack.seq}: snackBar dismissed`);
+                  // console.timeEnd(`${snack.seq}`);
 
                   this.snackSource$.next();
                 });
@@ -56,7 +56,7 @@ export class SnackBarService {
           } else {
             const diff = newTimestamp - this.timestamp;
 
-            console.log(`pending for ${this.intervalMS - diff} ms`);
+            // console.log(`pending for ${this.intervalMS - diff} ms`);
 
             this.pending = true;
 
@@ -72,12 +72,12 @@ export class SnackBarService {
   }
 
   add(snack: Snack): void {
-    snack.seq = this.seq;
-    this.seq++;
+    // snack.seq = this.seq;
+    // this.seq++;
 
     this.snackQueue.push(snack);
 
-    console.log(`${snack.seq}: snack added`, [...this.snackQueue]);
+    // console.log(`${snack.seq}: snack added`, [...this.snackQueue]);
 
     this.snackSource$.next();
   }

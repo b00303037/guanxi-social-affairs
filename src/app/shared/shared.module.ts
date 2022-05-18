@@ -35,13 +35,14 @@ import {
   MatProgressSpinnerModule,
   MAT_PROGRESS_SPINNER_DEFAULT_OPTIONS,
 } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 import {
   MatSnackBarConfig,
   MatSnackBarModule,
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
 } from '@angular/material/snack-bar';
+import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -213,6 +214,7 @@ const PIPES = [IncludesAppl, IsInSetPipe, SafeHTMLPipe];
     MatRadioModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatSortModule,
     MatTableModule,
     MatTabsModule,
     MatTooltipModule,
@@ -222,8 +224,9 @@ const PIPES = [IncludesAppl, IsInSetPipe, SafeHTMLPipe];
   exports: [
     MatDatepickerModule,
     MatFormFieldModule,
-    MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
+    MatTooltipModule,
     ...COMPONENTS,
     ...DIRECTIVES,
     ...PIPES,

@@ -25,6 +25,18 @@
           formControlName="keyword"
           autocomplete="off"
         />
+
+        <button
+          *ngIf="fcs['keyword'].value"
+          type="button"
+          matSuffix
+          mat-icon-button
+          color="primary"
+          matTooltip="清除關鍵字"
+          (click)="fcs['keyword'].setValue(null)"
+        >
+          <mat-icon>clear</mat-icon>
+        </button>
       </mat-form-field>
 
       <div class="col-span-2 overflow-auto">

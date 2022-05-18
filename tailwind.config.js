@@ -10,6 +10,10 @@ module.exports = {
       xl: "1920px",
     },
     extend: {
+      backgroundImage: {
+        "home-cover": "url('assets/home_cover.jpg')",
+        "home-cover-portrait": "url('assets/home_cover_portrait.jpg')",
+      },
       opacity: {
         6: "0.06",
       },

@@ -28,6 +28,10 @@ export interface HospDataHospital {
    */
   siteUrl?: string;
   /**
+   * 醫院檔案列表
+   */
+  hospFileList: Array<HospDataHospFile>;
+  /**
    * 啟用狀態
    * 'Y': 啟用
    * 'N': 停用
@@ -62,4 +66,15 @@ export interface HospDataHCProgram {
    * 醫院編號
    */
   hospitalID: number;
+}
+
+export interface HospDataHospFile {
+  /**
+   * 檔案名稱
+   */
+  name: string;
+  /**
+   * 檔案連結
+   */
+  url: string;
 }

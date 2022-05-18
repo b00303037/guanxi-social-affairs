@@ -5,13 +5,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 // @angular/material
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-// import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
-// import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -30,6 +28,7 @@ import { HospLayoutsComponent } from 'src/app/shared/layouts/hosp/hosp-layouts.c
 // pages
 import { HospApplListComponent } from './hosp-appl-list/hosp-appl-list.component';
 import { HcprogramMgmtComponent } from './hcprogram-mgmt/hcprogram-mgmt.component';
+import { HospChangePasswordComponent } from './hosp-change-password/hosp-change-password.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +37,7 @@ import { HcprogramMgmtComponent } from './hcprogram-mgmt/hcprogram-mgmt.componen
     // pages
     HospApplListComponent,
     HcprogramMgmtComponent,
+    HospChangePasswordComponent,
   ],
   imports: [
     CommonModule,
@@ -46,13 +46,11 @@ import { HcprogramMgmtComponent } from './hcprogram-mgmt/hcprogram-mgmt.componen
     // @angular/material
     MatButtonModule,
     MatCardModule,
-    // MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
     MatMenuModule,
     MatPaginatorModule,
-    // MatProgressSpinnerModule,
     MatSelectModule,
     MatSidenavModule,
     MatSlideToggleModule,

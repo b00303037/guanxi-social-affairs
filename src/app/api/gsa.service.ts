@@ -18,6 +18,10 @@ import { ArrangeApplReq, ArrangeApplRes } from './models/arrange-appl.models';
 import { BatchNotifyReq, BatchNotifyRes } from './models/batch-notify.models';
 import { CancelApplReq, CancelApplRes } from './models/cancel-appl.models';
 import {
+  ChangePasswordReq,
+  ChangePasswordRes,
+} from './models/change-password.models';
+import {
   CompleteApplReq,
   CompleteApplRes,
 } from './models/complete-appl.models';
@@ -158,7 +162,7 @@ export class GsaService extends BaseApiService {
 
     if (environment.fakeData) {
       const content = {
-        token: TOKENS.appl,
+        token: TOKENS.appl_U,
         hasApplied: false,
       };
 
@@ -312,30 +316,32 @@ export class GsaService extends BaseApiService {
     if (environment.fakeData) {
       let content: Array<Appl> = [];
 
-      const user = this.authService.user$.getValue() as User;
+      const user = this.authService.user$.getValue() as User | undefined;
 
       console.log('---');
       console.log('check user role');
       console.log(user);
 
-      switch (user.role) {
-        case 'appl':
-          content = APPL_LIST.filter((a) => a.IDNo === user.IDNo);
-          break;
-        case 'govt':
-          content = APPL_LIST;
-          break;
-        case 'hosp':
-          content = APPL_LIST.filter(
-            (a) =>
-              a.hospitalID === user.hospitalID &&
-              [
-                ApplStatuses.Y,
-                ApplStatuses.Arranged,
-                ApplStatuses.Completed,
-              ].includes(a.status)
-          );
-          break;
+      if (user !== undefined) {
+        switch (user.role) {
+          case 'appl':
+            content = APPL_LIST.filter((a) => a.IDNo === user.IDNo);
+            break;
+          case 'govt':
+            content = APPL_LIST;
+            break;
+          case 'hosp':
+            content = APPL_LIST.filter(
+              (a) =>
+                a.hospitalID === user.hospitalID &&
+                [
+                  ApplStatuses.Y,
+                  ApplStatuses.Arranged,
+                  ApplStatuses.Completed,
+                ].includes(a.status)
+            );
+            break;
+        }
       }
 
       console.log('---');
@@ -488,18 +494,20 @@ export class GsaService extends BaseApiService {
     if (environment.fakeData) {
       let content: Array<News> = [];
 
-      const user = this.authService.user$.getValue() as User;
+      const user = this.authService.user$.getValue() as User | undefined;
 
       console.log('---');
       console.log('check user role');
       console.log(user);
 
-      switch (user.role) {
-        case 'govt':
-          content = NEWS_LIST;
-          break;
-        default:
-          content = NEWS_LIST.filter((n) => n.enabled === YN.Y);
+      if (user !== undefined) {
+        switch (user.role) {
+          case 'govt':
+            content = NEWS_LIST;
+            break;
+        }
+      } else {
+        content = NEWS_LIST.filter((n) => n.enabled === YN.Y);
       }
 
       console.log('---');
@@ -693,6 +701,39 @@ export class GsaService extends BaseApiService {
 
     return super
       .post<BatchNotifyReq, BatchNotifyRes>(apiUri, req)
+      .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
+  }
+
+  /**
+   * 社會課/醫院帳戶變更密碼
+   */
+  ChangePassword(req: ChangePasswordReq): Observable<ChangePasswordRes> {
+    const apiUri = this.baseRoute + '/ChangePassword';
+    const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
+
+    if (environment.fakeData) {
+      console.log('---');
+      console.log('ChangePassword');
+      console.log(req);
+
+      const roleMapping = {
+        govt: '社會課',
+        hosp: '醫院',
+      };
+
+      return timer(this.shortLatencyMS).pipe(
+        map(() => ({
+          success: true,
+          code: BaseAPICodes.SUCCESS,
+          message: `${roleMapping[req.role]}帳戶變更密碼成功`,
+          content: null,
+        })),
+        switchMap((res) => super.throwNotIn(acceptedCodes, res))
+      );
+    }
+
+    return super
+      .post<ChangePasswordReq, ChangePasswordRes>(apiUri, req)
       .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
   }
 }

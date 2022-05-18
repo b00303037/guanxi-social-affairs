@@ -9,13 +9,11 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-// import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
-// import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -24,7 +22,6 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 // shared
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -41,6 +38,7 @@ import { NewsMgmtComponent } from './news-mgmt/news-mgmt.component';
 import { NotificationComponent } from './notification/notification.component';
 import { NotifyReceiverStepComponent } from './notification/notify-receiver-step/notify-receiver-step.component';
 import { NotifyContentStepComponent } from './notification/notify-content-step/notify-content-step.component';
+import { GovtChangePasswordComponent } from './govt-change-password/govt-change-password.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +51,7 @@ import { NotifyContentStepComponent } from './notification/notify-content-step/n
     NotificationComponent,
     NotifyReceiverStepComponent,
     NotifyContentStepComponent,
+    GovtChangePasswordComponent,
   ],
   imports: [
     CommonModule,
@@ -64,13 +63,11 @@ import { NotifyContentStepComponent } from './notification/notify-content-step/n
     MatButtonModule,
     MatCardModule,
     MatChipsModule,
-    // MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
     MatMenuModule,
     MatPaginatorModule,
-    // MatProgressSpinnerModule,
     MatRadioModule,
     MatSelectModule,
     MatSidenavModule,
@@ -79,7 +76,6 @@ import { NotifyContentStepComponent } from './notification/notify-content-step/n
     MatStepperModule,
     MatTableModule,
     MatToolbarModule,
-    MatTooltipModule,
     // shared
     SharedModule,
   ],

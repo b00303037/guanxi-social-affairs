@@ -1,10 +1,6 @@
 import { YN } from '../../shared/enums/yn.enum';
 import { HospData, HospDataHCProgram } from '../models/get-hosp-data.models';
 
-const hospitalIDs = [1, 2, 3, 4, 5, 6];
-const disabledHospitalIDs = [3];
-const programsPerHospital = 6;
-
 /**
  * 1 衛生福利部桃園醫院 (6)
  */
@@ -198,24 +194,56 @@ const HCPROGRAM_LIST_3: Array<HospDataHCProgram> = [
   },
 ];
 
+const SAMPLE_PDF_URL: string =
+  'http://www.africau.edu/images/default/sample.pdf';
+
 export const HOSP_DATA: HospData = {
   hospitalList: [
     {
       hospitalID: 1,
       name: '衛生福利部桃園醫院',
       siteUrl: 'https://www.tygh.mohw.gov.tw/?aid=54&pid=168',
+      hospFileList: [
+        {
+          name: '衛生福利部桃園醫院_健檢專案',
+          url: SAMPLE_PDF_URL,
+        },
+      ],
       enabled: YN.Y,
     },
     {
       hospitalID: 2,
       name: '國軍桃園總醫院',
       siteUrl: 'https://www.aftygh.gov.tw/department/pgsn5-1',
+      hospFileList: [
+        {
+          name: '國軍桃園總醫院_5000元方案',
+          url: SAMPLE_PDF_URL,
+        },
+        {
+          name: '國軍桃園總醫院_10000元方案',
+          url: SAMPLE_PDF_URL,
+        },
+        {
+          name: '國軍桃園總醫院_21000元方案',
+          url: SAMPLE_PDF_URL,
+        },
+        {
+          name: '國軍桃園總醫院_38000元方案',
+          url: SAMPLE_PDF_URL,
+        },
+        {
+          name: '國軍桃園總醫院_41000元方案',
+          url: SAMPLE_PDF_URL,
+        },
+      ],
       enabled: YN.Y,
     },
     {
       hospitalID: 3,
       name: '桃園長庚健診中心',
       siteUrl: 'https://www1.cgmh.org.tw/healthyhel',
+      hospFileList: [],
       enabled: YN.Y,
     },
   ],
@@ -227,32 +255,4 @@ export const HOSP_DATA: HospData = {
     // 3 桃園長庚健診中心
     ...HCPROGRAM_LIST_3,
   ],
-};
-
-export const HOSP_DATA2: HospData = {
-  hospitalList: hospitalIDs.map((id) => ({
-    hospitalID: id,
-    name: `name ${id}`,
-    siteUrl: 'https://www.google.com/',
-    enabled: disabledHospitalIDs.includes(id) ? YN.N : YN.Y,
-  })),
-  HCProgramList: hospitalIDs.reduce<Array<HospDataHCProgram>>((list, HID) => {
-    for (let n = 1; n <= programsPerHospital; n++) {
-      const PID = (HID - 1) * programsPerHospital + n;
-
-      list.push({
-        programID: PID,
-        name: `name ${HID}-${n}`,
-        description: `description ${HID}-${n}
-第二行
-第三行
-`,
-        charge: PID * 100,
-        hospitalID: HID,
-        enabled: YN.Y,
-      });
-    }
-
-    return list;
-  }, []),
 };

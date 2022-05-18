@@ -25,10 +25,10 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSortModule } from '@angular/material/sort';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 // shared
 import { SharedModule } from './shared/shared.module';
@@ -112,10 +112,10 @@ registerLocaleData(localeZhHant);
     MatSelectModule,
     MatSidenavModule,
     MatSlideToggleModule,
+    MatSortModule,
     MatStepperModule,
     MatTableModule,
     MatToolbarModule,
-    MatTooltipModule,
     // shared
     SharedModule,
   ],

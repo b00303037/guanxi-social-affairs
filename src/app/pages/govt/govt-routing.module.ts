@@ -6,6 +6,7 @@ import { ApplStatisticsComponent } from './appl-statistics/appl-statistics.compo
 import { GovtApplListComponent } from './govt-appl-list/govt-appl-list.component';
 import { NewsMgmtComponent } from './news-mgmt/news-mgmt.component';
 import { NotificationComponent } from './notification/notification.component';
+import { GovtChangePasswordComponent } from './govt-change-password/govt-change-password.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
         path: 'notification',
         component: NotificationComponent,
       },
+      {
+        path: 'change-password',
+        component: GovtChangePasswordComponent
+      }
     ],
   },
 ];

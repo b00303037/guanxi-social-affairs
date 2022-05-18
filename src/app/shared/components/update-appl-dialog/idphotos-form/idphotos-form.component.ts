@@ -60,7 +60,7 @@ export class IDPhotosFormComponent implements OnInit, OnDestroy {
     from(
       imageCompression(target.files[0], {
         maxSizeMB: this.maxImgSizeMB,
-        maxWidthOrHeight: 640,
+        maxWidthOrHeight: 1280,
         useWebWorker: true,
       })
     )

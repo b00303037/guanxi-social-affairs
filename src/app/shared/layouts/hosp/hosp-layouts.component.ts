@@ -29,6 +29,11 @@ export class HospLayoutsComponent implements OnInit, OnDestroy {
       label: '健檢項目維護',
       routerLink: '/hosp/hcprogram-mgmt',
     },
+    {
+      icon: 'lock_reset',
+      label: '變更密碼',
+      routerLink: '/hosp/change-password',
+    },
   ];
 
   constructor(

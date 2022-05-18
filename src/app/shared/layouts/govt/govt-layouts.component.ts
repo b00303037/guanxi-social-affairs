@@ -39,6 +39,11 @@ export class GovtLayoutsComponent implements OnInit {
       label: '發送通知',
       routerLink: '/govt/notification',
     },
+    {
+      icon: 'lock_reset',
+      label: '變更密碼',
+      routerLink: '/govt/change-password',
+    },
   ];
 
   constructor(

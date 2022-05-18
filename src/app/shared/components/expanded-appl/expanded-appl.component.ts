@@ -38,9 +38,7 @@ export class ExpandedApplComponent implements OnInit, OnDestroy {
     this.gtMDQuery.addEventListener('change', this._gtMDQueryListener);
   }
 
-  ngOnInit(): void {
-    console.log(this.expandedAppl);
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.gtMDQuery.removeEventListener('change', this._gtMDQueryListener);

@@ -4,6 +4,7 @@ import { HospLayoutsComponent } from 'src/app/shared/layouts/hosp/hosp-layouts.c
 import { HospDataResolver } from 'src/app/shared/resolvers/hosp-data.resolver';
 import { HcprogramMgmtComponent } from './hcprogram-mgmt/hcprogram-mgmt.component';
 import { HospApplListComponent } from './hosp-appl-list/hosp-appl-list.component';
+import { HospChangePasswordComponent } from './hosp-change-password/hosp-change-password.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
       {
         path: 'hcprogram-mgmt',
         component: HcprogramMgmtComponent,
+      },
+      {
+        path: 'change-password',
+        component: HospChangePasswordComponent,
       },
     ],
   },
