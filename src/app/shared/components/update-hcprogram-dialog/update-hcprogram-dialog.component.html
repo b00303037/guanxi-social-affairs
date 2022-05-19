@@ -1,6 +1,6 @@
-<h1 mat-dialog-title>編輯健檢項目</h1>
+<form [formGroup]="fg" class="spinner-box">
+  <h1 mat-dialog-title>編輯健檢項目</h1>
 
-<form [formGroup]="fg">
   <div mat-dialog-content class="grid grid-cols-1">
     <!-- 名稱 -->
     <mat-form-field class="col-span-1">
@@ -86,5 +86,9 @@
     >
       更新
     </button>
+  </div>
+
+  <div *ngIf="updating" class="spinner" appStopClickPropagation>
+    <mat-spinner></mat-spinner>
   </div>
 </form>
