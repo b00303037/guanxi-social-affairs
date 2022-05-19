@@ -12,22 +12,29 @@ import { HospData } from 'src/app/api/models/get-hosp-data.models';
   providedIn: 'root',
 })
 export class HospDataResolver implements Resolve<HospData> {
+  private _hospDataCache: HospData | undefined;
+
   constructor(private gsaService: GsaService) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): HospData | Observable<HospData> {
-    return this.gsaService.GetHospData().pipe(
-      map((res) => {
-        return res.content;
-      }),
-      catchError((err) => {
-        return of({
-          hospitalList: [],
-          HCProgramList: [],
-        });
-      })
+    return (
+      this._hospDataCache ??
+      this.gsaService.GetHospData().pipe(
+        map((res) => {
+          this._hospDataCache = res.content;
+
+          return res.content;
+        }),
+        catchError((err) => {
+          return of({
+            hospitalList: [],
+            HCProgramList: [],
+          });
+        })
+      )
     );
   }
 }

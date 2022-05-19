@@ -12,19 +12,26 @@ import { Settings } from 'src/app/api/models/get-settings.models';
   providedIn: 'root',
 })
 export class SettingsResolver implements Resolve<Settings | null> {
+  private _settingsCache: Settings | undefined;
+
   constructor(private gsaService: GsaService) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Settings | null | Observable<Settings | null> {
-    return this.gsaService.GetSettings().pipe(
-      map((res) => {
-        return res.content;
-      }),
-      catchError((err) => {
-        return of(null);
-      })
+    return (
+      this._settingsCache ??
+      this.gsaService.GetSettings().pipe(
+        map((res) => {
+          this._settingsCache = res.content;
+
+          return res.content;
+        }),
+        catchError((err) => {
+          return of(null);
+        })
+      )
     );
   }
 }

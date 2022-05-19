@@ -6,34 +6,30 @@ import {
 } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
 import { GsaService } from 'src/app/api/gsa.service';
-import { HomeData } from 'src/app/api/models/get-home-data.models';
+import { NewsInList } from 'src/app/api/models/get-news-list.models';
 
 @Injectable({
   providedIn: 'root',
 })
-export class HomeDataResolver implements Resolve<HomeData> {
-  private _homeDataCache: HomeData | undefined;
+export class NewsListResolver implements Resolve<Array<NewsInList>> {
+  private _newsListCache: Array<NewsInList> | undefined;
 
   constructor(private gsaService: GsaService) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): HomeData | Observable<HomeData> {
+  ): Array<NewsInList> | Observable<Array<NewsInList>> {
     return (
-      this._homeDataCache ??
-      this.gsaService.GetHomeData().pipe(
+      this._newsListCache ??
+      this.gsaService.GetNewsList({}).pipe(
         map((res) => {
-          this._homeDataCache = res.content;
+          this._newsListCache = res.content;
 
           return res.content;
         }),
         catchError((err) => {
-          return of({
-            newsList: [],
-            applCount: 0,
-            hospCount: 0,
-          });
+          return of([]);
         })
       )
     );

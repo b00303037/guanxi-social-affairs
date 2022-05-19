@@ -11,6 +11,7 @@ import { LayoutsComponent } from './shared/layouts/layouts.component';
 
 import { HomeDataResolver } from './shared/resolvers/home-data.resolver';
 import { HospDataResolver } from './shared/resolvers/hosp-data.resolver';
+import { NewsListResolver } from './shared/resolvers/newes-list-resolver';
 import { SettingsResolver } from './shared/resolvers/settings.resolver';
 
 const routes: Routes = [
@@ -45,6 +46,9 @@ const routes: Routes = [
       {
         path: 'news-list',
         component: NewsListComponent,
+        resolve: {
+          newsList: NewsListResolver,
+        },
       },
       {
         path: 'news/:id',
