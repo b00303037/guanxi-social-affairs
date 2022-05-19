@@ -210,7 +210,11 @@ export class NewsMgmtComponent implements OnInit, AfterViewInit, OnDestroy {
               : n
           );
         }),
-        catchError((err) => this.onError(err))
+        catchError((err) => {
+          e.source.checked = !e.checked;
+
+          return this.onError(err);
+        })
       )
       .subscribe();
   }

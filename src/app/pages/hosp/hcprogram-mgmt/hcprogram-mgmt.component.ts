@@ -158,7 +158,11 @@ export class HcprogramMgmtComponent
               : p
           );
         }),
-        catchError((err) => this.onError(err))
+        catchError((err) => {
+          e.source.checked = !e.checked;
+
+          return this.onError(err);
+        })
       )
       .subscribe();
   }
