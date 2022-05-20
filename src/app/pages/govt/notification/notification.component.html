@@ -37,6 +37,9 @@
           <app-notify-content-step [fg]="contentFG"></app-notify-content-step>
 
           <div class="actions-box">
+            <button type="button" mat-button color="primary" matStepperPrevious>
+              上一步
+            </button>
             <span class="grow"></span>
             <button
               type="submit"
@@ -44,7 +47,7 @@
               color="primary"
               [disabled]="notifying"
             >
-              下一步
+              發送通知
             </button>
           </div>
         </form>
