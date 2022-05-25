@@ -37,7 +37,15 @@
     </tr>
   </table>
 
-  <div class="col-span-2 md:col-span-1">
+  <div
+    *ngIf="
+      expandedAppl.imgIDA ||
+      expandedAppl.imgIDB ||
+      expandedAppl.imgBankbook ||
+      expandedAppl.imgRegTranscript
+    "
+    class="col-span-2 md:col-span-1"
+  >
     <div class="grid grid-cols-4 gap-x-2">
       <label
         *ngFor="let property of imgPropertyList"

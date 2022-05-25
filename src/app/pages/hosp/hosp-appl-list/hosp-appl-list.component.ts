@@ -33,15 +33,13 @@ import {
 import {
   APPL_STATUS_OBJ,
   APPL_STATUS_MAP,
-  ApplStatuses,
   HOSP_APPL_STATUS_SELECT_LIST,
 } from 'src/app/shared/enums/appl-status.enum';
 import { GsaService } from 'src/app/api/gsa.service';
 import { ApplInList } from 'src/app/api/models/get-appl-list.models';
 import {
   ExtendedAppl,
-  GetApplReq,
-  getExtendedAppl,
+  getExtendedApplInList,
 } from 'src/app/api/models/get-appl.models';
 import { HospData } from 'src/app/api/models/get-hosp-data.models';
 import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
@@ -194,33 +192,18 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe();
   }
 
-  onGetAppl(applicationID: string): void {
-    if (this.getting || this.expandedAppl?.applicationID === applicationID) {
+  onGetAppl(applInList: ApplInList): void {
+    if (
+      this.getting ||
+      this.expandedAppl?.applicationID === applInList.applicationID
+    ) {
       return;
     }
-    this.expandingApplID = applicationID;
-    this.expandedAppl = null;
-    this.getting = true;
 
-    const req: GetApplReq = {
-      applicationID,
+    const { hospData } = this.route.parent?.snapshot.data as {
+      hospData: HospData;
     };
-    this.gsaService
-      .GetAppl(req)
-      .pipe(
-        takeUntil(this.destroy$),
-        finalize(() => (this.getting = false)),
-        map((res) => {
-          const { hospData } = this.route.parent?.snapshot.data as {
-            hospData: HospData;
-          };
-
-          this.expandingApplID = undefined;
-          this.expandedAppl = getExtendedAppl(res.content, hospData);
-        }),
-        catchError((err) => this.onError(err))
-      )
-      .subscribe();
+    this.expandedAppl = getExtendedApplInList(applInList, hospData);
   }
 
   openArrangeApplDialog(applicationID: string, scheduledDate: string): void {

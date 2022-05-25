@@ -48,10 +48,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 // @angular/material-date-fns-adapter
-import {
-  MatDateFnsModule,
-  DateFnsAdapter,
-} from '@angular/material-date-fns-adapter';
+import { MatDateFnsModule } from '@angular/material-date-fns-adapter';
 import { zhTW } from 'date-fns/locale';
 
 // components
@@ -83,12 +80,13 @@ import { SubmitThrottleDirective } from './directives/submit-throttle.directive'
 import { UpperCaseDirective } from './directives/upper-case.directive';
 
 // pipes
-import { IncludesAppl } from './pipes/includes-appl.pipe';
+import { IncludesApplPipe } from './pipes/includes-appl.pipe';
 import { IsInSetPipe } from './pipes/is-in-set.pipe';
 import { SafeHTMLPipe } from './pipes/safe-html.pipe';
 
 import { PaginatorIntl } from './paginator-intl';
 import { MatPaginatorIntl } from '@angular/material/paginator';
+import { TWDateFnsAdapter } from './services/tw-date-fns.adapter';
 
 const EDITOR_CONFIG: NgxEditorConfig = {
   locals: {
@@ -183,7 +181,7 @@ const DIRECTIVES = [
   SubmitThrottleDirective,
   UpperCaseDirective,
 ];
-const PIPES = [IncludesAppl, IsInSetPipe, SafeHTMLPipe];
+const PIPES = [IncludesApplPipe, IsInSetPipe, SafeHTMLPipe];
 
 @NgModule({
   declarations: [
@@ -232,7 +230,7 @@ const PIPES = [IncludesAppl, IsInSetPipe, SafeHTMLPipe];
     ...PIPES,
   ],
   providers: [
-    { provide: DateAdapter, useClass: DateFnsAdapter },
+    { provide: DateAdapter, useClass: TWDateFnsAdapter },
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
     { provide: MAT_DATE_LOCALE, useValue: zhTW },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: DIALOG_DEFAULT_OPTIONS },

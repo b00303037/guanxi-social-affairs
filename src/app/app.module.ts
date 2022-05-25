@@ -13,14 +13,11 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
 // @angular/material
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-// import { MatDatepickerModule } from '@angular/material/datepicker';
-// import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
-// import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -53,7 +50,7 @@ import { QueryVerificationStepComponent } from './pages/query/query-verification
 import { QueryApplListStepComponent } from './pages/query/query-appl-list-step/query-appl-list-step.component';
 
 // @angular/common
-import { CurrencyPipe, registerLocaleData } from '@angular/common';
+import { CurrencyPipe, DatePipe, DecimalPipe, registerLocaleData } from '@angular/common';
 import localeZhHant from '@angular/common/locales/zh-Hant';
 
 import { environment } from 'src/environments/environment';
@@ -100,14 +97,11 @@ registerLocaleData(localeZhHant);
     // @angular/material
     MatButtonModule,
     MatCardModule,
-    // MatDatepickerModule,
-    // MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
     MatMenuModule,
     MatPaginatorModule,
-    // MatProgressSpinnerModule,
     MatRadioModule,
     MatSelectModule,
     MatSidenavModule,
@@ -119,7 +113,12 @@ registerLocaleData(localeZhHant);
     // shared
     SharedModule,
   ],
-  providers: [{ provide: LOCALE_ID, useValue: 'zh-Hant' }, CurrencyPipe],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'zh-Hant' },
+    CurrencyPipe,
+    DatePipe,
+    DecimalPipe,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

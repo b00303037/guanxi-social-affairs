@@ -19,4 +19,12 @@ export interface Settings {
    * 圖檔大小限制，單位為 MB
    */
   maxImgSizeMB: string;
+  /**
+   * 上線日期時間限制，格式為 YYYY-MM-DDTHH:mm:ss.sssZ
+   */
+  launchDatetime: string;
+  /**
+   * 年度件數限制，單位為件
+   */
+  yearlyApplLimit: string;
 }

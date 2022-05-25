@@ -373,9 +373,31 @@ export class GsaService extends BaseApiService {
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
     if (environment.fakeData) {
-      const content = APPL_LIST.find(
+      let content = APPL_LIST.find(
         (a) => a.applicationID === req.applicationID
       );
+
+      const user = this.authService.user$.getValue() as User | undefined;
+
+      console.log('---');
+      console.log('check user role');
+      console.log(user);
+
+      if (content !== undefined && user !== undefined) {
+        switch (user.role) {
+          case 'hosp':
+            content = {
+              ...content,
+              imgIDA: '',
+              imgIDB: '',
+              imgBankbook: '',
+              imgRegTranscript: '',
+            };
+            break;
+        }
+      } else {
+        content = undefined;
+      }
 
       console.log('---');
       console.log('GetAppl');
@@ -388,7 +410,7 @@ export class GsaService extends BaseApiService {
               success: true,
               code: BaseAPICodes.SUCCESS,
               message: '取得一筆申請單成功',
-              content,
+              content: content as Appl,
             })),
             switchMap((res) => super.throwNotIn(acceptedCodes, res))
           )

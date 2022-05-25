@@ -71,6 +71,27 @@ export const IMG_PROPERTY_LIST: Array<Property> = [
   { label: '戶籍謄本', key: 'imgRegTranscript' },
 ];
 
+export function getExtendedApplInList(
+  appl: ApplInList,
+  hospData: HospData
+): ExtendedAppl {
+  const hospital = findHospital(appl.hospitalID, hospData.hospitalList);
+  const program = findHCProgram(appl.programID, hospData.HCProgramList);
+
+  return {
+    ...appl,
+    imgIDA: '',
+    imgIDB: '',
+    imgBankbook: '',
+    imgRegTranscript: '',
+    genderText: GENDER_MAP[appl.gender],
+    hasCancerText: appl.hasCancer ? YN_MAP[appl.hasCancer] : '',
+    hospitalName: hospital ? hospital.name : '',
+    programName: program ? program.name : '',
+    displayedImg: 'imgIDA',
+  };
+}
+
 export function getExtendedAppl(appl: Appl, hospData: HospData): ExtendedAppl {
   const hospital = findHospital(appl.hospitalID, hospData.hospitalList);
   const program = findHCProgram(appl.programID, hospData.HCProgramList);

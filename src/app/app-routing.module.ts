@@ -58,6 +58,7 @@ const routes: Routes = [
         path: 'apply',
         component: ApplyComponent,
         resolve: {
+          homeData: HomeDataResolver,
           hospData: HospDataResolver,
           settings: SettingsResolver,
         },
