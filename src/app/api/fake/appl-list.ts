@@ -1,3 +1,4 @@
+import { sub } from 'date-fns';
 import { ApplStatuses } from '../../shared/enums/appl-status.enum';
 import { Genders } from '../../shared/enums/gender.enum';
 import { YN } from '../../shared/enums/yn.enum';
@@ -26,7 +27,7 @@ export const APPL_LIST: Array<Appl> = [
     hasCancer: undefined,
     hospitalID: 1,
     programID: 11,
-    createDatetime: new Date('2022/05/01').toISOString(),
+    createDatetime: sub(new Date(), { days: 2 }).toISOString(),
     updateDatetime: undefined,
   },
   // 'X': 已取消
@@ -50,7 +51,7 @@ export const APPL_LIST: Array<Appl> = [
     hasCancer: undefined,
     hospitalID: 2,
     programID: 21,
-    createDatetime: new Date('2022/05/02').toISOString(),
+    createDatetime: sub(new Date(), { days: 1 }).toISOString(),
     updateDatetime: undefined,
   },
   // 'Y': 審核通過
@@ -74,7 +75,7 @@ export const APPL_LIST: Array<Appl> = [
     hasCancer: undefined,
     hospitalID: 3,
     programID: 31,
-    createDatetime: new Date('2022/05/03').toISOString(),
+    createDatetime: sub(new Date(), { days: 1 }).toISOString(),
     updateDatetime: undefined,
   },
   // 'N': 待補正
@@ -98,7 +99,7 @@ export const APPL_LIST: Array<Appl> = [
     hasCancer: undefined,
     hospitalID: 1,
     programID: 12,
-    createDatetime: new Date('2022/05/04').toISOString(),
+    createDatetime: sub(new Date(), { days: 0 }).toISOString(),
     updateDatetime: undefined,
   },
   // 'A': 已安排健檢
@@ -122,7 +123,7 @@ export const APPL_LIST: Array<Appl> = [
     hasCancer: undefined,
     hospitalID: 2,
     programID: 22,
-    createDatetime: new Date('2022/05/05').toISOString(),
+    createDatetime: sub(new Date(), { days: 0 }).toISOString(),
     updateDatetime: undefined,
   },
   // 'C': 已完成健檢
@@ -146,7 +147,7 @@ export const APPL_LIST: Array<Appl> = [
     hasCancer: YN.N,
     hospitalID: 3,
     programID: 32,
-    createDatetime: new Date('2022/05/06').toISOString(),
+    createDatetime: sub(new Date(), { days: 0 }).toISOString(),
     updateDatetime: undefined,
   },
 ];

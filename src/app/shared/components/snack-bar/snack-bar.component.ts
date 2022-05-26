@@ -12,7 +12,7 @@ export class SnackBarComponent implements OnInit {
   icon: 'error' | 'check_circle' | 'cancel' = 'error';
 
   constructor(@Inject(MAT_SNACK_BAR_DATA) public data: SnackBarData) {
-    switch (data.type) {
+    switch (this.data.type) {
       case SnackTypes.Success:
         this.icon = 'check_circle';
         break;

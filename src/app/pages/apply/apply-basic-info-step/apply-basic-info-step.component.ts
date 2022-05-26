@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { parse } from 'date-fns';
+import { isValid, parse, sub } from 'date-fns';
 import { Settings } from 'src/app/api/models/get-settings.models';
 import { GENDER_OBJ } from 'src/app/shared/enums/gender.enum';
 import { EmailOrMobileNoErrorStateMatcher } from 'src/app/shared/validators/email-or-mobile-no.validator';
@@ -20,6 +20,7 @@ export class ApplyBasicInfoStepComponent implements OnInit {
 
   showPassword = false;
   today = new Date();
+  minApplAge: number | undefined;
   maxRegDate = new Date();
 
   genderObj = GENDER_OBJ;
@@ -30,11 +31,17 @@ export class ApplyBasicInfoStepComponent implements OnInit {
   constructor(private route: ActivatedRoute) {
     const { settings } = this.route.snapshot.data as { settings: Settings };
 
-    this.maxRegDate = parse(
+    // minApplAge
+    const minApplAge = Number.parseInt(settings.minApplAge, 10);
+    this.minApplAge = Number.isNaN(minApplAge) ? undefined : minApplAge;
+
+    // maxRegDate
+    const maxRegDate = parse(
       `${settings.maxRegDate} 00:00:00 0`,
       'yyyy/MM/dd HH:mm:ss S',
       new Date()
     );
+    this.maxRegDate = isValid(maxRegDate) ? maxRegDate : this.maxRegDate;
   }
 
   ngOnInit(): void {

@@ -74,6 +74,9 @@
     <mat-error *ngIf="fcs['birthDate'].hasError('required')"
       >請選擇&nbsp;<strong>出生日期</strong></mat-error
     >
+    <mat-error *ngIf="minApplAge && fcs['birthDate'].hasError('dateRange')"
+      >未符合申請資格，須年滿&nbsp;<strong>{{ minApplAge }}&nbsp;歲</strong>
+    </mat-error>
 
     <mat-datepicker #birthDatepicker startView="multi-year"></mat-datepicker>
   </mat-form-field>

@@ -5,22 +5,23 @@
     <div class="flex justify-between overflow-auto py-4">
       <span class="grow"></span>
 
-      <ngx-charts-bar-vertical
-        [view]="[960, 320]"
+      <ngx-charts-bar-horizontal
+        [view]="view"
         [results]="resultsGroupedByCreateDatetime"
-        [legend]="true"
+        [scheme]="scheme"
+        [legend]="false"
         legendTitle="圖例"
         [xAxis]="true"
         [yAxis]="true"
         [roundDomains]="true"
         [showXAxisLabel]="true"
         [showYAxisLabel]="true"
-        xAxisLabel="年月"
-        yAxisLabel="件數"
-        [yAxisTickFormatting]="yAxisTickFormatting"
+        xAxisLabel="件數"
+        yAxisLabel="日期"
+        [xAxisTickFormatting]="xAxisTickFormatting"
         [barPadding]="16"
       >
-      </ngx-charts-bar-vertical>
+      </ngx-charts-bar-horizontal>
 
       <span class="grow"></span>
     </div>

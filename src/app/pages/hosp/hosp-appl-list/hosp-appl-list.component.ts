@@ -245,21 +245,21 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe();
   }
 
-  openCancelApplDialog(applicationID: string): void {
-    const data: CancelApplDialogData = {
-      applicationID,
-    };
+  // openCancelApplDialog(applicationID: string): void {
+  //   const data: CancelApplDialogData = {
+  //     applicationID,
+  //   };
 
-    this.matDialog
-      .open(CancelApplDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        takeUntil(this.destroy$),
-        filter<CancelApplDialogResult>((result) => result === true),
-        tap(() => this.onGetApplList())
-      )
-      .subscribe();
-  }
+  //   this.matDialog
+  //     .open(CancelApplDialogComponent, { data })
+  //     .afterClosed()
+  //     .pipe(
+  //       takeUntil(this.destroy$),
+  //       filter<CancelApplDialogResult>((result) => result === true),
+  //       tap(() => this.onGetApplList())
+  //     )
+  //     .subscribe();
+  // }
 
   onError(err: string): Observable<never> {
     const snack = new Snack({ message: err, type: SnackTypes.Error });

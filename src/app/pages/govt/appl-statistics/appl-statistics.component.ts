@@ -17,6 +17,7 @@ import { ApplStatuses } from 'src/app/shared/enums/appl-status.enum';
 import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
 import { Snack } from 'src/app/shared/services/snack-bar.models';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
+import { getNumberList } from 'src/app/shared/services/utils';
 
 interface BarChartData {
   name: string;
@@ -32,6 +33,7 @@ export class ApplStatisticsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<null>();
 
   applList: Array<ApplInList> = [];
+  view: [number, number] = [NaN, NaN];
   resultsGroupedByCreateDatetime: Array<BarChartData> = [];
   scheme = {
     name: '',
@@ -39,7 +41,7 @@ export class ApplStatisticsComponent implements OnInit, OnDestroy {
     group: ScaleType.Ordinal,
     domain: ['rgb(251, 191, 36)'],
   };
-  yAxisTickFormatting = this.formatYAxisTick.bind(this);
+  xAxisTickFormatting = this.formatXAxisTick.bind(this);
 
   gettingList = false;
 
@@ -53,7 +55,7 @@ export class ApplStatisticsComponent implements OnInit, OnDestroy {
     this.onGetApplList();
   }
 
-  formatYAxisTick(value: number): string | null {
+  formatXAxisTick(value: number): string | null {
     return this.decimalPipe.transform(value, '1.0-0');
   }
 
@@ -69,11 +71,7 @@ export class ApplStatisticsComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         finalize(() => (this.gettingList = false)),
         map((res) => {
-          this.applList = res.content.sort(
-            (a, b) =>
-              new Date(a.createDatetime).valueOf() -
-              new Date(b.createDatetime).valueOf()
-          );
+          this.applList = res.content;
 
           this.groupApplByCreateDatetime();
         }),
@@ -83,10 +81,8 @@ export class ApplStatisticsComponent implements OnInit, OnDestroy {
   }
 
   groupApplByCreateDatetime(): void {
-    this.resultsGroupedByCreateDatetime = [
-      11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
-    ]
-      .map((months) => format(sub(new Date(), { months }), 'yyyy/MM'))
+    this.resultsGroupedByCreateDatetime = getNumberList(0, 13)
+      .map((days) => format(sub(new Date(), { days }), 'MM/dd'))
       .map((tick) => ({
         name: tick,
         value: 0,
@@ -97,7 +93,7 @@ export class ApplStatisticsComponent implements OnInit, OnDestroy {
         return;
       }
 
-      const name = format(new Date(a.createDatetime), 'yyyy/MM');
+      const name = format(new Date(a.createDatetime), 'MM/dd');
       const result = this.resultsGroupedByCreateDatetime.find(
         (r) => r.name === name
       );

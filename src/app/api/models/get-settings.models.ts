@@ -6,7 +6,7 @@ export interface Settings {
   /**
    * 每日身分證字號尾碼限制
    */
-  IDNoSuffixList: Array<string | undefined>;
+  IDNoSuffixList: Array<string>;
   /**
    * 設籍日期限制，格式為 YYYY/MM/DD
    */
@@ -27,4 +27,8 @@ export interface Settings {
    * 年度件數限制，單位為件
    */
   yearlyApplLimit: string;
+  /**
+   * 申請年齡限制，單位為歲
+   */
+  minApplAge: string;
 }

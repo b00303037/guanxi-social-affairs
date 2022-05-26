@@ -35,7 +35,7 @@ export const APPL_STATUS_OBJ = {
 export const APPL_STATUS_MAP = {
   [ApplStatuses.Unreviewed]: '待審核',
   [ApplStatuses.X]: '已取消',
-  [ApplStatuses.Y]: '審核通過',
+  [ApplStatuses.Y]: '審核通過（請等待醫院連繫）',
   [ApplStatuses.N]: '待補正',
   [ApplStatuses.Arranged]: '已安排健檢',
   [ApplStatuses.Completed]: '已完成健檢',
@@ -53,7 +53,7 @@ export const GOVT_APPL_STATUS_SELECT_LIST: Array<{
     value: ApplStatuses.X,
   },
   {
-    label: APPL_STATUS_MAP[ApplStatuses.Y],
+    label: '審核通過',
     value: ApplStatuses.Y,
   },
   {

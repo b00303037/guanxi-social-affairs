@@ -12,6 +12,7 @@ import { BasicInfoFCsModel } from '../update-appl-dialog.models';
 })
 export class BasicInfoFormComponent implements OnInit {
   @Input() fg!: FormGroup;
+  @Input() minApplAge!: number | undefined;
   @Input() maxRegDate!: Date;
   fcs!: BasicInfoFCsModel;
 

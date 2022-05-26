@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { format, parse } from 'date-fns';
+import { format, isValid, parse, sub } from 'date-fns';
 import {
   catchError,
   EMPTY,
@@ -137,6 +137,8 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
 
   appl: Appl | undefined;
 
+  minApplAge: number | undefined;
+  maxBirthDate: Date | undefined;
   maxRegDate = new Date();
   maxImgSizeMB = Number.POSITIVE_INFINITY;
 
@@ -156,14 +158,30 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
     private gsaService: GsaService,
     private currencyPipe: CurrencyPipe
   ) {
-    this.maxRegDate = parse(
-      `${data.settings.maxRegDate} 00:00:00 0`,
+    // minApplAge & maxBirthDate
+    const minApplAge = Number.parseInt(this.data.settings.minApplAge, 10);
+    this.minApplAge = Number.isNaN(minApplAge) ? undefined : minApplAge;
+    this.maxBirthDate = Number.isNaN(minApplAge)
+      ? undefined
+      : sub(new Date(), { years: minApplAge });
+
+    // maxRegDate
+    const maxRegDate = parse(
+      `${this.data.settings.maxRegDate} 00:00:00 0`,
       'yyyy/MM/dd HH:mm:ss S',
       new Date()
     );
-    this.maxImgSizeMB =
-      parseInt(data.settings.maxImgSizeMB) || this.maxImgSizeMB;
+    this.maxRegDate = isValid(maxRegDate) ? maxRegDate : this.maxRegDate;
 
+    // maxImgSizeMB
+    this.maxImgSizeMB =
+      parseInt(this.data.settings.maxImgSizeMB) || this.maxImgSizeMB;
+
+    if (this.maxBirthDate !== undefined) {
+      this.basicInfoFCs['birthDate'].addValidators([
+        DateRangeValidator({ max: this.maxBirthDate }),
+      ]);
+    }
     this.basicInfoFCs['regDate'].addValidators([
       DateRangeValidator({ max: this.maxRegDate }),
     ]);

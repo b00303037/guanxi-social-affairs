@@ -9,7 +9,7 @@ import {
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute } from '@angular/router';
-import { format, parse } from 'date-fns';
+import { format, isValid, parse, sub } from 'date-fns';
 import {
   catchError,
   EMPTY,
@@ -172,6 +172,8 @@ export class ApplyComponent implements OnInit, OnDestroy {
   }
 
   acceptedIDNoSuffix: string = '';
+  minApplAge: number | undefined;
+  maxBirthDate: Date | undefined;
   maxRegDate = new Date();
 
   verifying = false;
@@ -189,14 +191,30 @@ export class ApplyComponent implements OnInit, OnDestroy {
 
     const { settings } = this.route.snapshot.data as { settings: Settings };
 
+    // acceptedIDNoSuffix
     this.acceptedIDNoSuffix =
       settings.IDNoSuffixList[new Date().getDay()] ?? '';
-    this.maxRegDate = parse(
+
+    // minApplAge & maxBirthDate
+    const minApplAge = Number.parseInt(settings.minApplAge, 10);
+    this.minApplAge = Number.isNaN(minApplAge) ? undefined : minApplAge;
+    this.maxBirthDate = Number.isNaN(minApplAge)
+      ? undefined
+      : sub(new Date(), { years: minApplAge });
+
+    // maxRegDate
+    const maxRegDate = parse(
       `${settings.maxRegDate} 00:00:00 0`,
       'yyyy/MM/dd HH:mm:ss S',
       new Date()
     );
+    this.maxRegDate = isValid(maxRegDate) ? maxRegDate : this.maxRegDate;
 
+    if (this.maxBirthDate !== undefined) {
+      this.basicInfoFCs['birthDate'].addValidators([
+        DateRangeValidator({ max: this.maxBirthDate }),
+      ]);
+    }
     this.basicInfoFCs['regDate'].addValidators([
       DateRangeValidator({ max: this.maxRegDate }),
     ]);
@@ -263,6 +281,12 @@ export class ApplyComponent implements OnInit, OnDestroy {
 
     this.forceValidation(this.basicInfoFG);
 
+    if (!this.checkBirthDate()) {
+      const message = `未符合申請資格，申請人須年滿 ${this.minApplAge} 歲`;
+      const snack = new Snack({ message, type: SnackTypes.Error });
+      this.snackBarService.add(snack);
+      return;
+    }
     if (!this.checkRegDate()) {
       const message = `未符合申請資格，設籍日期須早於 ${format(
         this.maxRegDate,
@@ -368,6 +392,10 @@ export class ApplyComponent implements OnInit, OnDestroy {
       this.acceptedIDNoSuffix === '' ||
       this.acceptedIDNoSuffix.includes(IDNo.slice(-1))
     );
+  }
+
+  checkBirthDate(): boolean {
+    return !this.basicInfoFCs['birthDate'].hasError('dateRange');
   }
 
   checkRegDate(): boolean {
