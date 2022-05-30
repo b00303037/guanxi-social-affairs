@@ -153,16 +153,17 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
           }
 
           this.dataSource.data = result;
-          this.paginator.firstPage();
         })
       )
       .subscribe();
-
-    this.onGetApplList();
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+
+    setTimeout(() => {
+      this.onGetApplList();
+    });
   }
 
   onGetApplList(): void {
@@ -180,12 +181,7 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
         map((res) => {
           this.applList = res.content;
 
-          const defaultFV: HospApplListFilterFormModel = {
-            applStatusList: [],
-            keyword: '',
-          };
-
-          this.fg.setValue(defaultFV);
+          this.fg.setValue(this.fv);
         }),
         catchError((err) => this.onError(err))
       )

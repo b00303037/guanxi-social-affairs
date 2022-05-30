@@ -63,7 +63,7 @@ export const DETAIL_PROPERTY_LIST: Array<Property> = [
   { label: '住家電話', key: 'telephoneNo' },
   { label: '安排健檢日期', key: 'scheduledDate' },
   { label: '完成健檢日期', key: 'completionDate' },
-  { label: '是否罹癌', key: 'hasCancerText' },
+  { label: '影像異常', key: 'hasCancerText' },
   { label: '健檢醫院', key: 'hospitalName' },
   { label: '健檢項目', key: 'programName' },
 ];

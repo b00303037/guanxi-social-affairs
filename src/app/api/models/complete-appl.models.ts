@@ -11,7 +11,7 @@ export interface CompleteApplReq {
    */
   completionDate: string;
   /**
-   * 是否罹癌
+   * 影像異常
    * 'Y': 是
    * 'N': 否
    */

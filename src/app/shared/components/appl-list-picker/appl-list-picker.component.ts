@@ -117,17 +117,18 @@ export class ApplListPickerComponent
           }
 
           this.dataSource.data = result;
-          this.paginator.firstPage();
         })
       )
       .subscribe();
-
-    this.onGetApplList();
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+
+    setTimeout(() => {
+      this.onGetApplList();
+    });
   }
 
   onGetApplList(): void {
@@ -148,12 +149,7 @@ export class ApplListPickerComponent
             this.data.defaultPickedIDList.includes(a.applicationID)
           );
 
-          const defaultFV: ApplListFilterFormModel = {
-            applStatusList: [],
-            keyword: '',
-          };
-
-          this.fg.setValue(defaultFV);
+          this.fg.setValue(this.fv);
         }),
         catchError((err) => this.onError(err))
       )

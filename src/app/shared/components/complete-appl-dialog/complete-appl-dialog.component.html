@@ -49,7 +49,7 @@
       <mat-datepicker #completionDatepicker></mat-datepicker>
     </mat-form-field>
 
-    <!-- 是否罹癌 -->
+    <!-- 影像異常 -->
     <div
       class="col-span-1 h-form-field form-field-style flex items-center"
       [class.form-field-invalid]="
@@ -57,7 +57,7 @@
         fcs['hasCancer'].invalid
       "
     >
-      <label class="form-field-label mr-4">是否罹癌 *</label>
+      <label class="form-field-label mr-4">影像異常 *</label>
       <mat-radio-group formControlName="hasCancer">
         <mat-radio-button [value]="YNObj.Y" class="mr-4">是</mat-radio-button>
         <mat-radio-button [value]="YNObj.N">否</mat-radio-button>

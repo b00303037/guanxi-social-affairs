@@ -85,18 +85,11 @@ export class NewsListComponent implements OnInit, AfterViewInit, OnDestroy {
           }
 
           this.dataSource.data = result;
-          this.paginator.firstPage();
         })
       )
       .subscribe();
 
-    const defaultFV: NewsListFilterFormModel = {
-      startDate: null,
-      endDate: null,
-      keyword: '',
-    };
-
-    this.fg.setValue(defaultFV);
+    this.fg.setValue(this.fv);
   }
 
   ngAfterViewInit(): void {
