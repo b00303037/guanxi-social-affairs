@@ -80,7 +80,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     ]),
     body: new FormControl(null, [
       Validators.required,
-      Validators.maxLength(200), // TODO check body maxlength
+      Validators.maxLength(70),
     ]),
     passed: new FormControl(null, [Validators.requiredTrue]),
   });

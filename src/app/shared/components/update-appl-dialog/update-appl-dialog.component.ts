@@ -90,6 +90,11 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
       gender: new FormControl(null, [Validators.required]),
       birthDate: new FormControl(null, [Validators.required]),
       regDate: new FormControl(null, [Validators.required]),
+      village: new FormControl(null, [Validators.required]),
+      address: new FormControl(null, [
+        Validators.required,
+        Validators.maxLength(50),
+      ]),
       email: new FormControl(null, [
         Validators.maxLength(50),
         Validators.email,
@@ -108,6 +113,8 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
     gender: this.basicInfoFG.controls['gender'],
     birthDate: this.basicInfoFG.controls['birthDate'],
     regDate: this.basicInfoFG.controls['regDate'],
+    village: this.basicInfoFG.controls['village'],
+    address: this.basicInfoFG.controls['address'],
     email: this.basicInfoFG.controls['email'],
     mobileNo: this.basicInfoFG.controls['mobileNo'],
     telPrefix: this.basicInfoFG.controls['telPrefix'],
@@ -236,8 +243,17 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
   }
 
   patchBasicInfoFV(appl: Appl): void {
-    const { name, gender, birthDate, regDate, email, mobileNo, telephoneNo } =
-      appl;
+    const {
+      name,
+      gender,
+      birthDate,
+      regDate,
+      village,
+      address,
+      email,
+      mobileNo,
+      telephoneNo,
+    } = appl;
     const [telPrefix, telNo, telExt] = getTelPrefixNoExt(telephoneNo);
 
     const fv: BasicInfoFormModel = {
@@ -253,6 +269,8 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
         'yyyy/MM/dd HH:mm:ss S',
         new Date()
       ),
+      village,
+      address,
       email,
       mobileNo,
       telPrefix,
@@ -360,7 +378,7 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
     }
   ): UpdateApplReq {
     const { programID } = fvs.HCProgramFV;
-    const { name, gender, telPrefix, telNo, telExt, email, mobileNo } =
+    const { name, gender, village, address, telPrefix, telNo, telExt, email, mobileNo } =
       fvs.basicInfoFV;
     const { imgIDA, imgIDB, imgBankbook, imgRegTranscript } = fvs.IDPhotosFV;
 
@@ -379,6 +397,12 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
     }
     if (appl.regDate !== regDate) {
       req.regDate = regDate;
+    }
+    if (appl.village !== village) {
+      req.village = village;
+    }
+    if (appl.address !== address) {
+      req.address = address;
     }
     if (appl.email !== email) {
       req.email = email;

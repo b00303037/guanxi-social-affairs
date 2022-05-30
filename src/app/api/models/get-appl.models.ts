@@ -42,6 +42,7 @@ export interface ExtendedAppl extends Appl {
   hasCancerText?: string;
   hospitalName: string;
   programName: string;
+  regVillage: string;
   displayedImg: 'imgIDA' | 'imgIDB' | 'imgBankbook' | 'imgRegTranscript';
 }
 
@@ -55,6 +56,8 @@ export const DETAIL_PROPERTY_LIST: Array<Property> = [
   { label: '性別', key: 'genderText' },
   { label: '出生日期', key: 'birthDate' },
   { label: '設籍日期', key: 'regDate' },
+  { label: '戶籍村里', key: 'regVillage' },
+  { label: '詳細地址', key: 'address' },
   { label: 'Email', key: 'email' },
   { label: '行動電話', key: 'mobileNo' },
   { label: '住家電話', key: 'telephoneNo' },
@@ -88,6 +91,7 @@ export function getExtendedApplInList(
     hasCancerText: appl.hasCancer ? YN_MAP[appl.hasCancer] : '',
     hospitalName: hospital ? hospital.name : '',
     programName: program ? program.name : '',
+    regVillage: `新竹縣 關西鎮 ${appl.village}`,
     displayedImg: 'imgIDA',
   };
 }
@@ -102,6 +106,7 @@ export function getExtendedAppl(appl: Appl, hospData: HospData): ExtendedAppl {
     hasCancerText: appl.hasCancer ? YN_MAP[appl.hasCancer] : '',
     hospitalName: hospital ? hospital.name : '',
     programName: program ? program.name : '',
+    regVillage: `新竹縣 關西鎮 ${appl.village}`,
     displayedImg: 'imgIDA',
   };
 }

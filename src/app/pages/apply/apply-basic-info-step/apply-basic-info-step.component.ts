@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { isValid, parse, sub } from 'date-fns';
 import { Settings } from 'src/app/api/models/get-settings.models';
 import { GENDER_OBJ } from 'src/app/shared/enums/gender.enum';
+import { VILLAGE_SELECT_LIST } from 'src/app/shared/enums/villages';
 import { EmailOrMobileNoErrorStateMatcher } from 'src/app/shared/validators/email-or-mobile-no.validator';
 import { TelephoneNoErrorStateMatcher } from 'src/app/shared/validators/telephone-no.validator';
 import { BasicInfoFCsModel } from '../apply.models';
@@ -24,6 +25,7 @@ export class ApplyBasicInfoStepComponent implements OnInit {
   maxRegDate = new Date();
 
   genderObj = GENDER_OBJ;
+  villageSelectList = VILLAGE_SELECT_LIST;
 
   emailOrMobileNoErrorStateMatcher = new EmailOrMobileNoErrorStateMatcher();
   telephoneNoErrorStateMatcher = new TelephoneNoErrorStateMatcher();
@@ -55,6 +57,8 @@ export class ApplyBasicInfoStepComponent implements OnInit {
       gender: this.fg.controls['gender'],
       birthDate: this.fg.controls['birthDate'],
       regDate: this.fg.controls['regDate'],
+      village: this.fg.controls['village'],
+      address: this.fg.controls['address'],
       email: this.fg.controls['email'],
       mobileNo: this.fg.controls['mobileNo'],
       telPrefix: this.fg.controls['telPrefix'],

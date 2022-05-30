@@ -178,6 +178,54 @@
     <mat-datepicker #regDatepicker startView="multi-year"></mat-datepicker>
   </mat-form-field>
 
+  <div class="col-span-2 flex">
+    <!-- 戶籍地址（縣市、鄉鎮市區） -->
+    <mat-form-field class="w-32 grow shrink-0">
+      <mat-label>戶籍地址（縣市、鄉鎮市區）</mat-label>
+      <input
+        type="text"
+        matInput
+        value="新竹縣 關西鎮"
+        required
+        readonly
+        tabindex="-1"
+      />
+    </mat-form-field>
+
+    <!-- 戶籍地址（村里） -->
+    <mat-form-field class="w-24 grow shrink-0">
+      <mat-label>戶籍地址（村里）</mat-label>
+      <mat-select formControlName="village" required>
+        <mat-option
+          *ngFor="let village of villageSelectList"
+          [value]="village.value"
+        >
+          {{ village.label }}
+        </mat-option>
+      </mat-select>
+
+      <mat-error *ngIf="fcs['village'].hasError('required')"
+        >請選擇&nbsp;<strong>戶籍地址（村里）</strong></mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- 戶籍地址（詳細地址） -->
+  <mat-form-field class="col-span-2">
+    <mat-label>戶籍地址（詳細地址）</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="address"
+      required
+      maxlength="50"
+    />
+
+    <mat-error *ngIf="fcs['address'].hasError('required')"
+      >請輸入&nbsp;<strong>戶籍地址（詳細地址）</strong></mat-error
+    >
+  </mat-form-field>
+
   <!-- Email -->
   <mat-form-field class="col-span-2 sm:col-span-1">
     <mat-label>Email</mat-label>

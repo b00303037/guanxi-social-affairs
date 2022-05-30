@@ -31,6 +31,9 @@ module.exports = {
       light: 300,
       semibold: 600,
     },
+    minWidth: {
+      14: "3.5rem",
+    },
     minHeight: {
       "cover-page": "calc(100vh - 56px)",
       "cover-page-lg": "calc(100vh - 64px)",

@@ -35,6 +35,8 @@ export interface BasicInfoFormModel {
   gender: Genders;
   birthDate: Date;
   regDate: Date;
+  village: string;
+  address: string;
   email?: string;
   mobileNo?: string;
   telPrefix?: string;
@@ -47,6 +49,8 @@ export interface BasicInfoFCsModel {
   gender: AbstractControl;
   birthDate: AbstractControl;
   regDate: AbstractControl;
+  village: AbstractControl;
+  address: AbstractControl;
   email: AbstractControl;
   mobileNo: AbstractControl;
   telPrefix: AbstractControl;

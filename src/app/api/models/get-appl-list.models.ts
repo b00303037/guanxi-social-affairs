@@ -45,6 +45,14 @@ export interface ApplInList {
    */
   regDate: string;
   /**
+   * 村里
+   */
+  village: string;
+  /**
+   * 詳細地址
+   */
+  address: string;
+  /**
    * Email
    */
   email?: string;

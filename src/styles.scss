@@ -116,7 +116,7 @@ $guanxi-social-affairs-theme: mat.define-light-theme(
       @apply border-b border-black border-opacity-6;
     }
     label {
-      @apply shrink-0 leading-6 text-sm text-center md:leading-7;
+      @apply min-w-14 shrink-0 leading-6 text-sm text-center md:leading-7;
     }
     label:not(:last-of-type) {
       @apply mr-2;
