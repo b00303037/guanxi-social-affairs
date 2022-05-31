@@ -32,6 +32,7 @@ export class HomeDataResolver implements Resolve<HomeData> {
           return of({
             newsList: [],
             applCount: 0,
+            applCountToday: 0,
             hospCount: 0,
           });
         })

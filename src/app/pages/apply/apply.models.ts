@@ -17,10 +17,10 @@ export interface VerificationFCsModel {
 }
 
 export interface HCProgramFormModel {
-  hospitalID: number;
-  programID: number;
-  programName: string;
-  programCharge: string;
+  hospitalID?: number;
+  programID?: number;
+  programName?: string;
+  programCharge?: string;
 }
 export interface HCProgramFCsModel {
   hospitalID: AbstractControl;

@@ -24,6 +24,10 @@ export interface Settings {
    */
   launchDatetime: string;
   /**
+   * 每日件數限制，單位為件
+   */
+  dailyApplLimit: string;
+  /**
    * 年度件數限制，單位為件
    */
   yearlyApplLimit: string;

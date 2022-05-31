@@ -74,6 +74,7 @@
           <button
             *ngIf="
               appl.status === applStatusObj.Unreviewed ||
+              appl.status === applStatusObj.Y ||
               appl.status === applStatusObj.N
             "
             mat-icon-button
@@ -132,7 +133,10 @@
   <ng-template matMenuContent let-appl="appl">
     <!-- 編輯申請 -->
     <button
-      *ngIf="appl.status === applStatusObj.Unreviewed"
+      *ngIf="
+        appl.status === applStatusObj.Unreviewed ||
+        appl.status === applStatusObj.Y
+      "
       mat-menu-item
       class="color-primary"
       (click)="openUpdateApplDialog(appl.applicationID)"

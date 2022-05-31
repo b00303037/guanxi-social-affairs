@@ -6,6 +6,7 @@ export const SETTINGS: Settings = {
   applIntervalYears: '3',
   maxImgSizeMB: '0.25',
   launchDatetime: '2022-05-01T01:00:00.000Z',
+  dailyApplLimit: '30',
   yearlyApplLimit: '1500',
   minApplAge: '45',
 };

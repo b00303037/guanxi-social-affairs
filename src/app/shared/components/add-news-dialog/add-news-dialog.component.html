@@ -277,7 +277,14 @@
   </div>
 
   <div mat-dialog-actions align="end">
-    <button type="button" mat-button [mat-dialog-close]="false">取消</button>
+    <button
+      type="button"
+      mat-button
+      [disabled]="adding"
+      [mat-dialog-close]="false"
+    >
+      取消
+    </button>
     <button
       type="submit"
       mat-flat-button

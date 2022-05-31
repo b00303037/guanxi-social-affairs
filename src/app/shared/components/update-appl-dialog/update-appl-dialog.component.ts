@@ -27,6 +27,7 @@ import {
 } from 'src/app/api/models/get-appl.models';
 import { HospDataHCProgram } from 'src/app/api/models/get-hosp-data.models';
 import { UpdateApplReq } from 'src/app/api/models/update-appl.models';
+import { APPL_STATUS_OBJ } from '../../enums/appl-status.enum';
 import { GENDER_OBJ } from '../../enums/gender.enum';
 import { SnackTypes } from '../../enums/snack-type.enum';
 import { YN_OBJ } from '../../enums/yn.enum';
@@ -60,15 +61,15 @@ import {
 export class UpdateApplDialogComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<null>();
 
-  tabLabels: Array<string> = ['健檢項目', '資料填寫', '文件上傳'];
+  // tabLabels: Array<string> = ['健檢項目', '資料填寫', '文件上傳'];
   selectedIndex = 0;
 
   // 健檢項目
   HCProgramFG = new FormGroup({
-    hospitalID: new FormControl(null, [Validators.required]),
-    programID: new FormControl(null, [Validators.required]),
-    programName: new FormControl(null, [Validators.required]),
-    programCharge: new FormControl(null, [Validators.required]),
+    hospitalID: new FormControl(null),
+    programID: new FormControl(null),
+    programName: new FormControl(null),
+    programCharge: new FormControl(null),
   });
   HCProgramFCs: HCProgramFCsModel = {
     hospitalID: this.HCProgramFG.controls['hospitalID'],
@@ -151,6 +152,7 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
 
   YNObj = YN_OBJ;
   genderObj = GENDER_OBJ;
+  applStatusObj = APPL_STATUS_OBJ;
 
   emailOrMobileNoErrorStateMatcher = new EmailOrMobileNoErrorStateMatcher();
   telephoneNoErrorStateMatcher = new TelephoneNoErrorStateMatcher();
@@ -378,8 +380,17 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
     }
   ): UpdateApplReq {
     const { programID } = fvs.HCProgramFV;
-    const { name, gender, village, address, telPrefix, telNo, telExt, email, mobileNo } =
-      fvs.basicInfoFV;
+    const {
+      name,
+      gender,
+      village,
+      address,
+      telPrefix,
+      telNo,
+      telExt,
+      email,
+      mobileNo,
+    } = fvs.basicInfoFV;
     const { imgIDA, imgIDB, imgBankbook, imgRegTranscript } = fvs.IDPhotosFV;
 
     const birthDate = format(fvs.basicInfoFV.birthDate, 'yyyy/MM/dd');

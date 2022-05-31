@@ -45,10 +45,20 @@
       >
         <form (submit)="onHCProgramFormSubmit($event)">
           <app-apply-hcprogram-step
+            #applyHCProgramStep
             [fg]="HCProgramFG"
           ></app-apply-hcprogram-step>
 
           <div class="actions-box">
+            <button
+              type="button"
+              mat-button
+              color="primary"
+              [disabled]="HCProgramFCs['hospitalID'].value === null"
+              (click)="applyHCProgramStep.clear()"
+            >
+              清除選擇
+            </button>
             <span class="grow"></span>
             <button type="submit" mat-flat-button color="primary">
               下一步

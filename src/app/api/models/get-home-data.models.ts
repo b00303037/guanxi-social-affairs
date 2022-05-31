@@ -8,9 +8,13 @@ export interface HomeData {
    */
   newsList: Array<HomeDataNews>;
   /**
-   * 申請件數
+   * 今年申請件數
    */
   applCount: number;
+  /**
+   * 今日申請件數
+   */
+  applCountToday: number;
   /**
    * 合作醫院數
    */

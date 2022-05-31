@@ -67,7 +67,7 @@ export interface AddApplReq {
   /**
    * 健檢項目 ID
    */
-  programID: number;
+  programID?: number;
 }
 
 export type AddApplRes = BaseAPIResModel<null>;

@@ -102,11 +102,23 @@ export class ApplyHCProgramStepComponent implements OnInit, OnDestroy {
   onSelectProgram(program: HospDataHCProgram): void {
     const { programID, name, charge } = program;
 
-    this.fcs['programID'].setValue(programID);
-    this.fcs['programName'].setValue(name);
-    this.fcs['programCharge'].setValue(
-      this.currencyPipe.transform(charge, 'TWD', 'code', '1.0-2')
+    this.fg.patchValue(
+      {
+        programID,
+        programName: name,
+        programCharge: this.currencyPipe.transform(
+          charge,
+          'TWD',
+          'code',
+          '1.0-2'
+        ),
+      },
+      { emitEvent: false }
     );
+  }
+
+  clear(): void {
+    this.fcs['hospitalID'].setValue(null);
   }
 
   ngOnDestroy(): void {

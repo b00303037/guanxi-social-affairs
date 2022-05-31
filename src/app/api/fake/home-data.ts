@@ -15,5 +15,6 @@ export const HOME_DATA: HomeData = {
     }
   ),
   applCount: 1234,
+  applCountToday: 29,
   hospCount: 12,
 };

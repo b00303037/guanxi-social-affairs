@@ -1,14 +1,9 @@
-import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, AbstractControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
-import { isBefore, isValid } from 'date-fns';
+import { ActivatedRoute } from '@angular/router';
 import { startWith, Subject, takeUntil, tap } from 'rxjs';
-import { HomeData } from 'src/app/api/models/get-home-data.models';
 import { Settings } from 'src/app/api/models/get-settings.models';
-import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
-import { ConfirmDialogData } from 'src/app/shared/components/confirm-dialog/confirm-dialog.models';
 import { IDNoHintDialogComponent } from 'src/app/shared/components/idno-hint-dialog/idno-hint-dialog.component';
 import { IDNoHintDialogData } from 'src/app/shared/components/idno-hint-dialog/idno-hint-dialog.models';
 import { environment } from 'src/environments/environment';
@@ -27,28 +22,9 @@ export class ApplyVerificationStepComponent implements OnInit, OnDestroy {
 
   showPassword = false;
   captchaImgSrc: string | undefined;
-  launchDatetime: Date | undefined;
-  applCount: number;
-  yearlyApplLimit: number | undefined;
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private matDialog: MatDialog,
-    private datePipe: DatePipe,
-    private decimalPipe: DecimalPipe
-  ) {
+  constructor(private route: ActivatedRoute, private matDialog: MatDialog) {
     this.refreshCaptcha();
-
-    const { homeData, settings } = this.route.snapshot.data as {
-      homeData: HomeData;
-      settings: Settings;
-    };
-    const launchDatetime = new Date(settings.launchDatetime);
-
-    this.launchDatetime = isValid(launchDatetime) ? launchDatetime : undefined;
-    this.applCount = homeData.applCount;
-    this.yearlyApplLimit = Number.parseInt(settings.yearlyApplLimit, 10);
   }
 
   ngOnInit(): void {
@@ -65,45 +41,6 @@ export class ApplyVerificationStepComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe();
-
-    let confirmDialogData: ConfirmDialogData | undefined;
-
-    if (this.launchDatetime && isBefore(new Date(), this.launchDatetime)) {
-      confirmDialogData = new ConfirmDialogData({
-        title: '尚未開始',
-        content: `線上申請將於 ${this.datePipe.transform(
-          this.launchDatetime,
-          'yyyy/MM/dd HH:mm'
-        )} 開始`,
-        closeButtonText: '',
-        confirmButtonText: '返回首頁',
-      });
-    } else if (this.yearlyApplLimit && this.applCount >= this.yearlyApplLimit) {
-      confirmDialogData = new ConfirmDialogData({
-        title: '申請額滿',
-        content: `今年度線上申請 ${this.decimalPipe.transform(
-          this.yearlyApplLimit,
-          '1.0'
-        )} 件已額滿`,
-        closeButtonText: '',
-        confirmButtonText: '返回首頁',
-      });
-    }
-
-    if (confirmDialogData !== undefined) {
-      this.matDialog
-        .open(ConfirmDialogComponent, { data: confirmDialogData })
-        .afterClosed()
-        .pipe(
-          takeUntil(this.destroy$),
-          tap(() => {
-            this.router.navigate(['/home']);
-          })
-        )
-        .subscribe();
-    } else {
-      this.openIDNoHintDialog();
-    }
   }
 
   initFCs(): void {

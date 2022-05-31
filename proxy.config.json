@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://kuanhsiwelfaredevapi.azurewebsites.net",
+    "target": "https://kuanhsiwelfaredevapi-staging.azurewebsites.net",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

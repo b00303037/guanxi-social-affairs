@@ -1,17 +1,6 @@
 <div class="spinner-box">
-  <div mat-dialog-title class="flex justify-around">
-    <h1
-      *ngFor="let label of tabLabels; let i = index"
-      [class.text-amber-400]="selectedIndex === i"
-      class="clickable-text"
-      (click)="selectedIndex = i"
-    >
-      {{ label }}
-    </h1>
-  </div>
-
   <div mat-dialog-content>
-    <mat-tab-group [selectedIndex]="selectedIndex" class="header-hidden">
+    <mat-tab-group [selectedIndex]="selectedIndex">
       <!-- 健檢項目 -->
       <mat-tab label="健檢項目">
         <app-hcprogram-form
@@ -21,7 +10,7 @@
       </mat-tab>
 
       <!-- 資料填寫 -->
-      <mat-tab label="資料填寫">
+      <mat-tab label="資料填寫" [disabled]="appl?.status === applStatusObj.Y">
         <app-basic-info-form
           [fg]="basicInfoFG"
           [minApplAge]="minApplAge"
@@ -30,7 +19,7 @@
       </mat-tab>
 
       <!-- 文件上傳 -->
-      <mat-tab label="文件上傳">
+      <mat-tab label="文件上傳" [disabled]="appl?.status === applStatusObj.Y">
         <app-idphotos-form
           [fg]="IDPhotosFG"
           [maxImgSizeMB]="maxImgSizeMB"
@@ -40,7 +29,9 @@
   </div>
 
   <div mat-dialog-actions align="end">
-    <button mat-button [mat-dialog-close]="false">取消</button>
+    <button mat-button [disabled]="updating" [mat-dialog-close]="false">
+      取消
+    </button>
     <button
       mat-flat-button
       color="primary"

@@ -3,7 +3,9 @@
 <div mat-dialog-content>取消編號 {{ data.applicationID }} 的申請單？</div>
 
 <div mat-dialog-actions align="end">
-  <button mat-button [mat-dialog-close]="false">返回</button>
+  <button mat-button [disabled]="cancelling" [mat-dialog-close]="false">
+    取消
+  </button>
   <button
     mat-flat-button
     color="primary"

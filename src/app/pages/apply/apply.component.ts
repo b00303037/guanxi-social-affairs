@@ -1,5 +1,6 @@
 import { MediaMatcher } from '@angular/cdk/layout';
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   OnDestroy,
@@ -8,8 +9,8 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute } from '@angular/router';
-import { format, isValid, parse, sub } from 'date-fns';
+import { ActivatedRoute, Router } from '@angular/router';
+import { format, isBefore, isValid, parse, sub } from 'date-fns';
 import {
   catchError,
   EMPTY,
@@ -18,6 +19,7 @@ import {
   Observable,
   Subject,
   takeUntil,
+  tap,
 } from 'rxjs';
 import { GsaService } from 'src/app/api/gsa.service';
 import { AddApplReq } from 'src/app/api/models/add-appl.models';
@@ -43,19 +45,27 @@ import { mobileNoRegExp } from 'src/app/shared/validators/mobile-no.validator';
 import { EmailOrMobileNoValidator } from 'src/app/shared/validators/email-or-mobile-no.validator';
 import { TelephoneNoValidator } from 'src/app/shared/validators/telephone-no.validator';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { HomeData } from 'src/app/api/models/get-home-data.models';
+import { ConfirmDialogData } from 'src/app/shared/components/confirm-dialog/confirm-dialog.models';
+import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
+import { ApplyVerificationStepComponent } from './apply-verification-step/apply-verification-step.component';
 
 @Component({
   selector: 'app-apply',
   templateUrl: './apply.component.html',
   styleUrls: ['./apply.component.scss'],
 })
-export class ApplyComponent implements OnInit, OnDestroy {
+export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$ = new Subject<null>();
   private _gtMDQueryListener = () => this.changeDetectorRef.detectChanges();
 
   gtMDQuery: MediaQueryList = this.media.matchMedia('(min-width: 960px)');
 
   @ViewChild(MatStepper) stepper!: MatStepper;
+  @ViewChild(ApplyVerificationStepComponent)
+  applyVerificationStep!: ApplyVerificationStepComponent;
 
   flagsOfEditable = {
     verification: false,
@@ -93,10 +103,10 @@ export class ApplyComponent implements OnInit, OnDestroy {
 
   // 健檢項目
   HCProgramFG = new FormGroup({
-    hospitalID: new FormControl(null, [Validators.required]),
-    programID: new FormControl(null, [Validators.required]),
-    programName: new FormControl(null, [Validators.required]),
-    programCharge: new FormControl(null, [Validators.required]),
+    hospitalID: new FormControl(null),
+    programID: new FormControl(null),
+    programName: new FormControl(null),
+    programCharge: new FormControl(null),
   });
   HCProgramFCs: HCProgramFCsModel = {
     hospitalID: this.HCProgramFG.controls['hospitalID'],
@@ -179,6 +189,11 @@ export class ApplyComponent implements OnInit, OnDestroy {
   }
 
   acceptedIDNoSuffix: string = '';
+  launchDatetime: Date | undefined;
+  applCountToday: number;
+  applCount: number;
+  dailyApplLimit: number | undefined;
+  yearlyApplLimit: number | undefined;
   minApplAge: number | undefined;
   maxBirthDate: Date | undefined;
   maxRegDate = new Date();
@@ -189,18 +204,38 @@ export class ApplyComponent implements OnInit, OnDestroy {
   constructor(
     private media: MediaMatcher,
     private changeDetectorRef: ChangeDetectorRef,
+    private router: Router,
     private route: ActivatedRoute,
+    private matDialog: MatDialog,
     private snackBarService: SnackBarService,
     private gsaService: GsaService,
-    private authService: AuthService
+    private authService: AuthService,
+    private datePipe: DatePipe,
+    private decimalPipe: DecimalPipe
   ) {
     this.gtMDQuery.addEventListener('change', this._gtMDQueryListener);
 
-    const { settings } = this.route.snapshot.data as { settings: Settings };
+    const { homeData, settings } = this.route.snapshot.data as {
+      homeData: HomeData;
+      settings: Settings;
+    };
 
     // acceptedIDNoSuffix
     this.acceptedIDNoSuffix =
       settings.IDNoSuffixList[new Date().getDay()] ?? '';
+
+    // launchDatetime
+    const launchDatetime = new Date(settings.launchDatetime);
+
+    this.launchDatetime = isValid(launchDatetime) ? launchDatetime : undefined;
+
+    // dailyApplLimit
+    this.applCountToday = homeData.applCountToday;
+    this.dailyApplLimit = Number.parseInt(settings.dailyApplLimit, 10);
+
+    // yearlyApplLimit
+    this.applCount = homeData.applCount;
+    this.yearlyApplLimit = Number.parseInt(settings.yearlyApplLimit, 10);
 
     // minApplAge & maxBirthDate
     const minApplAge = Number.parseInt(settings.minApplAge, 10);
@@ -229,12 +264,66 @@ export class ApplyComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {}
 
+  ngAfterViewInit(): void {
+    let confirmDialogData: ConfirmDialogData | undefined;
+
+    if (this.launchDatetime && isBefore(new Date(), this.launchDatetime)) {
+      confirmDialogData = new ConfirmDialogData({
+        title: '尚未開始',
+        content: `線上申請將於 ${this.datePipe.transform(
+          this.launchDatetime,
+          'yyyy/MM/dd HH:mm'
+        )} 開始`,
+        closeButtonText: '',
+        confirmButtonText: '返回首頁',
+      });
+    } else if (
+      this.dailyApplLimit &&
+      this.applCountToday >= this.dailyApplLimit
+    ) {
+      confirmDialogData = new ConfirmDialogData({
+        title: '申請額滿',
+        content: `今日線上申請 ${this.decimalPipe.transform(
+          this.dailyApplLimit,
+          '1.0'
+        )} 件已額滿`,
+        closeButtonText: '',
+        confirmButtonText: '返回首頁',
+      });
+    } else if (this.yearlyApplLimit && this.applCount >= this.yearlyApplLimit) {
+      confirmDialogData = new ConfirmDialogData({
+        title: '申請額滿',
+        content: `今年度線上申請 ${this.decimalPipe.transform(
+          this.yearlyApplLimit,
+          '1.0'
+        )} 件已額滿`,
+        closeButtonText: '',
+        confirmButtonText: '返回首頁',
+      });
+    }
+
+    if (confirmDialogData !== undefined) {
+      this.matDialog
+        .open(ConfirmDialogComponent, { data: confirmDialogData })
+        .afterClosed()
+        .pipe(
+          takeUntil(this.destroy$),
+          tap(() => {
+            this.router.navigate(['/home']);
+          })
+        )
+        .subscribe();
+    } else {
+      this.applyVerificationStep.openIDNoHintDialog();
+    }
+  }
+
   onVerificationFormSubmit(e: Event): void {
     e.preventDefault();
 
     this.forceValidation(this.verificationFG);
 
-    if (!this.checkIDNoSuffix()) {
+    if (this.verificationFCs['IDNo'].valid && !this.checkIDNoSuffix()) {
       const snack = new Snack({
         message: '目前採分流管制，敬請擇日再做申請',
         type: SnackTypes.Error,
@@ -269,10 +358,24 @@ export class ApplyComponent implements OnInit, OnDestroy {
           ]();
 
           this.stepper.next();
+
+          this.openHCProgramStepHintDialog();
         }),
         catchError((err) => this.onError(err))
       )
       .subscribe();
+  }
+
+  openHCProgramStepHintDialog(): void {
+    this.matDialog.open(ConfirmDialogComponent, {
+      data: new ConfirmDialogData({
+        title: '健檢項目可於日後選擇',
+        content:
+          '若尚未決定醫院或健檢項目，請先留空並點選「下一步」。日後可在「申請查詢 - 編輯申請」功能中再做選擇',
+        closeButtonText: '',
+        confirmButtonText: '瞭解',
+      }),
+    });
   }
 
   onHCProgramFormSubmit(e: Event): void {
