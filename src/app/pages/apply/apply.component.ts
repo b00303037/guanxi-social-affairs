@@ -46,7 +46,7 @@ import { EmailOrMobileNoValidator } from 'src/app/shared/validators/email-or-mob
 import { TelephoneNoValidator } from 'src/app/shared/validators/telephone-no.validator';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { HomeData } from 'src/app/api/models/get-home-data.models';
 import { ConfirmDialogData } from 'src/app/shared/components/confirm-dialog/confirm-dialog.models';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
@@ -197,6 +197,9 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
   minApplAge: number | undefined;
   maxBirthDate: Date | undefined;
   maxRegDate = new Date();
+  applUnavailableWeekdayOrDateList: Array<string> = [];
+  applAvailableDateList: Array<string> = [];
+  applAvailableHourList: Array<string> = [];
 
   verifying = false;
   adding = false;
@@ -210,8 +213,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
     private snackBarService: SnackBarService,
     private gsaService: GsaService,
     private authService: AuthService,
-    private datePipe: DatePipe,
-    private decimalPipe: DecimalPipe
+    private datePipe: DatePipe
   ) {
     this.gtMDQuery.addEventListener('change', this._gtMDQueryListener);
 
@@ -252,6 +254,17 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     this.maxRegDate = isValid(maxRegDate) ? maxRegDate : this.maxRegDate;
 
+    // applUnavailableWeekdayOrDateList & applAvailableDateList
+    this.applUnavailableWeekdayOrDateList =
+      settings.applUnavailableWeekdayOrDateList ??
+      this.applUnavailableWeekdayOrDateList;
+    this.applAvailableDateList =
+      settings.applAvailableDateList ?? this.applAvailableDateList;
+
+    // applAvailableHourList
+    this.applAvailableHourList =
+      settings.applAvailableHourList ?? this.applAvailableHourList;
+
     if (this.maxBirthDate !== undefined) {
       this.basicInfoFCs['birthDate'].addValidators([
         DateRangeValidator({ max: this.maxBirthDate }),
@@ -265,46 +278,51 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    let confirmDialogData: ConfirmDialogData | undefined;
+    let titleAndContent: [string, string] | undefined;
 
     if (this.launchDatetime && isBefore(new Date(), this.launchDatetime)) {
-      confirmDialogData = new ConfirmDialogData({
-        title: '尚未開始',
-        content: `線上申請將於 ${this.datePipe.transform(
+      titleAndContent = [
+        '尚未開始',
+        `線上申請將於 ${this.datePipe.transform(
           this.launchDatetime,
           'yyyy/MM/dd HH:mm'
         )} 開始`,
-        closeButtonText: '',
-        confirmButtonText: '返回首頁',
-      });
+      ];
     } else if (
       this.dailyApplLimit &&
       this.applCountToday >= this.dailyApplLimit
     ) {
-      confirmDialogData = new ConfirmDialogData({
-        title: '申請額滿',
-        content: `今日線上申請 ${this.decimalPipe.transform(
-          this.dailyApplLimit,
-          '1.0'
-        )} 件已額滿`,
-        closeButtonText: '',
-        confirmButtonText: '返回首頁',
-      });
+      titleAndContent = [
+        '申請額滿',
+        `今日線上申請 ${this.dailyApplLimit} 件已額滿`,
+      ];
     } else if (this.yearlyApplLimit && this.applCount >= this.yearlyApplLimit) {
-      confirmDialogData = new ConfirmDialogData({
-        title: '申請額滿',
-        content: `今年度線上申請 ${this.decimalPipe.transform(
-          this.yearlyApplLimit,
-          '1.0'
-        )} 件已額滿`,
-        closeButtonText: '',
-        confirmButtonText: '返回首頁',
-      });
+      titleAndContent = [
+        '申請額滿',
+        `今年度線上申請 ${this.yearlyApplLimit} 件已額滿`,
+      ];
+    } else if (!this.checkAvailableDate()) {
+      titleAndContent = [
+        '本日暫停受理',
+        '詳情請至「最新消息」查看，或向關西鎮公所洽詢',
+      ];
+    } else if (!this.checkAvailableHours()) {
+      titleAndContent = [
+        '目前非開放時間',
+        '詳情請至「最新消息」查看，或向關西鎮公所洽詢',
+      ];
     }
 
-    if (confirmDialogData !== undefined) {
+    if (titleAndContent !== undefined) {
       this.matDialog
-        .open(ConfirmDialogComponent, { data: confirmDialogData })
+        .open(ConfirmDialogComponent, {
+          data: new ConfirmDialogData({
+            title: titleAndContent[0],
+            content: titleAndContent[1],
+            closeButtonText: '',
+            confirmButtonText: '返回首頁',
+          }),
+        })
         .afterClosed()
         .pipe(
           takeUntil(this.destroy$),
@@ -495,6 +513,26 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
       Object.entries(fg.controls)
         .filter(([name, fc]) => !skippedFCNames.includes(name))
         .every(([name, fc]) => fc.errors === null)
+    );
+  }
+
+  checkAvailableDate(): boolean {
+    const weekday = format(new Date(), 'EEE').toUpperCase();
+    const formatted = format(new Date(), 'yyyy/MM/dd');
+
+    return (
+      this.applAvailableDateList.includes(formatted) ||
+      (!this.applUnavailableWeekdayOrDateList.includes(weekday) &&
+        !this.applUnavailableWeekdayOrDateList.includes(formatted))
+    );
+  }
+
+  checkAvailableHours(): boolean {
+    const hour = format(new Date(), 'H');
+
+    return (
+      this.applAvailableHourList.length === 0 ||
+      this.applAvailableHourList.includes(hour)
     );
   }
 

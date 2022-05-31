@@ -9,4 +9,7 @@ export const SETTINGS: Settings = {
   dailyApplLimit: '30',
   yearlyApplLimit: '1500',
   minApplAge: '45',
+  applUnavailableWeekdayOrDateList: ['SUN'],
+  applAvailableDateList: ['2022/06/01'],
+  applAvailableHourList: ['9', '10', '11', '12', '13', '14', '15', '16'],
 };
