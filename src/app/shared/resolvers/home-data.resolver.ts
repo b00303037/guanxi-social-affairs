@@ -5,7 +5,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { HomeData } from 'src/app/api/models/get-home-data.models';
 
 @Injectable({
@@ -14,7 +14,7 @@ import { HomeData } from 'src/app/api/models/get-home-data.models';
 export class HomeDataResolver implements Resolve<HomeData> {
   private _homeDataCache: HomeData | undefined;
 
-  constructor(private gsaService: GsaService) {}
+  constructor(private gsaService: AbstractGsaService) {}
 
   resolve(
     route: ActivatedRouteSnapshot,

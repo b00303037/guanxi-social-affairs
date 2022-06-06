@@ -9,7 +9,7 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { ReviewApplReq } from 'src/app/api/models/review-appl.models';
 import { ApplStatuses, APPL_STATUS_OBJ } from '../../enums/appl-status.enum';
 import { SnackTypes } from '../../enums/snack-type.enum';
@@ -33,7 +33,7 @@ export class ReviewApplDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: ReviewApplDialogData,
     private dialogRef: MatDialogRef<ReviewApplDialogComponent>,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {}
 
   ngOnInit(): void {}

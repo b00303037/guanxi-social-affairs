@@ -6,6 +6,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 // ngx-editor
 import { NgxEditorConfig, NgxEditorModule } from 'ngx-editor';
 
+// ng-magnizoom
+import { NgMagnizoomModule } from 'ng-magnizoom';
+
 // @angular/material
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -198,6 +201,8 @@ const PIPES = [IncludesApplPipe, IsInSetPipe, SafeHTMLPipe];
     ReactiveFormsModule,
     // ngx-editor
     NgxEditorModule.forRoot(EDITOR_CONFIG),
+    // ng-magnizoom
+    NgMagnizoomModule,
     // @angular/material
     MatButtonModule,
     MatCheckboxModule,

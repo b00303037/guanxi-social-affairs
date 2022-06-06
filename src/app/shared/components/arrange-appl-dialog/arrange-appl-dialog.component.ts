@@ -16,7 +16,7 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { ArrangeApplReq } from 'src/app/api/models/arrange-appl.models';
 import { SnackTypes } from '../../enums/snack-type.enum';
 import { Snack } from '../../services/snack-bar.models';
@@ -51,7 +51,7 @@ export class ArrangeApplDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: ArrangeApplDialogData,
     private dialogRef: MatDialogRef<ArrangeApplDialogComponent>,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {
     const scheduledDate = this.data.scheduledDate
       ? parse(

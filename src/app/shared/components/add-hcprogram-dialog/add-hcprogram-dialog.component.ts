@@ -10,7 +10,7 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { AddHCProgramReq } from 'src/app/api/models/add-hcprogram.models';
 import { SnackTypes } from '../../enums/snack-type.enum';
 import { YN_OBJ } from '../../enums/yn.enum';
@@ -55,7 +55,7 @@ export class AddHCProgramDialogComponent implements OnInit, OnDestroy {
   constructor(
     private dialogRef: MatDialogRef<AddHCProgramDialogComponent>,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {}
 
   ngOnInit(): void {}

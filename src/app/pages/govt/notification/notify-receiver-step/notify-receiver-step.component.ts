@@ -26,7 +26,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { ApplInList } from 'src/app/api/models/get-appl-list.models';
 import { ApplListPickerComponent } from 'src/app/shared/components/appl-list-picker/appl-list-picker.component';
 import {
@@ -86,7 +86,7 @@ export class NotifyReceiverStepComponent
     private changeDetectorRef: ChangeDetectorRef,
     private matDialog: MatDialog,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {
     this.gtSMQuery.addEventListener('change', this._gtSMQueryListener);
   }

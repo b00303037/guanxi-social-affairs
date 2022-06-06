@@ -10,7 +10,7 @@ import {
   Observable,
   EMPTY,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { HospDataHCProgram } from 'src/app/api/models/get-hosp-data.models';
 import { UpdateHCProgramReq } from 'src/app/api/models/update-hcprogram.models';
 import { SnackTypes } from '../../enums/snack-type.enum';
@@ -58,7 +58,7 @@ export class UpdateHCProgramDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: UpdateHCProgramDialogData,
     private dialogRef: MatDialogRef<UpdateHCProgramDialogComponent>,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {
     const { name, description, charge, enabled } = this.data.program;
 

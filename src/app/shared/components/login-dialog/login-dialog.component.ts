@@ -10,7 +10,7 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { LoginReq } from 'src/app/api/models/login.models';
 import { environment } from 'src/environments/environment';
 import { SnackTypes } from '../../enums/snack-type.enum';
@@ -67,7 +67,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: LoginDialogData,
     private dialogRef: MatDialogRef<LoginDialogComponent>,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService,
+    private gsaService: AbstractGsaService,
     private authService: AuthService
   ) {
     this.loginFCs['role'].setValue(this.data.role);
@@ -78,7 +78,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {}
 
   refreshCaptcha(): void {
-    const url = environment.fakeData
+    const url = environment.mockData
       ? 'assets/captcha.png'
       : `${environment.baseApiUrl}/api/GetCaptcha`;
     const timestamp = new Date().valueOf();

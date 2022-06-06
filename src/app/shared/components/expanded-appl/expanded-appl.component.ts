@@ -7,7 +7,6 @@ import {
   OnInit,
 } from '@angular/core';
 import { APPL_STATUS_MAP } from 'src/app/shared/enums/appl-status.enum';
-import { ApplInList } from 'src/app/api/models/get-appl-list.models';
 import {
   DETAIL_PROPERTY_LIST,
   ExtendedAppl,

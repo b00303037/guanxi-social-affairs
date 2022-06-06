@@ -35,7 +35,7 @@ import {
   APPL_STATUS_MAP,
   HOSP_APPL_STATUS_SELECT_LIST,
 } from 'src/app/shared/enums/appl-status.enum';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { ApplInList } from 'src/app/api/models/get-appl-list.models';
 import {
   ExtendedAppl,
@@ -129,7 +129,7 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private matDialog: MatDialog,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {
     this.gtMDQuery.addEventListener('change', this._gtMDQueryListener);
   }

@@ -57,14 +57,17 @@
         >{{ property.label }}</label
       >
     </div>
-    <div class="w-full h-60 flex justify-center items-center">
-      <img
-        *ngIf="
-          $any(expandedAppl)[expandedAppl?.displayedImg ?? ''] !== undefined
-        "
-        [src]="$any(expandedAppl)[expandedAppl?.displayedImg ?? '']"
-        class="max-w-full max-h-full"
-      />
+    <div
+      *ngFor="let property of imgPropertyList"
+      class="flex justify-center items-center"
+    >
+      <ng-magnizoom
+        [hidden]="$any(expandedAppl).displayedImg !== property.key"
+        zoomMode="LENS"
+        [imageSrc]="$any(expandedAppl)[property.key] ?? ''"
+        [imageStyle]="{ 'max-width': '100%', 'max-height': '20rem' }"
+      >
+      </ng-magnizoom>
     </div>
   </div>
 </div>

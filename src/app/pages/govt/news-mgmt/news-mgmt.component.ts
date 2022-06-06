@@ -23,7 +23,7 @@ import {
   debounceTime,
 } from 'rxjs';
 import { YN, YN_OBJ } from 'src/app/shared/enums/yn.enum';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { NewsInList } from 'src/app/api/models/get-news-list.models';
 import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
 import { Snack } from 'src/app/shared/services/snack-bar.models';
@@ -94,7 +94,7 @@ export class NewsMgmtComponent implements OnInit, AfterViewInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private matDialog: MatDialog,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {
     this.gtSMQuery.addEventListener('change', this._gtSMQueryListener);
   }

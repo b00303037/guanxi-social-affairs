@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   baseApiUrl: '/api',
-  fakeData: false,
+  mockData: false,
   tokenKey: 'dev-token',
 };
 

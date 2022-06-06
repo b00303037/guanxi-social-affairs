@@ -18,7 +18,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import {
   getDatetime,
   GetNewsReq,
@@ -118,7 +118,7 @@ export class UpdateNewsDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: UpdateNewsDialogData,
     private dialogRef: MatDialogRef<UpdateNewsDialogComponent>,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {
     this.fcs['startDate'].valueChanges
       .pipe(

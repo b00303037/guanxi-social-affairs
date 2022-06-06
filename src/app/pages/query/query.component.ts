@@ -17,7 +17,7 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { VerifyReq } from 'src/app/api/models/verify.models';
 import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -77,7 +77,7 @@ export class QueryComponent implements OnInit, OnDestroy {
     private media: MediaMatcher,
     private changeDetectorRef: ChangeDetectorRef,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService,
+    private gsaService: AbstractGsaService,
     private authService: AuthService
   ) {
     this.gtMDQuery.addEventListener('change', this._gtMDQueryListener);

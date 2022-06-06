@@ -22,7 +22,7 @@ import {
   tap,
 } from 'rxjs';
 import { YN, YN_OBJ } from 'src/app/shared/enums/yn.enum';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
 import { Snack } from 'src/app/shared/services/snack-bar.models';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
@@ -76,7 +76,7 @@ export class HcprogramMgmtComponent
     private changeDetectorRef: ChangeDetectorRef,
     private matDialog: MatDialog,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService,
+    private gsaService: AbstractGsaService,
     private authService: AuthService
   ) {
     this.gtSMQuery.addEventListener('change', this._gtSMQueryListener);

@@ -1,13 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, switchMap, throwError, timer } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { Observable, switchMap } from 'rxjs';
 import { BaseApiService } from './base-api.service';
-import { APPL_LIST } from './fake/appl-list';
-import { HOME_DATA } from './fake/home-data';
-import { HOSP_DATA } from './fake/hosp-data';
-import { NEWS_LIST } from './fake/news-list';
-import { SETTINGS } from './fake/settings';
 import { AddApplReq, AddApplRes } from './models/add-appl.models';
 import {
   AddHCProgramReq,
@@ -26,7 +20,7 @@ import {
   CompleteApplRes,
 } from './models/complete-appl.models';
 import { GetApplListReq, GetApplListRes } from './models/get-appl-list.models';
-import { Appl, GetApplReq, GetApplRes } from './models/get-appl.models';
+import { GetApplReq, GetApplRes } from './models/get-appl.models';
 import { GetHomeDataRes } from './models/get-home-data.models';
 import { GetHospDataRes } from './models/get-hosp-data.models';
 import { GetNewsListReq, GetNewsListRes } from './models/get-news-list.models';
@@ -42,24 +36,15 @@ import {
 import { UpdateNewsReq, UpdateNewsRes } from './models/update-news.models';
 import { VerifyReq, VerifyRes } from './models/verify.models';
 import { BaseAPICodes } from '../shared/enums/base-api-codes.enum';
-import { TOKENS } from './fake/tokens';
-import { AuthService } from '../shared/services/auth.service';
-import { User } from './models/user.models';
-import { ApplStatuses } from '../shared/enums/appl-status.enum';
-import { YN } from '../shared/enums/yn.enum';
+import { AbstractGsaService } from './models/abstract-gsa.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class GsaService extends BaseApiService {
+export class GsaService extends BaseApiService implements AbstractGsaService {
   private baseRoute = '';
-  private shortLatencyMS = 300;
-  private longLatencyMS = 600;
 
-  constructor(
-    protected override http: HttpClient,
-    private authService: AuthService
-  ) {
+  constructor(protected override http: HttpClient) {
     super(http);
   }
 
@@ -69,24 +54,6 @@ export class GsaService extends BaseApiService {
   GetHomeData(): Observable<GetHomeDataRes> {
     const apiUri = this.baseRoute + '/GetHomeData';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
-
-    if (environment.fakeData) {
-      const content = HOME_DATA;
-
-      console.log('---');
-      console.log('GetHomeData');
-      console.log(content);
-
-      return timer(this.longLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '取得首頁資料成功',
-          content,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
 
     return super
       .post<null, GetHomeDataRes>(apiUri, null)
@@ -100,24 +67,6 @@ export class GsaService extends BaseApiService {
     const apiUri = this.baseRoute + '/GetHospData';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
-    if (environment.fakeData) {
-      const content = HOSP_DATA;
-
-      console.log('---');
-      console.log('GetHospData');
-      console.log(content);
-
-      return timer(this.longLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '取得醫院資料成功',
-          content,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
-
     return super
       .post<null, GetHospDataRes>(apiUri, null)
       .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
@@ -129,24 +78,6 @@ export class GsaService extends BaseApiService {
   GetSettings(): Observable<GetSettingsRes> {
     const apiUri = this.baseRoute + '/GetSettings';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
-
-    if (environment.fakeData) {
-      const content = SETTINGS;
-
-      console.log('---');
-      console.log('GetSettings');
-      console.log(content);
-
-      return timer(this.longLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '取得字典檔設定成功',
-          content,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
 
     return super
       .post<null, GetSettingsRes>(apiUri, null)
@@ -160,28 +91,6 @@ export class GsaService extends BaseApiService {
     const apiUri = this.baseRoute + '/Verify';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
-    if (environment.fakeData) {
-      const content = {
-        token: TOKENS.appl_U,
-        hasApplied: false,
-      };
-
-      console.log('---');
-      console.log('Verify');
-      console.log(req);
-      console.log(content);
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '身分認證成功',
-          content,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
-
     return super
       .post<VerifyReq, VerifyRes>(apiUri, req)
       .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
@@ -193,22 +102,6 @@ export class GsaService extends BaseApiService {
   AddAppl(req: AddApplReq): Observable<AddApplRes> {
     const apiUri = this.baseRoute + '/AddAppl';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
-
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('AddAppl');
-      console.log(req);
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '新增申請單成功',
-          content: null,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
 
     return super
       .post<AddApplReq, AddApplRes>(apiUri, req)
@@ -222,22 +115,6 @@ export class GsaService extends BaseApiService {
     const apiUri = this.baseRoute + '/UpdateAppl';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('UpdateAppl');
-      console.log(req);
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '更新申請單成功',
-          content: null,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
-
     return super
       .post<UpdateApplReq, UpdateApplRes>(apiUri, req)
       .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
@@ -249,22 +126,6 @@ export class GsaService extends BaseApiService {
   CancelAppl(req: CancelApplReq): Observable<CancelApplRes> {
     const apiUri = this.baseRoute + '/CancelAppl';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
-
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('CancelAppl');
-      console.log(req);
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '取消申請單成功',
-          content: null,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
 
     return super
       .post<CancelApplReq, CancelApplRes>(apiUri, req)
@@ -278,29 +139,6 @@ export class GsaService extends BaseApiService {
     const apiUri = this.baseRoute + '/Login';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('Login');
-      console.log(req);
-
-      const roleMapping = {
-        govt: '社會課',
-        hosp: '醫院',
-      };
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: `${roleMapping[req.role]}帳戶登入成功`,
-          content: {
-            token: TOKENS[req.role],
-          },
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
-
     return super
       .post<LoginReq, LoginRes>(apiUri, req)
       .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
@@ -312,53 +150,6 @@ export class GsaService extends BaseApiService {
   GetApplList(req: GetApplListReq): Observable<GetApplListRes> {
     const apiUri = this.baseRoute + '/GetApplList';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
-
-    if (environment.fakeData) {
-      let content: Array<Appl> = [];
-
-      const user = this.authService.user$.getValue() as User | undefined;
-
-      console.log('---');
-      console.log('check user role');
-      console.log(user);
-
-      if (user !== undefined) {
-        switch (user.role) {
-          case 'appl':
-            content = APPL_LIST.filter((a) => a.IDNo === user.IDNo);
-            break;
-          case 'govt':
-            content = APPL_LIST;
-            break;
-          case 'hosp':
-            content = APPL_LIST.filter(
-              (a) =>
-                a.hospitalID === user.hospitalID &&
-                [
-                  ApplStatuses.Y,
-                  ApplStatuses.Arranged,
-                  ApplStatuses.Completed,
-                ].includes(a.status)
-            );
-            break;
-        }
-      }
-
-      console.log('---');
-      console.log('GetApplList');
-      console.log(req);
-      console.log(content);
-
-      return timer(this.longLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '取得申請單列表成功',
-          content,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
 
     return super
       .post<GetApplListReq, GetApplListRes>(apiUri, req)
@@ -372,51 +163,6 @@ export class GsaService extends BaseApiService {
     const apiUri = this.baseRoute + '/GetAppl';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
-    if (environment.fakeData) {
-      let content = APPL_LIST.find(
-        (a) => a.applicationID === req.applicationID
-      );
-
-      const user = this.authService.user$.getValue() as User | undefined;
-
-      console.log('---');
-      console.log('check user role');
-      console.log(user);
-
-      if (content !== undefined && user !== undefined) {
-        switch (user.role) {
-          case 'hosp':
-            content = {
-              ...content,
-              imgIDA: '',
-              imgIDB: '',
-              imgBankbook: '',
-              imgRegTranscript: '',
-            };
-            break;
-        }
-      } else {
-        content = undefined;
-      }
-
-      console.log('---');
-      console.log('GetAppl');
-      console.log(req);
-      console.log(content);
-
-      return content
-        ? timer(this.longLatencyMS).pipe(
-            map(() => ({
-              success: true,
-              code: BaseAPICodes.SUCCESS,
-              message: '取得一筆申請單成功',
-              content: content as Appl,
-            })),
-            switchMap((res) => super.throwNotIn(acceptedCodes, res))
-          )
-        : throwError(() => '取無資料');
-    }
-
     return super
       .post<GetApplReq, GetApplRes>(apiUri, req)
       .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
@@ -428,22 +174,6 @@ export class GsaService extends BaseApiService {
   ReviewAppl(req: ReviewApplReq): Observable<ReviewApplRes> {
     const apiUri = this.baseRoute + '/ReviewAppl';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
-
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('ReviewAppl');
-      console.log(req);
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '審核申請單成功',
-          content: null,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
 
     return super
       .post<ReviewApplReq, ReviewApplRes>(apiUri, req)
@@ -457,22 +187,6 @@ export class GsaService extends BaseApiService {
     const apiUri = this.baseRoute + '/ArrangeAppl';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('ArrangeAppl');
-      console.log(req);
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '安排健檢成功',
-          content: null,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
-
     return super
       .post<ArrangeApplReq, ArrangeApplRes>(apiUri, req)
       .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
@@ -484,22 +198,6 @@ export class GsaService extends BaseApiService {
   CompleteAppl(req: CompleteApplReq): Observable<CompleteApplRes> {
     const apiUri = this.baseRoute + '/CompleteAppl';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
-
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('CompleteAppl');
-      console.log(req);
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '完成健檢成功',
-          content: null,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
 
     return super
       .post<CompleteApplReq, CompleteApplRes>(apiUri, req)
@@ -513,41 +211,6 @@ export class GsaService extends BaseApiService {
     const apiUri = this.baseRoute + '/GetNewsList';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
-    if (environment.fakeData) {
-      let content: Array<News> = [];
-
-      const user = this.authService.user$.getValue() as User | undefined;
-
-      console.log('---');
-      console.log('check user role');
-      console.log(user);
-
-      if (user !== undefined) {
-        switch (user.role) {
-          case 'govt':
-            content = NEWS_LIST;
-            break;
-        }
-      } else {
-        content = NEWS_LIST.filter((n) => n.enabled === YN.Y);
-      }
-
-      console.log('---');
-      console.log('GetNewsList');
-      console.log(req);
-      console.log(content);
-
-      return timer(this.longLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '取得最新消息列表成功',
-          content,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
-
     return super
       .post<GetNewsListReq, GetNewsListRes>(apiUri, req)
       .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
@@ -559,27 +222,6 @@ export class GsaService extends BaseApiService {
   GetNews(req: GetNewsReq): Observable<GetNewsRes> {
     const apiUri = this.baseRoute + '/GetNews';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
-
-    if (environment.fakeData) {
-      const content = NEWS_LIST.find((a) => a.newsID === req.newsID);
-
-      console.log('---');
-      console.log('GetNews');
-      console.log(req);
-      console.log(content);
-
-      return content
-        ? timer(this.longLatencyMS).pipe(
-            map(() => ({
-              success: true,
-              code: BaseAPICodes.SUCCESS,
-              message: '取得一筆最新消息成功',
-              content,
-            })),
-            switchMap((res) => super.throwNotIn(acceptedCodes, res))
-          )
-        : throwError(() => '取無資料');
-    }
 
     return super
       .post<GetNewsReq, GetNewsRes>(apiUri, req)
@@ -593,22 +235,6 @@ export class GsaService extends BaseApiService {
     const apiUri = this.baseRoute + '/AddNews';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('AddNews');
-      console.log(req);
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '新增最新消息成功',
-          content: null,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
-
     return super
       .post<AddNewsReq, AddNewsRes>(apiUri, req)
       .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
@@ -620,22 +246,6 @@ export class GsaService extends BaseApiService {
   UpdateNews(req: UpdateNewsReq): Observable<UpdateNewsRes> {
     const apiUri = this.baseRoute + '/UpdateNews';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
-
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('UpdateNews');
-      console.log(req);
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '更新最新消息成功',
-          content: null,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
 
     return super
       .post<UpdateNewsReq, UpdateNewsRes>(apiUri, req)
@@ -649,22 +259,6 @@ export class GsaService extends BaseApiService {
     const apiUri = this.baseRoute + '/AddHCProgram';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('AddHCProgram');
-      console.log(req);
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '新增健檢項目成功',
-          content: null,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
-
     return super
       .post<AddHCProgramReq, AddHCProgramRes>(apiUri, req)
       .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
@@ -676,22 +270,6 @@ export class GsaService extends BaseApiService {
   UpdateHCProgram(req: UpdateHCProgramReq): Observable<UpdateHCProgramRes> {
     const apiUri = this.baseRoute + '/UpdateHCProgram';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
-
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('UpdateHCProgram');
-      console.log(req);
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '更新健檢項目成功',
-          content: null,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
 
     return super
       .post<UpdateHCProgramReq, UpdateHCProgramRes>(apiUri, req)
@@ -705,22 +283,6 @@ export class GsaService extends BaseApiService {
     const apiUri = this.baseRoute + '/BatchNotify';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
 
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('BatchNotify');
-      console.log(req);
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: '批次發送自訂通知成功',
-          content: null,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
-
     return super
       .post<BatchNotifyReq, BatchNotifyRes>(apiUri, req)
       .pipe(switchMap((res) => super.throwNotIn(acceptedCodes, res)));
@@ -732,27 +294,6 @@ export class GsaService extends BaseApiService {
   ChangePassword(req: ChangePasswordReq): Observable<ChangePasswordRes> {
     const apiUri = this.baseRoute + '/ChangePassword';
     const acceptedCodes: Array<BaseAPICodes> = [BaseAPICodes.SUCCESS];
-
-    if (environment.fakeData) {
-      console.log('---');
-      console.log('ChangePassword');
-      console.log(req);
-
-      const roleMapping = {
-        govt: '社會課',
-        hosp: '醫院',
-      };
-
-      return timer(this.shortLatencyMS).pipe(
-        map(() => ({
-          success: true,
-          code: BaseAPICodes.SUCCESS,
-          message: `${roleMapping[req.role]}帳戶變更密碼成功`,
-          content: null,
-        })),
-        switchMap((res) => super.throwNotIn(acceptedCodes, res))
-      );
-    }
 
     return super
       .post<ChangePasswordReq, ChangePasswordRes>(apiUri, req)

@@ -5,7 +5,7 @@ import {
   ActivatedRouteSnapshot,
 } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { HospData } from 'src/app/api/models/get-hosp-data.models';
 
 @Injectable({
@@ -14,7 +14,7 @@ import { HospData } from 'src/app/api/models/get-hosp-data.models';
 export class HospDataResolver implements Resolve<HospData> {
   private _hospDataCache: HospData | undefined;
 
-  constructor(private gsaService: GsaService) {}
+  constructor(private gsaService: AbstractGsaService) {}
 
   resolve(
     route: ActivatedRouteSnapshot,

@@ -18,7 +18,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { AddNewsReq } from 'src/app/api/models/add-news.models';
 import { getDatetime } from 'src/app/api/models/get-news.models';
 import { SnackTypes } from '../../enums/snack-type.enum';
@@ -106,7 +106,7 @@ export class AddNewsDialogComponent implements OnInit, OnDestroy {
   constructor(
     private dialogRef: MatDialogRef<AddNewsDialogComponent>,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {
     this.fcs['startDate'].valueChanges
       .pipe(

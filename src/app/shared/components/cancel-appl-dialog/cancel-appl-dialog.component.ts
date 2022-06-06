@@ -9,7 +9,7 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { CancelApplReq } from 'src/app/api/models/cancel-appl.models';
 import { SnackTypes } from '../../enums/snack-type.enum';
 import { Snack } from '../../services/snack-bar.models';
@@ -30,7 +30,7 @@ export class CancelApplDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: CancelApplDialogData,
     private dialogRef: MatDialogRef<CancelApplDialogComponent>,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {}
 
   ngOnInit(): void {}

@@ -11,7 +11,7 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { ApplInList } from 'src/app/api/models/get-appl-list.models';
 import { ApplStatuses } from 'src/app/shared/enums/appl-status.enum';
 import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
@@ -48,7 +48,7 @@ export class ApplStatisticsComponent implements OnInit, OnDestroy {
   constructor(
     private decimalPipe: DecimalPipe,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {}
 
   ngOnInit(): void {

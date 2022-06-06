@@ -1,7 +1,7 @@
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule, Provider } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
 // @auth0/angular-jwt
@@ -29,6 +29,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 // shared
 import { SharedModule } from './shared/shared.module';
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -50,12 +51,30 @@ import { QueryVerificationStepComponent } from './pages/query/query-verification
 import { QueryApplListStepComponent } from './pages/query/query-appl-list-step/query-appl-list-step.component';
 
 // @angular/common
-import { CurrencyPipe, DatePipe, DecimalPipe, registerLocaleData } from '@angular/common';
+import {
+  CurrencyPipe,
+  DatePipe,
+  DecimalPipe,
+  registerLocaleData,
+} from '@angular/common';
 import localeZhHant from '@angular/common/locales/zh-Hant';
 
 import { environment } from 'src/environments/environment';
+import { GsaMockService } from './api/gsa.mock.service';
+import { GsaService } from './api/gsa.service';
+import { AbstractGsaService } from './api/models/abstract-gsa.service';
 
 registerLocaleData(localeZhHant);
+
+const GSA_SERVICE_PROVIDER: Provider = environment.mockData
+  ? {
+      provide: AbstractGsaService,
+      useClass: GsaMockService,
+    }
+  : {
+      provide: AbstractGsaService,
+      useClass: GsaService,
+    };
 
 @NgModule({
   declarations: [
@@ -118,6 +137,7 @@ registerLocaleData(localeZhHant);
     CurrencyPipe,
     DatePipe,
     DecimalPipe,
+    GSA_SERVICE_PROVIDER,
   ],
   bootstrap: [AppComponent],
 })

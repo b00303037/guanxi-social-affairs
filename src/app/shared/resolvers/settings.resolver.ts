@@ -5,7 +5,7 @@ import {
   ActivatedRouteSnapshot,
 } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { Settings } from 'src/app/api/models/get-settings.models';
 
 @Injectable({
@@ -14,7 +14,7 @@ import { Settings } from 'src/app/api/models/get-settings.models';
 export class SettingsResolver implements Resolve<Settings | null> {
   private _settingsCache: Settings | undefined;
 
-  constructor(private gsaService: GsaService) {}
+  constructor(private gsaService: AbstractGsaService) {}
 
   resolve(
     route: ActivatedRouteSnapshot,

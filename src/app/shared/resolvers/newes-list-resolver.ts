@@ -5,7 +5,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { NewsInList } from 'src/app/api/models/get-news-list.models';
 
 @Injectable({
@@ -14,7 +14,7 @@ import { NewsInList } from 'src/app/api/models/get-news-list.models';
 export class NewsListResolver implements Resolve<Array<NewsInList>> {
   private _newsListCache: Array<NewsInList> | undefined;
 
-  constructor(private gsaService: GsaService) {}
+  constructor(private gsaService: AbstractGsaService) {}
 
   resolve(
     route: ActivatedRouteSnapshot,

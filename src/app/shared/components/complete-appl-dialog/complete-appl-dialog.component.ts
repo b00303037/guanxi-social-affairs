@@ -16,7 +16,7 @@ import {
   Observable,
   EMPTY,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { CompleteApplReq } from 'src/app/api/models/complete-appl.models';
 import { SnackTypes } from '../../enums/snack-type.enum';
 import { YN_OBJ } from '../../enums/yn.enum';
@@ -56,7 +56,7 @@ export class CompleteApplDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: CompleteApplDialogData,
     private dialogRef: MatDialogRef<CompleteApplDialogComponent>,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {
     const completionDate = this.data.completionDate
       ? parse(

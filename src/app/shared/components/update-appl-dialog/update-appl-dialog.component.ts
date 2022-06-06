@@ -17,7 +17,7 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import {
   Appl,
   findHCProgram,
@@ -164,7 +164,7 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: UpdateApplDialogData,
     private dialogRef: MatDialogRef<UpdateApplDialogComponent>,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService,
+    private gsaService: AbstractGsaService,
     private currencyPipe: CurrencyPipe
   ) {
     // minApplAge & maxBirthDate

@@ -4837,6 +4837,13 @@ neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
+ng-magnizoom@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ng-magnizoom/-/ng-magnizoom-1.0.0.tgz#7adae0d373420f1ccf0576f5012c445b7e75d694"
+  integrity sha512-L2lWX45UV9Za8vF2GLh81D0YWD7uwUAWIR2mhutPVtEABiN5uedVyeXR/2WySSd5GxZ6O3I0q+DVxvMyhC26NA==
+  dependencies:
+    tslib "^2.0.0"
+
 ngx-editor@^12.2.2:
   version "12.4.0"
   resolved "https://registry.yarnpkg.com/ngx-editor/-/ngx-editor-12.4.0.tgz#da5fb1ce7e22dad316458a8e99ffe09c2732eefb"

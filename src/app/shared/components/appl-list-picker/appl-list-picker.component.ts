@@ -24,7 +24,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { ApplInList } from 'src/app/api/models/get-appl-list.models';
 import {
   APPL_STATUS_MAP,
@@ -91,7 +91,7 @@ export class ApplListPickerComponent
     private media: MediaMatcher,
     private changeDetectorRef: ChangeDetectorRef,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService
+    private gsaService: AbstractGsaService
   ) {
     this.gtSMQuery.addEventListener('change', this._gtSMQueryListener);
   }

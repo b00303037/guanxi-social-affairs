@@ -21,7 +21,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { GsaService } from 'src/app/api/gsa.service';
+import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
 import { AddApplReq } from 'src/app/api/models/add-appl.models';
 import { Settings } from 'src/app/api/models/get-settings.models';
 import { VerifyReq } from 'src/app/api/models/verify.models';
@@ -211,7 +211,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private matDialog: MatDialog,
     private snackBarService: SnackBarService,
-    private gsaService: GsaService,
+    private gsaService: AbstractGsaService,
     private authService: AuthService,
     private datePipe: DatePipe
   ) {
