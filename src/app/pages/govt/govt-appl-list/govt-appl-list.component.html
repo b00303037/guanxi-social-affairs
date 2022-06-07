@@ -110,6 +110,7 @@
             <button
               *ngIf="
                 appl.status === applStatusObj.Unreviewed ||
+                appl.status === applStatusObj.Y ||
                 appl.status === applStatusObj.N
               "
               mat-icon-button
@@ -193,6 +194,7 @@
     <button
       *ngIf="
         appl.status === applStatusObj.Unreviewed ||
+        appl.status === applStatusObj.Y ||
         appl.status === applStatusObj.N
       "
       mat-menu-item
