@@ -43,7 +43,10 @@ import {
   ExtendedAppl,
   GetApplReq,
 } from 'src/app/api/models/get-appl.models';
-import { HospData } from 'src/app/api/models/get-hosp-data.models';
+import {
+  HospData,
+  HospDataHospital,
+} from 'src/app/api/models/get-hosp-data.models';
 import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
 import { Snack } from 'src/app/shared/services/snack-bar.models';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
@@ -88,10 +91,12 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   fg = new FormGroup({
     applStatusList: new FormControl(null),
+    hospitalIDList: new FormControl(null),
     keyword: new FormControl(null),
   });
   fcs: GovtApplListFilterFCsModel = {
     applStatusList: this.fg.controls['applStatusList'],
+    hospitalIDList: this.fg.controls['hospitalIDList'],
     keyword: this.fg.controls['keyword'],
   };
   get fv(): GovtApplListFilterFormModel {
@@ -112,6 +117,7 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   expandedAppl: ExtendedAppl | null = null;
 
   applStatusSelectList = GOVT_APPL_STATUS_SELECT_LIST;
+  hospitalSelectList: Array<HospDataHospital> = [];
   applStatusObj = APPL_STATUS_OBJ;
   applStatusMap = APPL_STATUS_MAP;
 
@@ -128,6 +134,12 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
     private gsaService: AbstractGsaService
   ) {
     this.gtMDQuery.addEventListener('change', this._gtMDQueryListener);
+
+    const { hospData } = this.route.parent?.snapshot.data as {
+      hospData: HospData;
+    };
+
+    this.hospitalSelectList = [...hospData.hospitalList];
   }
 
   ngOnInit(): void {
@@ -137,10 +149,15 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
         debounceTime(300),
         tap<GovtApplListFilterFormModel>((fv) => {
           let result = [...this.applList];
-          const { applStatusList, keyword } = fv;
+          const { applStatusList, hospitalIDList, keyword } = fv;
 
           if ((applStatusList?.length ?? 0) !== 0) {
             result = result.filter((a) => applStatusList.includes(a.status));
+          }
+          if ((hospitalIDList?.length ?? 0) !== 0) {
+            result = result.filter((a) =>
+              hospitalIDList.includes(a.hospitalID)
+            );
           }
           if (typeof keyword === 'string' && keyword.length > 0) {
             result = result.filter((a) =>

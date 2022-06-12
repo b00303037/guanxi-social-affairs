@@ -14,8 +14,21 @@
     </mat-select>
   </mat-form-field>
 
-  <!-- 申請單編號、姓名關鍵字 -->
+  <!-- 健檢醫院 -->
   <mat-form-field class="col-span-2 sm:col-span-1">
+    <mat-label>健檢醫院</mat-label>
+    <mat-select formControlName="hospitalIDList" multiple>
+      <mat-option
+        *ngFor="let hospital of hospitalSelectList"
+        [value]="hospital.hospitalID"
+      >
+        {{ hospital.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- 申請單編號、姓名關鍵字 -->
+  <mat-form-field class="col-span-2">
     <mat-label>申請單編號、姓名關鍵字</mat-label>
     <input type="text" matInput formControlName="keyword" autocomplete="off" />
 
