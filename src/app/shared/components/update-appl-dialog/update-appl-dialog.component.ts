@@ -33,15 +33,9 @@ import { SnackTypes } from '../../enums/snack-type.enum';
 import { YN_OBJ } from '../../enums/yn.enum';
 import { Snack } from '../../services/snack-bar.models';
 import { SnackBarService } from '../../services/snack-bar.service';
-import {
-  EmailOrMobileNoErrorStateMatcher,
-  EmailOrMobileNoValidator,
-} from '../../validators/email-or-mobile-no.validator';
 import { mobileNoRegExp } from '../../validators/mobile-no.validator';
-import {
-  TelephoneNoErrorStateMatcher,
-  TelephoneNoValidator,
-} from '../../validators/telephone-no.validator';
+import { MobileOrTelephoneNoValidator } from '../../validators/mobile-or-telephone-no.validator';
+import { TelephoneNoValidator } from '../../validators/telephone-no.validator';
 import { DateRangeValidator } from '../../validators/validator-utils';
 import {
   BasicInfoFCsModel,
@@ -106,7 +100,7 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
       telExt: new FormControl(null, [Validators.maxLength(6)]),
     },
     {
-      validators: [EmailOrMobileNoValidator, TelephoneNoValidator],
+      validators: [MobileOrTelephoneNoValidator, TelephoneNoValidator],
     }
   );
   basicInfoFCs: BasicInfoFCsModel = {
@@ -153,9 +147,6 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
   YNObj = YN_OBJ;
   genderObj = GENDER_OBJ;
   applStatusObj = APPL_STATUS_OBJ;
-
-  emailOrMobileNoErrorStateMatcher = new EmailOrMobileNoErrorStateMatcher();
-  telephoneNoErrorStateMatcher = new TelephoneNoErrorStateMatcher();
 
   getting = false;
   updating = false;

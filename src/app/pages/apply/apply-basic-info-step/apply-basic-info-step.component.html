@@ -235,13 +235,10 @@
       matInput
       formControlName="email"
       maxlength="50"
-      [errorStateMatcher]="emailOrMobileNoErrorStateMatcher"
     />
 
-    <mat-error *ngIf="fg.hasError('emailOrMobileNo')"
-      >請輸入&nbsp;<strong>Email</strong>&nbsp;或&nbsp;<strong
-        >行動電話</strong
-      ></mat-error
+    <mat-error *ngIf="fcs['email'].hasError('email')"
+      ><strong>Email</strong>&nbsp;格式有誤</mat-error
     >
   </mat-form-field>
 
@@ -254,12 +251,12 @@
       matInput
       formControlName="mobileNo"
       maxlength="10"
-      [errorStateMatcher]="emailOrMobileNoErrorStateMatcher"
+      [errorStateMatcher]="mobileOrTelephoneNoErrorStateMatcher"
     />
 
-    <mat-error *ngIf="fg.hasError('emailOrMobileNo')"
-      >請輸入&nbsp;<strong>Email</strong>&nbsp;或&nbsp;<strong
-        >行動電話</strong
+    <mat-error *ngIf="fg.hasError('mobileOrTelephoneNo')"
+      >請輸入&nbsp;<strong>行動電話</strong>&nbsp;或&nbsp;<strong
+        >住家電話</strong
       ></mat-error
     >
     <mat-error *ngIf="fcs['mobileNo'].hasError('pattern')"
@@ -280,6 +277,11 @@
         [errorStateMatcher]="telephoneNoErrorStateMatcher"
       />
 
+      <mat-error *ngIf="fg.hasError('mobileOrTelephoneNo')"
+        >請輸入&nbsp;<strong>行動電話</strong>&nbsp;或&nbsp;<strong
+          >住家電話</strong
+        ></mat-error
+      >
       <mat-error *ngIf="fg.hasError('telephoneNo')"
         ><strong>住家電話</strong>&nbsp;格式有誤</mat-error
       >

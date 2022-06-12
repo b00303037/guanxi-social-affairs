@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { isValid, parse, sub } from 'date-fns';
+import { isValid, parse } from 'date-fns';
 import { Settings } from 'src/app/api/models/get-settings.models';
 import { GENDER_OBJ } from 'src/app/shared/enums/gender.enum';
 import { VILLAGE_SELECT_LIST } from 'src/app/shared/enums/villages';
-import { EmailOrMobileNoErrorStateMatcher } from 'src/app/shared/validators/email-or-mobile-no.validator';
+import { MobileOrTelephoneNoErrorStateMatcher } from 'src/app/shared/validators/mobile-or-telephone-no.validator';
 import { TelephoneNoErrorStateMatcher } from 'src/app/shared/validators/telephone-no.validator';
 import { BasicInfoFCsModel } from '../apply.models';
 
@@ -27,7 +27,8 @@ export class ApplyBasicInfoStepComponent implements OnInit {
   genderObj = GENDER_OBJ;
   villageSelectList = VILLAGE_SELECT_LIST;
 
-  emailOrMobileNoErrorStateMatcher = new EmailOrMobileNoErrorStateMatcher();
+  mobileOrTelephoneNoErrorStateMatcher =
+    new MobileOrTelephoneNoErrorStateMatcher();
   telephoneNoErrorStateMatcher = new TelephoneNoErrorStateMatcher();
 
   constructor(private route: ActivatedRoute) {

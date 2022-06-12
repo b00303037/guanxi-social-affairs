@@ -42,7 +42,7 @@ import {
 import { DateRangeValidator } from 'src/app/shared/validators/validator-utils';
 import { getTelephoneNo } from 'src/app/api/models/get-appl.models';
 import { mobileNoRegExp } from 'src/app/shared/validators/mobile-no.validator';
-import { EmailOrMobileNoValidator } from 'src/app/shared/validators/email-or-mobile-no.validator';
+import { MobileOrTelephoneNoValidator } from 'src/app/shared/validators/mobile-or-telephone-no.validator';
 import { TelephoneNoValidator } from 'src/app/shared/validators/telephone-no.validator';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -148,7 +148,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
       telExt: new FormControl(null, [Validators.maxLength(6)]),
     },
     {
-      validators: [EmailOrMobileNoValidator, TelephoneNoValidator],
+      validators: [MobileOrTelephoneNoValidator, TelephoneNoValidator],
     }
   );
   basicInfoFCs: BasicInfoFCsModel = {
