@@ -30,7 +30,7 @@
     "autoprefixer": "^10.4.4",
     "browser-image-compression": "^2.0.0",
     "date-fns": "^2.28.0",
-    "ngx-editor": "^12.2.2",
+    "ngx-editor": "^13.0.0",
     "ngx-owl-carousel-o": "^7.0.2",
     "postcss": "^8.4.12",
     "rxjs": "~7.5.0",

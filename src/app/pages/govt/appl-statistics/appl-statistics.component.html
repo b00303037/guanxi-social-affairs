@@ -2,29 +2,88 @@
 
 <mat-card>
   <div class="spinner-box">
-    <div class="flex justify-between overflow-auto py-4">
-      <span class="grow"></span>
+    <mat-tab-group>
+      <!-- 依日期 -->
+      <mat-tab label="依日期">
+        <div class="flex justify-between overflow-auto py-4">
+          <span class="grow"></span>
 
-      <ngx-charts-bar-horizontal
-        [view]="view"
-        [results]="resultsGroupedByCreateDatetime"
-        [scheme]="scheme"
-        [legend]="false"
-        legendTitle="圖例"
-        [xAxis]="true"
-        [yAxis]="true"
-        [roundDomains]="true"
-        [showXAxisLabel]="true"
-        [showYAxisLabel]="true"
-        xAxisLabel="件數"
-        yAxisLabel="日期"
-        [xAxisTickFormatting]="xAxisTickFormatting"
-        [barPadding]="16"
-      >
-      </ngx-charts-bar-horizontal>
+          <ngx-charts-bar-horizontal
+            [view]="view"
+            [results]="resultsGroupedByCreateDatetime"
+            [scheme]="scheme"
+            [legend]="false"
+            legendTitle="圖例"
+            [xAxis]="true"
+            [yAxis]="true"
+            [roundDomains]="true"
+            [showXAxisLabel]="true"
+            [showYAxisLabel]="true"
+            xAxisLabel="件數"
+            yAxisLabel="日期"
+            [xAxisTickFormatting]="xAxisTickFormatting"
+            [barPadding]="barPadding"
+          >
+          </ngx-charts-bar-horizontal>
 
-      <span class="grow"></span>
-    </div>
+          <span class="grow"></span>
+        </div>
+      </mat-tab>
+
+      <!-- 依性別 -->
+      <mat-tab label="依性別">
+        <div class="flex justify-between overflow-auto py-4">
+          <span class="grow"></span>
+
+          <ngx-charts-bar-horizontal
+            [view]="view"
+            [results]="resultsGroupedByGender"
+            [scheme]="scheme"
+            [legend]="false"
+            legendTitle="圖例"
+            [xAxis]="true"
+            [yAxis]="true"
+            [roundDomains]="true"
+            [showXAxisLabel]="true"
+            [showYAxisLabel]="true"
+            xAxisLabel="件數"
+            yAxisLabel="性別"
+            [xAxisTickFormatting]="xAxisTickFormatting"
+            [barPadding]="barPadding"
+          >
+          </ngx-charts-bar-horizontal>
+
+          <span class="grow"></span>
+        </div>
+      </mat-tab>
+
+      <!-- 依醫院 -->
+      <mat-tab label="依醫院">
+        <div class="flex justify-between overflow-auto py-4">
+          <span class="grow"></span>
+
+          <ngx-charts-bar-horizontal
+            [view]="view"
+            [results]="resultsGroupedByHospital"
+            [scheme]="scheme"
+            [legend]="false"
+            legendTitle="圖例"
+            [xAxis]="true"
+            [yAxis]="true"
+            [roundDomains]="true"
+            [showXAxisLabel]="true"
+            [showYAxisLabel]="true"
+            xAxisLabel="件數"
+            yAxisLabel="醫院"
+            [xAxisTickFormatting]="xAxisTickFormatting"
+            [barPadding]="barPadding"
+          >
+          </ngx-charts-bar-horizontal>
+
+          <span class="grow"></span>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
 
     <div *ngIf="gettingList" class="spinner">
       <mat-spinner></mat-spinner>
