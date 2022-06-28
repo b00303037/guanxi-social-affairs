@@ -124,7 +124,8 @@
               *ngIf="
                 appl.status === applStatusObj.Unreviewed ||
                 appl.status === applStatusObj.Y ||
-                appl.status === applStatusObj.N
+                appl.status === applStatusObj.N ||
+                appl.status === applStatusObj.Arranged
               "
               mat-icon-button
               color="primary"
@@ -208,7 +209,8 @@
       *ngIf="
         appl.status === applStatusObj.Unreviewed ||
         appl.status === applStatusObj.Y ||
-        appl.status === applStatusObj.N
+        appl.status === applStatusObj.N ||
+        appl.status === applStatusObj.Arranged
       "
       mat-menu-item
       class="color-warn"
