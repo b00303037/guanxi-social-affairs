@@ -60,6 +60,7 @@ import { CancelApplDialogComponent } from './components/cancel-appl-dialog/cance
 import { CompleteApplDialogComponent } from './components/complete-appl-dialog/complete-appl-dialog.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ExpandedApplComponent } from './components/expanded-appl/expanded-appl.component';
+import { IDPhotosStepHintDialogComponent } from './components/id-photos-step-hint-dialog/id-photos-step-hint-dialog.component';
 import { IDNoHintDialogComponent } from './components/idno-hint-dialog/idno-hint-dialog.component';
 import { ReviewApplDialogComponent } from './components/review-appl-dialog/review-appl-dialog.component';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
@@ -164,6 +165,7 @@ const COMPONENTS = [
   CancelApplDialogComponent,
   CompleteApplDialogComponent,
   ConfirmDialogComponent,
+  IDPhotosStepHintDialogComponent,
   ExpandedApplComponent,
   IDNoHintDialogComponent,
   ReviewApplDialogComponent,

@@ -158,7 +158,12 @@
         </ng-container>
       </table>
     </div>
-    <mat-paginator pageSize="10" hidePageSize class="w-full"></mat-paginator>
+    <mat-paginator
+      pageSize="10"
+      showFirstLastButtons
+      hidePageSize
+      class="w-full"
+    ></mat-paginator>
 
     <div *ngIf="gettingList" class="spinner">
       <mat-spinner></mat-spinner>

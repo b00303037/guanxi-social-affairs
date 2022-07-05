@@ -51,6 +51,7 @@ import { HomeData } from 'src/app/api/models/get-home-data.models';
 import { ConfirmDialogData } from 'src/app/shared/components/confirm-dialog/confirm-dialog.models';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 import { ApplyVerificationStepComponent } from './apply-verification-step/apply-verification-step.component';
+import { IDPhotosStepHintDialogComponent } from 'src/app/shared/components/id-photos-step-hint-dialog/id-photos-step-hint-dialog.component';
 
 @Component({
   selector: 'app-apply',
@@ -429,6 +430,8 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.stepper.next();
+
+    this.openIDPhotosStepHintDialog();
   }
 
   onIDPhotosFormSubmit(e: Event): void {
@@ -500,6 +503,10 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
         catchError((err) => this.onError(err))
       )
       .subscribe();
+  }
+
+  openIDPhotosStepHintDialog(): void {
+    this.matDialog.open(IDPhotosStepHintDialogComponent);
   }
 
   forceValidation(fg: FormGroup): void {

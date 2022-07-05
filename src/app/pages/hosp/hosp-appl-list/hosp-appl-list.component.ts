@@ -152,7 +152,9 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
             );
           }
 
-          this.dataSource.data = result;
+          this.dataSource.data = result.sort(
+            (a, b) => +b.applicationID - +a.applicationID
+          );
         })
       )
       .subscribe();

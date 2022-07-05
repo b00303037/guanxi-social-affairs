@@ -130,7 +130,9 @@ export class QueryApplListStepComponent
         takeUntil(this.destroy$),
         finalize(() => (this.gettingList = false)),
         map((res) => {
-          this.dataSource.data = res.content;
+          this.dataSource.data = res.content.sort(
+            (a, b) => +b.applicationID - +a.applicationID
+          );
         }),
         catchError((err) => this.onError(err))
       )
