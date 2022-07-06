@@ -35,6 +35,7 @@ module.exports = {
       14: "3.5rem",
     },
     minHeight: {
+      0: 0,
       "cover-page": "calc(100vh - 56px)",
       "cover-page-lg": "calc(100vh - 64px)",
       60: "15rem",

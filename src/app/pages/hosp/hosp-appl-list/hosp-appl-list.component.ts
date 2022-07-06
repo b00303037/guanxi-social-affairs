@@ -1,10 +1,3 @@
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from '@angular/animations';
 import { MediaMatcher } from '@angular/cdk/layout';
 import {
   AfterViewInit,
@@ -66,21 +59,12 @@ import {
   HospApplListFilterFCsModel,
   HospApplListFilterFormModel,
 } from './hosp-appl-list.models';
+import { MatSort, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-hosp-appl-list',
   templateUrl: './hosp-appl-list.component.html',
   styleUrls: ['./hosp-appl-list.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
-    ]),
-  ],
 })
 export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$ = new Subject<null>();
@@ -89,6 +73,7 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   gtMDQuery: MediaQueryList = this.media.matchMedia('(min-width: 960px)');
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   fg = new FormGroup({
     applStatusList: new FormControl(null),
@@ -152,9 +137,7 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
             );
           }
 
-          this.dataSource.data = result.sort(
-            (a, b) => +b.applicationID - +a.applicationID
-          );
+          this.dataSource.data = result;
         })
       )
       .subscribe();
@@ -162,6 +145,7 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
 
     setTimeout(() => {
       this.onGetApplList();
@@ -202,6 +186,11 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
       hospData: HospData;
     };
     this.expandedAppl = getExtendedApplInList(applInList, hospData);
+  }
+
+  onSortChange(sort: Sort): void {
+    this.expandingApplID = undefined;
+    this.expandedAppl = null;
   }
 
   openArrangeApplDialog(applicationID: string, scheduledDate: string): void {

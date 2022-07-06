@@ -1,10 +1,3 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { MediaMatcher } from '@angular/cdk/layout';
 import {
   AfterViewInit,
@@ -24,6 +17,7 @@ import {
   filter,
   finalize,
   map,
+  merge,
   Observable,
   Subject,
   takeUntil,
@@ -55,31 +49,24 @@ import {
   CancelApplDialogData,
   CancelApplDialogResult,
 } from 'src/app/shared/components/cancel-appl-dialog/cancel-appl-dialog.models';
+import { MatSort, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-query-appl-list-step',
   templateUrl: './query-appl-list-step.component.html',
   styleUrls: ['./query-appl-list-step.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
-    ]),
-  ],
 })
 export class QueryApplListStepComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   private destroy$ = new Subject<null>();
+  private sortChange$ = new Subject<null>();
   private _gtMDQueryListener = () => this.changeDetectorRef.detectChanges();
 
   gtMDQuery: MediaQueryList = this.media.matchMedia('(min-width: 960px)');
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   dataSource = new MatTableDataSource<ApplInList>([]);
   displayedColumns: Array<string> = ['applicationID', 'actions'];
@@ -115,6 +102,7 @@ export class QueryApplListStepComponent
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   onGetApplList(): void {
@@ -130,9 +118,7 @@ export class QueryApplListStepComponent
         takeUntil(this.destroy$),
         finalize(() => (this.gettingList = false)),
         map((res) => {
-          this.dataSource.data = res.content.sort(
-            (a, b) => +b.applicationID - +a.applicationID
-          );
+          this.dataSource.data = res.content;
         }),
         catchError((err) => this.onError(err))
       )
@@ -153,7 +139,7 @@ export class QueryApplListStepComponent
     this.gsaService
       .GetAppl(req)
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntil(merge(this.destroy$, this.sortChange$)),
         finalize(() => (this.getting = false)),
         map((res) => {
           const { hospData } = this.route.snapshot.data as {
@@ -166,6 +152,13 @@ export class QueryApplListStepComponent
         catchError((err) => this.onError(err))
       )
       .subscribe();
+  }
+
+  onSortChange(sort: Sort): void {
+    this.expandingApplID = undefined;
+    this.expandedAppl = null;
+
+    this.sortChange$.next(null);
   }
 
   openUpdateApplDialog(applicationID: string): void {
@@ -217,6 +210,7 @@ export class QueryApplListStepComponent
   ngOnDestroy(): void {
     this.destroy$.next(null);
     this.destroy$.complete();
+    this.sortChange$.complete();
 
     this.gtMDQuery.removeEventListener('change', this._gtMDQueryListener);
   }

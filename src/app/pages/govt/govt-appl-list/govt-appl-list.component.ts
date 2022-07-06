@@ -1,10 +1,3 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { MediaMatcher } from '@angular/cdk/layout';
 import {
   AfterViewInit,
@@ -25,6 +18,7 @@ import {
   filter,
   finalize,
   map,
+  merge,
   Observable,
   Subject,
   takeUntil,
@@ -65,29 +59,22 @@ import {
   GovtApplListFilterFCsModel,
   GovtApplListFilterFormModel,
 } from './govt-appl-list.models';
+import { MatSort, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-govt-appl-list',
   templateUrl: './govt-appl-list.component.html',
   styleUrls: ['./govt-appl-list.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
-    ]),
-  ],
 })
 export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$ = new Subject<null>();
+  private sortChange$ = new Subject<null>();
   private _gtMDQueryListener = () => this.changeDetectorRef.detectChanges();
 
   gtMDQuery: MediaQueryList = this.media.matchMedia('(min-width: 960px)');
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   fg = new FormGroup({
     applStatusList: new FormControl(null),
@@ -165,9 +152,7 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
             );
           }
 
-          this.dataSource.data = result.sort(
-            (a, b) => +b.applicationID - +a.applicationID
-          );
+          this.dataSource.data = result;
         })
       )
       .subscribe();
@@ -175,6 +160,7 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
 
     setTimeout(() => {
       this.onGetApplList();
@@ -217,7 +203,7 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gsaService
       .GetAppl(req)
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntil(merge(this.destroy$, this.sortChange$)),
         finalize(() => (this.getting = false)),
         map((res) => {
           const { hospData } = this.route.parent?.snapshot.data as {
@@ -230,6 +216,13 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
         catchError((err) => this.onError(err))
       )
       .subscribe();
+  }
+
+  onSortChange(sort: Sort): void {
+    this.expandingApplID = undefined;
+    this.expandedAppl = null;
+
+    this.sortChange$.next(null);
   }
 
   openReviewApplDialog(applicationID: string, status: ApplStatuses): void {
@@ -275,6 +268,7 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(null);
     this.destroy$.complete();
+    this.sortChange$.complete();
 
     this.gtMDQuery.removeEventListener('change', this._gtMDQueryListener);
   }
