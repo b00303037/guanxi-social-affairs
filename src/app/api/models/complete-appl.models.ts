@@ -15,7 +15,7 @@ export interface CompleteApplReq {
    * 'Y': 是
    * 'N': 否
    */
-  hasCancer: YN;
+  hasCancer?: YN;
 }
 
 export type CompleteApplRes = BaseAPIResModel<null>;

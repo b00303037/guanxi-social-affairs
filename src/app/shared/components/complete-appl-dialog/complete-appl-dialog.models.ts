@@ -9,7 +9,7 @@ export interface CompleteApplDialogData {
 
 export interface CompleteApplFormModel {
   completionDate: Date;
-  hasCancer: YN;
+  hasCancer?: YN;
 }
 export interface CompleteApplFCsModel {
   completionDate: AbstractControl;

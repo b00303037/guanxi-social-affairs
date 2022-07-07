@@ -38,7 +38,7 @@ export class CompleteApplDialogComponent implements OnInit, OnDestroy {
 
   fg = new FormGroup({
     completionDate: new FormControl(null, [Validators.required]),
-    hasCancer: new FormControl(null, [Validators.required]),
+    hasCancer: new FormControl(null),
   });
   fcs: CompleteApplFCsModel = {
     completionDate: this.fg.controls['completionDate'],
