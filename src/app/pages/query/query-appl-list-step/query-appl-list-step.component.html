@@ -66,6 +66,12 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>申請狀態</th>
         <td mat-cell *matCellDef="let appl" class="border-b-0">
           <span>{{ appl.status | i18nSelect: applStatusMap }}</span>
+          <span *ngIf="appl.status === applStatusObj.Arranged">
+            ({{ appl.scheduledDate }})</span
+          >
+          <span *ngIf="appl.status === applStatusObj.Completed">
+            ({{ appl.completionDate }})</span
+          >
         </td>
       </ng-container>
 
