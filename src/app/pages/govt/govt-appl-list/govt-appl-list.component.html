@@ -116,10 +116,10 @@
           <td mat-cell *matCellDef="let appl" class="border-b-0">
             <span>{{ appl.status | i18nSelect: applStatusMap }}</span>
             <span *ngIf="appl.status === applStatusObj.Arranged">
-              ({{ appl.scheduledDate }})</span
+              （{{ appl.scheduledDate }}）</span
             >
             <span *ngIf="appl.status === applStatusObj.Completed">
-              ({{ appl.completionDate }})</span
+              （{{ appl.completionDate }}）</span
             >
           </td>
         </ng-container>
