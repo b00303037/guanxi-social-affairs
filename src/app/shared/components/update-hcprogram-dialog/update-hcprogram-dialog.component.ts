@@ -72,7 +72,9 @@ export class UpdateHCProgramDialogComponent implements OnInit, OnDestroy {
     this.fg.patchValue(fv);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dialogRef.updateSize('600px');
+  }
 
   onUpdateHCProgram(): void {
     this.fg.markAllAsTouched();

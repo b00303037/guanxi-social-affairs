@@ -60,10 +60,10 @@ export class UpdateApplDialogComponent implements OnInit, OnDestroy {
 
   // 健檢項目
   HCProgramFG = new FormGroup({
-    hospitalID: new FormControl(null),
-    programID: new FormControl(null),
-    programName: new FormControl(null),
-    programCharge: new FormControl(null),
+    hospitalID: new FormControl(null, [Validators.required]),
+    programID: new FormControl(null, [Validators.required]),
+    programName: new FormControl(null, [Validators.required]),
+    programCharge: new FormControl(null, [Validators.required]),
   });
   HCProgramFCs: HCProgramFCsModel = {
     hospitalID: this.HCProgramFG.controls['hospitalID'],

@@ -58,7 +58,9 @@ export class AddHCProgramDialogComponent implements OnInit, OnDestroy {
     private gsaService: AbstractGsaService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dialogRef.updateSize('600px');
+  }
 
   onAddHCProgram(): void {
     this.fg.markAllAsTouched();

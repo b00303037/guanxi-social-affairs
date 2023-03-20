@@ -104,10 +104,10 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // 健檢項目
   HCProgramFG = new FormGroup({
-    hospitalID: new FormControl(null),
-    programID: new FormControl(null),
-    programName: new FormControl(null),
-    programCharge: new FormControl(null),
+    hospitalID: new FormControl(null, [Validators.required]),
+    programID: new FormControl(null, [Validators.required]),
+    programName: new FormControl(null, [Validators.required]),
+    programCharge: new FormControl(null, [Validators.required]),
   });
   HCProgramFCs: HCProgramFCsModel = {
     hospitalID: this.HCProgramFG.controls['hospitalID'],
@@ -378,24 +378,24 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
 
           this.stepper.next();
 
-          this.openHCProgramStepHintDialog();
+          // this.openHCProgramStepHintDialog();
         }),
         catchError((err) => this.onError(err))
       )
       .subscribe();
   }
 
-  openHCProgramStepHintDialog(): void {
-    this.matDialog.open(ConfirmDialogComponent, {
-      data: new ConfirmDialogData({
-        title: '健檢項目可於日後選擇',
-        content:
-          '若尚未決定醫院或健檢項目，請先留空並點選「下一步」。日後可在「申請查詢 - 編輯申請」功能中再做選擇',
-        closeButtonText: '',
-        confirmButtonText: '瞭解',
-      }),
-    });
-  }
+  // openHCProgramStepHintDialog(): void {
+  //   this.matDialog.open(ConfirmDialogComponent, {
+  //     data: new ConfirmDialogData({
+  //       title: '健檢項目可於日後選擇',
+  //       content:
+  //         '若尚未決定醫院或健檢項目，請先留空並點選「下一步」。日後可在「申請查詢 - 編輯申請」功能中再做選擇',
+  //       closeButtonText: '',
+  //       confirmButtonText: '瞭解',
+  //     }),
+  //   });
+  // }
 
   onHCProgramFormSubmit(e: Event): void {
     e.preventDefault();

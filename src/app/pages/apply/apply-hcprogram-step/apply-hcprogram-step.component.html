@@ -2,7 +2,7 @@
   <!-- 醫院 -->
   <mat-form-field class="col-span-2">
     <mat-label>醫院</mat-label>
-    <mat-select formControlName="hospitalID">
+    <mat-select formControlName="hospitalID" required>
       <mat-option
         *ngFor="let hospital of hospitalSelectList"
         [value]="hospital.hospitalID"
@@ -11,6 +11,10 @@
         {{ hospital.name }}
       </mat-option>
     </mat-select>
+
+    <mat-error *ngIf="fcs['hospitalID'].hasError('required')"
+      >請選擇&nbsp;<strong>醫院</strong></mat-error
+    >
   </mat-form-field>
 
   <!-- 網站連結 -->
@@ -74,7 +78,7 @@
           {{ HCProgram.name }}
         </div>
         <div class="text-xl font-semibold font-mono mb-2 px-4">
-          {{ HCProgram.charge | currency: "TWD":"symbol":"1.0-2" }}
+          {{ HCProgram.charge | currency : "TWD" : "symbol" : "1.0-2" }}
         </div>
         <div
           [innerHTML]="HCProgram.description"
@@ -91,9 +95,14 @@
       type="text"
       matInput
       formControlName="programName"
+      required
       readonly
       tabindex="-1"
     />
+
+    <mat-error *ngIf="fcs['programName'].hasError('required')"
+      >請選擇&nbsp;<strong>健檢項目</strong></mat-error
+    >
   </mat-form-field>
 
   <mat-form-field class="col-span-2 sm:col-span-1">
@@ -102,6 +111,7 @@
       type="text"
       matInput
       formControlName="programCharge"
+      required
       readonly
       tabindex="-1"
     />

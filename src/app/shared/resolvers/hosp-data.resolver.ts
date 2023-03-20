@@ -13,6 +13,7 @@ import { HospData } from 'src/app/api/models/get-hosp-data.models';
 })
 export class HospDataResolver implements Resolve<HospData> {
   private _hospDataCache: HospData | undefined;
+  private hospSeqOrderList: Array<number> = [2, 3, 1, 5, 4, 6];
 
   constructor(private gsaService: AbstractGsaService) {}
 
@@ -24,6 +25,12 @@ export class HospDataResolver implements Resolve<HospData> {
       this._hospDataCache ??
       this.gsaService.GetHospData().pipe(
         map((res) => {
+          res.content.hospitalList.sort(
+            (a, b) =>
+              this.hospSeqOrderList.findIndex((i) => i === a.hospitalID) -
+              this.hospSeqOrderList.findIndex((i) => i === b.hospitalID)
+          );
+
           this._hospDataCache = res.content;
 
           return res.content;
