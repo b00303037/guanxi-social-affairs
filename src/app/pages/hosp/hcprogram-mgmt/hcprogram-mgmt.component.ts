@@ -77,9 +77,10 @@ export class HcprogramMgmtComponent
 
   hcprogramList: Array<HospDataHCProgram> = [];
   dataSource = new MatTableDataSource<HospDataHCProgram>([]);
-  displayedColumns: Array<string> = ['name', 'charge', 'actions'];
+  displayedColumns: Array<string> = ['name', 'actions'];
   displayedColumnsSM: Array<string> = [
     'enabled',
+    'year',
     'name',
     'description',
     'charge',
