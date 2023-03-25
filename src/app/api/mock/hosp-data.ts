@@ -1,6 +1,8 @@
 import { YN } from '../../shared/enums/yn.enum';
 import { HospData, HospDataHCProgram } from '../models/get-hosp-data.models';
 
+const year = new Date().getFullYear();
+
 /**
  * 1 衛生福利部桃園醫院 (6)
  */
@@ -15,6 +17,7 @@ const HCPROGRAM_LIST_1: Array<HospDataHCProgram> = [
     charge: 3500,
     hospitalID: 1,
     enabled: YN.Y,
+    year,
   },
   {
     programID: 12,
@@ -27,6 +30,7 @@ const HCPROGRAM_LIST_1: Array<HospDataHCProgram> = [
     charge: 12000,
     hospitalID: 1,
     enabled: YN.Y,
+    year,
   },
   {
     programID: 13,
@@ -41,6 +45,7 @@ const HCPROGRAM_LIST_1: Array<HospDataHCProgram> = [
     charge: 20000,
     hospitalID: 1,
     enabled: YN.Y,
+    year,
   },
   {
     programID: 14,
@@ -51,6 +56,7 @@ const HCPROGRAM_LIST_1: Array<HospDataHCProgram> = [
     charge: 3500,
     hospitalID: 1,
     enabled: YN.Y,
+    year,
   },
   {
     programID: 15,
@@ -62,6 +68,7 @@ const HCPROGRAM_LIST_1: Array<HospDataHCProgram> = [
     charge: 2500,
     hospitalID: 1,
     enabled: YN.Y,
+    year,
   },
   {
     programID: 16,
@@ -74,6 +81,7 @@ const HCPROGRAM_LIST_1: Array<HospDataHCProgram> = [
     charge: 6000,
     hospitalID: 1,
     enabled: YN.Y,
+    year,
   },
 ];
 
@@ -93,6 +101,7 @@ const HCPROGRAM_LIST_2: Array<HospDataHCProgram> = [
     charge: 5000,
     hospitalID: 2,
     enabled: YN.Y,
+    year,
   },
   {
     programID: 22,
@@ -106,6 +115,7 @@ const HCPROGRAM_LIST_2: Array<HospDataHCProgram> = [
     charge: 10000,
     hospitalID: 2,
     enabled: YN.Y,
+    year,
   },
   {
     programID: 23,
@@ -119,6 +129,7 @@ const HCPROGRAM_LIST_2: Array<HospDataHCProgram> = [
     charge: 21000,
     hospitalID: 2,
     enabled: YN.Y,
+    year,
   },
   {
     programID: 24,
@@ -132,6 +143,7 @@ const HCPROGRAM_LIST_2: Array<HospDataHCProgram> = [
     charge: 38000,
     hospitalID: 2,
     enabled: YN.Y,
+    year,
   },
   {
     programID: 25,
@@ -145,6 +157,7 @@ const HCPROGRAM_LIST_2: Array<HospDataHCProgram> = [
     charge: 41000,
     hospitalID: 2,
     enabled: YN.Y,
+    year,
   },
 ];
 
@@ -160,6 +173,7 @@ const HCPROGRAM_LIST_3: Array<HospDataHCProgram> = [
     charge: 16500,
     hospitalID: 3,
     enabled: YN.Y,
+    year,
   },
   {
     programID: 32,
@@ -169,6 +183,7 @@ const HCPROGRAM_LIST_3: Array<HospDataHCProgram> = [
     charge: 23000,
     hospitalID: 3,
     enabled: YN.Y,
+    year,
   },
   {
     programID: 33,
@@ -179,6 +194,7 @@ const HCPROGRAM_LIST_3: Array<HospDataHCProgram> = [
     charge: 29500,
     hospitalID: 3,
     enabled: YN.Y,
+    year,
   },
   {
     programID: 34,
@@ -191,6 +207,7 @@ const HCPROGRAM_LIST_3: Array<HospDataHCProgram> = [
     charge: 66000,
     hospitalID: 3,
     enabled: YN.Y,
+    year,
   },
 ];
 

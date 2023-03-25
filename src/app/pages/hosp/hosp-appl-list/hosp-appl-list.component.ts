@@ -39,11 +39,6 @@ import { SnackTypes } from 'src/app/shared/enums/snack-type.enum';
 import { Snack } from 'src/app/shared/services/snack-bar.models';
 import { SnackBarService } from 'src/app/shared/services/snack-bar.service';
 import {
-  CancelApplDialogData,
-  CancelApplDialogResult,
-} from 'src/app/shared/components/cancel-appl-dialog/cancel-appl-dialog.models';
-import { CancelApplDialogComponent } from 'src/app/shared/components/cancel-appl-dialog/cancel-appl-dialog.component';
-import {
   ArrangeApplDialogData,
   ArrangeApplDialogResult,
 } from 'src/app/shared/components/arrange-appl-dialog/arrange-appl-dialog.models';
@@ -60,6 +55,7 @@ import {
   HospApplListFilterFormModel,
 } from './hosp-appl-list.models';
 import { MatSort, Sort } from '@angular/material/sort';
+import { getNumberList } from 'src/app/shared/services/utils';
 
 @Component({
   selector: 'app-hosp-appl-list',
@@ -77,10 +73,12 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   fg = new FormGroup({
     applStatusList: new FormControl(null),
+    yyyyList: new FormControl([`${new Date().getFullYear()}`]),
     keyword: new FormControl(null),
   });
   fcs: HospApplListFilterFCsModel = {
     applStatusList: this.fg.controls['applStatusList'],
+    yyyyList: this.fg.controls['yyyyList'],
     keyword: this.fg.controls['keyword'],
   };
   get fv(): HospApplListFilterFormModel {
@@ -103,6 +101,10 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   applStatusSelectList = HOSP_APPL_STATUS_SELECT_LIST;
   applStatusObj = APPL_STATUS_OBJ;
   applStatusMap = APPL_STATUS_MAP;
+  yyyySelectList: Array<string> = getNumberList(
+    2022,
+    new Date().getFullYear()
+  ).map((year) => `${year}`);
 
   gettingList = false;
   getting = false;
@@ -126,10 +128,15 @@ export class HospApplListComponent implements OnInit, AfterViewInit, OnDestroy {
         debounceTime(300),
         tap<HospApplListFilterFormModel>((fv) => {
           let result = [...this.applList];
-          const { applStatusList, keyword } = fv;
+          const { applStatusList, keyword, yyyyList } = fv;
 
           if ((applStatusList?.length ?? 0) !== 0) {
             result = result.filter((a) => applStatusList.includes(a.status));
+          }
+          if ((yyyyList?.length ?? 0) !== 0) {
+            result = result.filter((a) =>
+              yyyyList.includes(a.applicationID.substring(0, 4))
+            );
           }
           if (typeof keyword === 'string' && keyword.length > 0) {
             result = result.filter((a) =>

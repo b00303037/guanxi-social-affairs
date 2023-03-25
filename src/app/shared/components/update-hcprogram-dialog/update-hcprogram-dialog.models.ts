@@ -11,12 +11,14 @@ export interface UpdateHCProgramFormModel {
   description: string;
   charge: number;
   enabled: YN;
+  year: number;
 }
 export interface UpdateHCProgramFCsModel {
   name: AbstractControl;
   description: AbstractControl;
   charge: AbstractControl;
   enabled: AbstractControl;
+  year: AbstractControl;
 }
 
 export type UpdateHCProgramDialogResult = boolean | undefined;

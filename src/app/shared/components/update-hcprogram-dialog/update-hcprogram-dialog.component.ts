@@ -37,14 +37,24 @@ export class UpdateHCProgramDialogComponent implements OnInit, OnDestroy {
       Validators.maxLength(50),
     ]),
     description: new FormControl(null, [Validators.required]),
-    charge: new FormControl(null, [Validators.required, Validators.min(0)]),
+    charge: new FormControl(null, [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(99999),
+    ]),
     enabled: new FormControl(null, [Validators.required]),
+    year: new FormControl(new Date().getFullYear(), [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(9999),
+    ]),
   });
   fcs: UpdateHCProgramFCsModel = {
     name: this.fg.controls['name'],
     description: this.fg.controls['description'],
     charge: this.fg.controls['charge'],
     enabled: this.fg.controls['enabled'],
+    year: this.fg.controls['year'],
   };
   get fv(): UpdateHCProgramFormModel {
     return this.fg.value;
@@ -60,13 +70,14 @@ export class UpdateHCProgramDialogComponent implements OnInit, OnDestroy {
     private snackBarService: SnackBarService,
     private gsaService: AbstractGsaService
   ) {
-    const { name, description, charge, enabled } = this.data.program;
+    const { name, description, charge, enabled, year } = this.data.program;
 
     const fv: UpdateHCProgramFormModel = {
       name,
       description,
       charge,
       enabled,
+      year,
     };
 
     this.fg.patchValue(fv);
@@ -133,6 +144,9 @@ export class UpdateHCProgramDialogComponent implements OnInit, OnDestroy {
     }
     if (program.enabled !== fv.enabled) {
       req.enabled = fv.enabled;
+    }
+    if (program.year !== fv.year) {
+      req.year = fv.year;
     }
 
     return req;

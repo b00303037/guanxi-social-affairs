@@ -35,14 +35,24 @@ export class AddHCProgramDialogComponent implements OnInit, OnDestroy {
       Validators.maxLength(50),
     ]),
     description: new FormControl(null, [Validators.required]),
-    charge: new FormControl(null, [Validators.required, Validators.min(0)]),
+    charge: new FormControl(null, [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(99999),
+    ]),
     enabled: new FormControl(null, [Validators.required]),
+    year: new FormControl(new Date().getFullYear(), [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(9999),
+    ]),
   });
   fcs: AddHCProgramFCsModel = {
     name: this.fg.controls['name'],
     description: this.fg.controls['description'],
     charge: this.fg.controls['charge'],
     enabled: this.fg.controls['enabled'],
+    year: this.fg.controls['year'],
   };
   get fv(): AddHCProgramFormModel {
     return this.fg.value;
@@ -71,12 +81,13 @@ export class AddHCProgramDialogComponent implements OnInit, OnDestroy {
     }
     this.adding = true;
 
-    const { name, description, charge, enabled } = this.fv;
+    const { name, description, charge, enabled, year } = this.fv;
     const req: AddHCProgramReq = {
       name,
       description,
       charge,
       enabled,
+      year,
     };
 
     this.gsaService

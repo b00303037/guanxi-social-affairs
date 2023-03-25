@@ -24,6 +24,10 @@ export interface UpdateHCProgramReq {
    * 'N': 停用
    */
   enabled?: YN;
+  /**
+   * 年份 (西元年)
+   */
+  year?: number;
 }
 
 export type UpdateHCProgramRes = BaseAPIResModel<null>;

@@ -60,6 +60,7 @@ import {
   GovtApplListFilterFormModel,
 } from './govt-appl-list.models';
 import { MatSort, Sort } from '@angular/material/sort';
+import { getNumberList } from 'src/app/shared/services/utils';
 
 @Component({
   selector: 'app-govt-appl-list',
@@ -79,11 +80,13 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   fg = new FormGroup({
     applStatusList: new FormControl(null),
     hospitalIDList: new FormControl(null),
+    yyyyList: new FormControl([`${new Date().getFullYear()}`]),
     keyword: new FormControl(null),
   });
   fcs: GovtApplListFilterFCsModel = {
     applStatusList: this.fg.controls['applStatusList'],
     hospitalIDList: this.fg.controls['hospitalIDList'],
+    yyyyList: this.fg.controls['yyyyList'],
     keyword: this.fg.controls['keyword'],
   };
   get fv(): GovtApplListFilterFormModel {
@@ -107,6 +110,10 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
   hospitalSelectList: Array<HospDataHospital> = [];
   applStatusObj = APPL_STATUS_OBJ;
   applStatusMap = APPL_STATUS_MAP;
+  yyyySelectList: Array<string> = getNumberList(
+    2022,
+    new Date().getFullYear()
+  ).map((year) => `${year}`);
 
   gettingList = false;
   getting = false;
@@ -136,7 +143,7 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
         debounceTime(300),
         tap<GovtApplListFilterFormModel>((fv) => {
           let result = [...this.applList];
-          const { applStatusList, hospitalIDList, keyword } = fv;
+          const { applStatusList, hospitalIDList, yyyyList, keyword } = fv;
 
           if ((applStatusList?.length ?? 0) !== 0) {
             result = result.filter((a) => applStatusList.includes(a.status));
@@ -144,6 +151,11 @@ export class GovtApplListComponent implements OnInit, AfterViewInit, OnDestroy {
           if ((hospitalIDList?.length ?? 0) !== 0) {
             result = result.filter((a) =>
               hospitalIDList.includes(a.hospitalID)
+            );
+          }
+          if ((yyyyList?.length ?? 0) !== 0) {
+            result = result.filter((a) =>
+              yyyyList.includes(a.applicationID.substring(0, 4))
             );
           }
           if (typeof keyword === 'string' && keyword.length > 0) {

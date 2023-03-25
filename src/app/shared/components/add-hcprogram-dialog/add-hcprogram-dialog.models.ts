@@ -7,12 +7,14 @@ export interface AddHCProgramFormModel {
   description: string;
   charge: number;
   enabled: YN;
+  year: number;
 }
 export interface AddHCProgramFCsModel {
   name: AbstractControl;
   description: AbstractControl;
   charge: AbstractControl;
   enabled: AbstractControl;
+  year: AbstractControl;
 }
 
 export type AddHCProgramDialogResult = boolean | undefined;

@@ -63,6 +63,10 @@ export interface HospDataHCProgram {
    */
   enabled: YN;
   /**
+   * 年份 (西元年)
+   */
+  year: number;
+  /**
    * 醫院編號
    */
   hospitalID: number;

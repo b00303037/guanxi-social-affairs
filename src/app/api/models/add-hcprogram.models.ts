@@ -20,6 +20,10 @@ export interface AddHCProgramReq {
    * 'N': 停用
    */
   enabled: YN;
+  /**
+   * 年份 (西元年)
+   */
+  year: number;
 }
 
 export type AddHCProgramRes = BaseAPIResModel<null>;

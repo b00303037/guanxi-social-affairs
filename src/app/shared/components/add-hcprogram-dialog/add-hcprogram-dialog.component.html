@@ -2,6 +2,25 @@
 
 <form [formGroup]="fg">
   <div mat-dialog-content class="grid grid-cols-1">
+    <!-- 年份 (西元年) -->
+    <mat-form-field class="col-span-1">
+      <mat-label>年份 (西元年)</mat-label>
+      <input
+        type="number"
+        matInput
+        formControlName="year"
+        required
+        min="0"
+        max="9999"
+        step="1"
+        autocomplete="off"
+      />
+
+      <mat-error *ngIf="fcs['year'].hasError('required')"
+        >請輸入&nbsp;<strong>年份 (西元年)</strong></mat-error
+      >
+    </mat-form-field>
+
     <!-- 名稱 -->
     <mat-form-field class="col-span-1">
       <mat-label>名稱</mat-label>
@@ -47,6 +66,8 @@
         formControlName="charge"
         required
         min="0"
+        max="99999"
+        step="1"
         autocomplete="off"
       />
 

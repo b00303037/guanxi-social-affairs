@@ -20,6 +20,7 @@ import {
   EMPTY,
   filter,
   tap,
+  debounceTime,
 } from 'rxjs';
 import { YN, YN_OBJ } from 'src/app/shared/enums/yn.enum';
 import { AbstractGsaService } from 'src/app/api/models/abstract-gsa.service';
@@ -39,6 +40,12 @@ import { AddHCProgramDialogComponent } from 'src/app/shared/components/add-hcpro
 import { AddHCProgramDialogResult } from 'src/app/shared/components/add-hcprogram-dialog/add-hcprogram-dialog.models';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { HospUser } from 'src/app/api/models/user.models';
+import { FormControl, FormGroup } from '@angular/forms';
+import {
+  HcprogramListFilterFCsModel,
+  HcprogramListFilterFormModel,
+} from './hcprogram-mgmt.models';
+import { getNumberList } from 'src/app/shared/services/utils';
 
 @Component({
   selector: 'app-hcprogram-mgmt',
@@ -56,6 +63,19 @@ export class HcprogramMgmtComponent
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  fg = new FormGroup({
+    yearList: new FormControl([new Date().getFullYear()]),
+    keyword: new FormControl(null),
+  });
+  fcs: HcprogramListFilterFCsModel = {
+    yearList: this.fg.controls['yearList'],
+    keyword: this.fg.controls['keyword'],
+  };
+  get fv(): HcprogramListFilterFormModel {
+    return this.fg.value;
+  }
+
+  hcprogramList: Array<HospDataHCProgram> = [];
   dataSource = new MatTableDataSource<HospDataHCProgram>([]);
   displayedColumns: Array<string> = ['name', 'charge', 'actions'];
   displayedColumnsSM: Array<string> = [
@@ -66,6 +86,7 @@ export class HcprogramMgmtComponent
     'actions',
   ];
 
+  yearSelectList: Array<number> = getNumberList(2022, new Date().getFullYear());
   YNObj = YN_OBJ;
 
   getting = false;
@@ -83,12 +104,36 @@ export class HcprogramMgmtComponent
   }
 
   ngOnInit(): void {
-    this.onGetHospData();
+    this.fg.valueChanges
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(300),
+        tap<HcprogramListFilterFormModel>((fv) => {
+          let result = [...this.hcprogramList];
+          const { yearList, keyword } = fv;
+
+          if ((yearList?.length ?? 0) !== 0) {
+            result = result.filter((p) => yearList.includes(p.year));
+          }
+          if (typeof keyword === 'string' && keyword.length > 0) {
+            result = result.filter((a) =>
+              [a.name, a.description].some((value) => value.includes(keyword))
+            );
+          }
+
+          this.dataSource.data = result;
+        })
+      )
+      .subscribe();
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+
+    setTimeout(() => {
+      this.onGetHospData();
+    });
   }
 
   onGetHospData(): void {
@@ -105,9 +150,11 @@ export class HcprogramMgmtComponent
         map((res) => {
           const user = this.authService.user$.getValue() as HospUser;
 
-          this.dataSource.data = res.content.HCProgramList.filter(
+          this.hcprogramList = res.content.HCProgramList.filter(
             (p) => p.hospitalID === user.hospitalID
           );
+
+          this.fg.setValue(this.fv);
         }),
         catchError((err) => this.onError(err))
       )
