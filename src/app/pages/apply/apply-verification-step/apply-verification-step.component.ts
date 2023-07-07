@@ -58,11 +58,13 @@ export class ApplyVerificationStepComponent implements OnInit, OnDestroy {
       settings: Settings;
     };
 
-    const data: IDNoHintDialogData = {
-      IDNoSuffixList: settings.IDNoSuffixList,
-    };
+    if (settings.IDNoSuffixList.some((suffix) => suffix?.length)) {
+      const data: IDNoHintDialogData = {
+        IDNoSuffixList: settings.IDNoSuffixList,
+      };
 
-    this.matDialog.open(IDNoHintDialogComponent, { data });
+      this.matDialog.open(IDNoHintDialogComponent, { data });
+    }
   }
 
   refreshCaptcha(): void {
