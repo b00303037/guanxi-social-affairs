@@ -24,6 +24,10 @@ export interface Settings {
    */
   launchDatetime: string;
   /**
+   * 下線日期時間限制，格式為 YYYY-MM-DDTHH:mm:ss.sssZ
+   */
+  closeDatetime: string;
+  /**
    * 每日件數限制，單位為件
    */
   dailyApplLimit: string;

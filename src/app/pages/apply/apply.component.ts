@@ -10,7 +10,7 @@ import {
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
-import { format, isBefore, isValid, parse, sub } from 'date-fns';
+import { format, isAfter, isBefore, isValid, parse, sub } from 'date-fns';
 import {
   catchError,
   EMPTY,
@@ -191,6 +191,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
 
   acceptedIDNoSuffix: string = '';
   launchDatetime: Date | undefined;
+  closeDatetime: Date | undefined;
   applCountToday: number;
   applCount: number;
   dailyApplLimit: number | undefined;
@@ -231,6 +232,11 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
     const launchDatetime = new Date(settings.launchDatetime);
 
     this.launchDatetime = isValid(launchDatetime) ? launchDatetime : undefined;
+
+    // closeDatetime
+    const closeDatetime = new Date(settings.closeDatetime);
+
+    this.closeDatetime = isValid(closeDatetime) ? closeDatetime : undefined;
 
     // dailyApplLimit
     this.applCountToday = homeData.applCountToday;
@@ -288,6 +294,14 @@ export class ApplyComponent implements OnInit, AfterViewInit, OnDestroy {
           this.launchDatetime,
           'yyyy/MM/dd HH:mm'
         )} 開始`,
+      ];
+    } else if (this.closeDatetime && isAfter(new Date(), this.closeDatetime)) {
+      titleAndContent = [
+        '申請結束',
+        `線上申請已於 ${this.datePipe.transform(
+          this.closeDatetime,
+          'yyyy/MM/dd HH:mm'
+        )} 結束`,
       ];
     } else if (
       this.dailyApplLimit &&
