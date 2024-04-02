@@ -20,10 +20,21 @@ export class ApplyVerificationStepComponent implements OnInit, OnDestroy {
   @Input() fg!: FormGroup;
   fcs!: VerificationFCsModel;
 
+  showIDNoHintButton = false;
   showPassword = false;
   captchaImgSrc: string | undefined;
 
   constructor(private route: ActivatedRoute, private matDialog: MatDialog) {
+    const { settings } = this.route.snapshot.data as {
+      settings: Settings;
+    };
+
+    this.showIDNoHintButton = settings.IDNoSuffixList.some(
+      (suffix) => suffix?.length
+    );
+
+    console.warn(this.showIDNoHintButton);
+
     this.refreshCaptcha();
   }
 
